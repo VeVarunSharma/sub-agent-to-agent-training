@@ -1,0 +1,32 @@
+{
+  "name": "sub-agent-to-agent-training",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Tutorial: fleet-mode GHCP CLI sub-agents iterating on Azure AI Foundry agents, with a Vancouver SSMUH permit pre-review copilot as the working domain.",
+  "license": "MIT",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=20.11.0",
+    "pnpm": ">=10.0.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @srs/web dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "seed": "tsx scripts/seed-data.ts",
+    "gen:data": "tsx scripts/generate-data.ts",
+    "gen:few-shot": "tsx scripts/generate-data.ts --few-shot",
+    "validate:data": "tsx scripts/validate-data.ts",
+    "sync:agents": "tsx scripts/sync-agents.ts",
+    "eval": "tsx scripts/eval-run.ts",
+    "iterate": "tsx scripts/iterate.ts",
+    "ablate": "tsx scripts/ablate.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "tsx": "^4.20.1",
+    "typescript": "^5.7.3"
+  }
+}

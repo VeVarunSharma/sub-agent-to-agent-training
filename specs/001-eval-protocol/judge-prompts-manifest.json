@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "manifest_id": "judge-prompts-manifest",
+  "spec_id": "001-eval-protocol",
+  "frozen_at": null,
+  "freeze_commit": null,
+  "judge_model": {
+    "provider": "azure-openai",
+    "model": "gpt-4.1",
+    "snapshot": "2025-04-14",
+    "deployment_name": "srs-judge-gpt-4-1-20250414",
+    "region": "eastus2",
+    "temperature": 0,
+    "top_p": 1,
+    "max_tokens": 1024,
+    "seed": 4242,
+    "response_format": "json_object"
+  },
+  "prompts": [
+    {
+      "prompt_id": "m12-redline-actionability",
+      "sub_metric": "M12",
+      "path": "judge-prompts/redline-actionability.md",
+      "sha256": "ad7d068fe57f54d29efed40f49643626e015924e756f9eecc5e66591a0067af0"
+    },
+    {
+      "prompt_id": "m13-readability-staff",
+      "sub_metric": "M13.staff",
+      "path": "judge-prompts/readability-staff.md",
+      "sha256": "6d79a1fc70a7eb53d4b5ba6799abf62af09208c1024d8f3735a2fd3aea3ac35b"
+    },
+    {
+      "prompt_id": "m13-readability-applicant",
+      "sub_metric": "M13.applicant",
+      "path": "judge-prompts/readability-applicant.md",
+      "sha256": "f8ee360e5e5ea4deb155fd6bc403ab4ea882016c6ff81d518176762a73dc2241"
+    },
+    {
+      "prompt_id": "memo-structure",
+      "sub_metric": "M9",
+      "path": "judge-prompts/memo-structure.md",
+      "sha256": "3d0bff1dea688be379df4b77560fb1e5db1fd7fdb3b3d97376be0156c976ab5e"
+    }
+  ],
+  "auxiliary_artifacts": [
+    {
+      "artifact_id": "applicant-support-flags",
+      "sub_metrics": ["M10", "M11"],
+      "path": "applicant-support-flags.md",
+      "sha256": "69fcd441ec806cc3ae1cfaab21420c58d951f995773d4fb4088135373efdfce8"
+    }
+  ],
+  "calibration_set_path": "judge-calibration/",
+  "calibration_set_sha256": null,
+  "evaluator_package_sha": null,
+  "applicant_support_flags_sha": "69fcd441ec806cc3ae1cfaab21420c58d951f995773d4fb4088135373efdfce8",
+  "acceptance_threshold_abs": 1.5,
+  "bootstrap": {
+    "method_single_round": "regular-bootstrap-over-per-case-scores",
+    "method_round_over_round": "paired-bootstrap-over-per-case-deltas",
+    "resamples": 1000,
+    "seed": 4242,
+    "confidence_level": 0.95
+  },
+  "notes": [
+    "SHAs are placeholders captured before freeze. At freeze, the maintainer recomputes SHAs on the freeze commit, fills frozen_at and freeze_commit, populates calibration_set_sha256 from a recursive hash of judge-calibration/, populates evaluator_package_sha from the SHA of packages/evaluator at the freeze commit, and locks this manifest.",
+    "The eval runner refuses to run if any prompt file's SHA, any auxiliary artifact's SHA, calibration_set_sha256, evaluator_package_sha, or acceptance_threshold_abs does not match the manifest.",
+    "ANY change to judge prompts, the judge model deployment, the calibration set, applicant-support-flags.md, the evaluator package, the acceptance threshold, or the bootstrap parameters invalidates all prior rounds. Resuming requires a new round-0 baseline."
+  ]
+}

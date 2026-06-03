@@ -1,0 +1,7 @@
+agent_id: completeness-applicant-support-auditor
+version: v0
+description: |
+  Stub. Real spec lands in p2-foundry-spec; the system prompt and few-shots in p2-agents-v0.
+foundry:
+  model: gpt-4.1
+  tools: []
