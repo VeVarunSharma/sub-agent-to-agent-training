@@ -1,7 +1,8 @@
 import { dirname, join, resolve as resolvePath } from "node:path"
 import { fileURLToPath } from "node:url"
-import { beforeAll, describe, expect, it } from "vitest"
-import { DETERMINISTIC_SCORERS, aggregateSplit, loadCorpusManifest, loadMemoStructureRequirements, loadRequiredEvidenceMap, scoreCase } from "../../src/index.js"
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest"
+import { DETERMINISTIC_SCORERS, NULL_JUDGE_SCORER, aggregateSplit, buildJudgeRunner, loadCorpusManifest, loadMemoStructureRequirements, loadRequiredEvidenceMap, scoreCase } from "../../src/index.js"
+import type { MetricScorerMap } from "../../src/index.js"
 import type { MetricContext } from "../../src/index.js"
 import { FIXTURES } from "./fixtures.js"
 
@@ -11,6 +12,10 @@ const DATASETS_ROOT = join(REPO_ROOT, "datasets")
 
 describe("eval integration: deterministic PRQS over hand-rolled fixtures", () => {
   let ctx: MetricContext
+
+  afterEach(() => {
+    vi.unstubAllEnvs()
+  })
 
   beforeAll(async () => {
     const corpusManifest = await loadCorpusManifest(
@@ -32,9 +37,9 @@ describe("eval integration: deterministic PRQS over hand-rolled fixtures", () =>
   })
 
   for (const fixture of FIXTURES) {
-    it(`scores ${fixture.id}: ${fixture.description}`, () => {
+    it(`scores ${fixture.id}: ${fixture.description}`, async () => {
       const wrapped = { case: fixture.case, sourcePath: `fixtures/${fixture.id}`, line: 0 }
-      const result = scoreCase(wrapped, fixture.runtime, ctx, DETERMINISTIC_SCORERS)
+      const result = await scoreCase(wrapped, fixture.runtime, ctx, DETERMINISTIC_SCORERS)
 
       for (const [id, expectation] of Object.entries(fixture.expected.sub_metrics)) {
         if (!expectation) continue
@@ -58,11 +63,51 @@ describe("eval integration: deterministic PRQS over hand-rolled fixtures", () =>
     })
   }
 
-  it("aggregateSplit composes across all fixtures with a bootstrap CI", () => {
-    const results = FIXTURES.map((fixture) => {
+  it("keeps chunk-4 deterministic values when judges are disabled", async () => {
+    vi.stubEnv("SRS_JUDGE_ENABLED", "")
+    expect(buildJudgeRunner()).toBeNull()
+
+    const legacyScorers: MetricScorerMap = {
+      ...DETERMINISTIC_SCORERS,
+      M12: NULL_JUDGE_SCORER,
+      M13: NULL_JUDGE_SCORER,
+    }
+    const fixture = FIXTURES[0]
+    if (!fixture) throw new Error("fixture missing")
+
+    const wrapped = { case: fixture.case, sourcePath: `fixtures/${fixture.id}`, line: 0 }
+    const legacy = await scoreCase(wrapped, fixture.runtime, ctx, legacyScorers)
+    const disabled = await scoreCase(wrapped, fixture.runtime, { ...ctx, judge: null }, DETERMINISTIC_SCORERS)
+
+    const stableMetricIds = ["M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8", "M9", "M10", "M11"] as const
+    const stableProjection = (result: typeof disabled) => ({
+      case_id: result.case_id,
+      domain: result.domain,
+      agent_versions: result.agent_versions,
+      sub_metrics: Object.fromEntries(stableMetricIds.map((id) => [id, result.sub_metrics[id]])),
+      deterministic_prqs: result.deterministic_prqs,
+      partial_full_prqs_lower_bound: result.partial_full_prqs_lower_bound,
+      evaluator_version: result.evaluator_version,
+    })
+
+    expect(JSON.stringify(stableProjection(disabled))).toBe(JSON.stringify(stableProjection(legacy)))
+    expect(disabled.sub_metrics.M12).toEqual({
+      raw: null,
+      empty_set_branch: "not_applicable",
+      detail: { reason: "judge_disabled" },
+    })
+    expect(disabled.sub_metrics.M13).toEqual({
+      raw: null,
+      empty_set_branch: "not_applicable",
+      detail: { reason: "judge_disabled" },
+    })
+  })
+
+  it("aggregateSplit composes across all fixtures with a bootstrap CI", async () => {
+    const results = await Promise.all(FIXTURES.map((fixture) => {
       const wrapped = { case: fixture.case, sourcePath: `fixtures/${fixture.id}`, line: 0 }
       return scoreCase(wrapped, fixture.runtime, ctx, DETERMINISTIC_SCORERS)
-    })
+    }))
     const aggregate = aggregateSplit(results)
     expect(aggregate.case_count).toBe(FIXTURES.length)
     expect(aggregate.deterministic_prqs.mean).toBeGreaterThan(0)

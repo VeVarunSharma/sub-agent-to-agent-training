@@ -1,4 +1,5 @@
 import type { Case, RuntimePayload, SubMetricResult } from "@srs/shared";
+import type { JudgeRunner } from "./judge.js";
 
 export type { Case, RuntimePayload, SubMetricResult };
 export type CaseRecord = Case;
@@ -50,10 +51,11 @@ export interface MetricContext {
   corpusManifest: CorpusManifest;
   requiredEvidenceMap: RequiredEvidenceMap;
   memoStructureRequirements: MemoStructureRequirements;
+  judge?: JudgeRunner | null;
 }
 
 export type MetricScorer = (
   caseData: Case,
   runtime: RuntimePayload,
   ctx: MetricContext,
-) => SubMetricResult;
+) => SubMetricResult | Promise<SubMetricResult>;

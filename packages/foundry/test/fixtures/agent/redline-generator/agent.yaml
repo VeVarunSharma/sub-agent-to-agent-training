@@ -1,0 +1,7 @@
+agent_id: redline-generator
+version: v-test
+foundry:
+  model: openai/gpt-4o-mini
+  temperature: 0.0
+  max_tokens: 512
+  response_format: json

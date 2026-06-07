@@ -119,3 +119,35 @@ Reviewer rule for this assignment: Mal gates every phase before the next phase s
 - All meaningful changes require team consensus
 - Document architectural decisions here
 - Keep history focused on work, decisions focused on direction
+
+## 2026-06-07 — Chunk 5 ghmodels runtime + round-0 baseline
+
+Assignment id: `chunk-5-ghmodels-baseline-2026-06-07`. Branch: `vesharma/chunk-5-ghmodels-baseline`.
+
+Fleet cast: Mal (Lead), Kaylee (Frontend Dev, prompts and few-shots), Wash (Tester, runtime), Inara (UX Designer, judge integration). Three parallel sub-agents authored prompts, runner, and judges. Mal owned the spec freeze and end-to-end integration.
+
+Locked contract (`specs/004-ghmodels-runtime/SPEC.md`):
+- Inference primitives: `gh models run <model> --system-prompt <string> "<prompt>"` and `gh models eval <prompt.yml>`. No file flag, prompt is positional. Output may contain markdown fences; the runner strips them.
+- Per-agent model: `openai/gpt-4o-mini`, temperature 0, deterministic decoding.
+- Six agents run in the spec-pinned DAG. compliance and completeness run in parallel; everything else sequential.
+- Judge gating: `M12` / `M13` self-gate on `ctx.judge`. Builder returns null unless `SRS_JUDGE_ENABLED=1` and prompt files exist.
+- `pnpm baseline` CLI ships round-0 outputs to `eval-reports/round-000-baseline/`. Sets `SRS_JUDGE_ENABLED=1` automatically with `--judge`.
+
+Two runtime bugs caught at integration that future scorer authors need to know:
+- `gh models run` does NOT accept `--system-prompt-file`. Use only `--system-prompt <string>`. Without a positional prompt argv, gh enters interactive mode and leaks `>>>` to stdout. The runner now passes `userPrompt` as positional argv.
+- `ghEnv()` env scrub must keep `PATH` (the gh binary lives at `/opt/homebrew/bin/gh`). Aligned with spec 000 allowlist: `PATH`, `HOME`, `LANG`, `LC_*`, `SRS_*`, plus `GH_TOKEN`/`GITHUB_TOKEN`.
+
+Two schema mismatches resolved against the prompts as source of truth (spec rule: schema, few-shots, parser must agree):
+- `bylaw-retriever` output: `snippet_pack` (was `retrieved_bylaws` in Wash's draft schema). Aligned to Kaylee's prompt.
+- `compliance-evidence-compiler` output: added optional `incomplete_reasons: string[]` so Kaylee's prompt and few-shots validate.
+
+Round-0 baseline on `train` (18 cases, 18 ok, 0 errors):
+- `deterministic_prqs` 80.96 CI95 [75.24, 86.14]
+- `partial_full_prqs_lower_bound` 67.64 CI95 [63.99, 71.11]
+- M12 + M13 null (judge disabled). Baseline run cost: ~107 model calls, ~8 minutes wall clock.
+
+Carry-forwards for chunk 6:
+- `DETERMINISTIC_SCORERS` name is stale, now includes M12/M13. Rename to `ALL_SCORERS` when chunk 6 lands.
+- `RuntimePathwayClass` / `RuntimeOutcomeClass` enum dedupe.
+- `extractJsonPayload` heuristic is best-effort. Document and revisit if prose-with-braces output bites.
+- Reference-output fidelity regen still pending under `p1-reference-outputs`.

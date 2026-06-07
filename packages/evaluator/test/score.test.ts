@@ -42,8 +42,8 @@ function expectedLowerBound(scores: Record<SubMetricId, number | null>): number 
 }
 
 describe("scoreCase", () => {
-  it("composes a perfect deterministic case", () => {
-    const result = scoreCase(
+  it("composes a perfect deterministic case", async () => {
+    const result = await scoreCase(
       buildCaseRecord("case-perfect"),
       buildPerfectRuntimePayload(),
       buildMetricContext(),
@@ -56,8 +56,8 @@ describe("scoreCase", () => {
     expect(result.sub_metrics.M13.raw).toBeNull();
   });
 
-  it("composes an all-zero case", () => {
-    const result = scoreCase(
+  it("composes an all-zero case", async () => {
+    const result = await scoreCase(
       buildCaseRecord("case-zero"),
       buildZeroRuntimePayload(),
       buildMetricContext(),
@@ -68,8 +68,8 @@ describe("scoreCase", () => {
     expect(result.partial_full_prqs_lower_bound).toBe(0);
   });
 
-  it("honors deterministic and partial full weights", () => {
-    const result = scoreCase(
+  it("honors deterministic and partial full weights", async () => {
+    const result = await scoreCase(
       buildCaseRecord("case-mixed"),
       buildMixedRuntimePayload(),
       buildMetricContext(),
@@ -80,16 +80,16 @@ describe("scoreCase", () => {
     expect(result.partial_full_prqs_lower_bound).toBeCloseTo(expectedLowerBound(mixedMetricScores), 10);
   });
 
-  it("throws when M1 through M11 returns null", () => {
+  it("throws when M1 through M11 returns null", async () => {
     const invalidScores = { ...perfectMetricScores, M1: null };
 
-    expect(() =>
+    await expect(
       scoreCase(
         buildCaseRecord("case-null"),
         buildPerfectRuntimePayload(),
         buildMetricContext(),
         buildCannedScorers(invalidScores),
       ),
-    ).toThrow("Metric M1 returned raw=null");
+    ).rejects.toThrow("Metric M1 returned raw=null");
   });
 });
