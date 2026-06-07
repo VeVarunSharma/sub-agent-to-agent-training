@@ -53,8 +53,8 @@ function parseArgs(argv) {
                        [--identity <path> | --no-identity]
 
 Scores a runtime payload JSONL against a domain split using the M1-M11
-deterministic sub-metrics. M12 and M13 are stubbed at null until the judge
-integration lands.
+deterministic sub-metrics. M12 and M13 stay null unless a caller wires a
+judge runner into the evaluator context.
 
 Env vars:
   SRS_HOLDOUT_IDENTITY_PATH    override the default age identity location
@@ -219,7 +219,7 @@ async function main() {
     const runtime = byId.get(caseData.case_id);
     if (!runtime) throw new Error(`unreachable: missing runtime for ${caseData.case_id}`);
     const wrapped = { case: caseData, sourcePath: `cases/${caseData.split}`, line: 0 };
-    results.push(scoreCase(wrapped, runtime, ctx, DETERMINISTIC_SCORERS));
+    results.push(await scoreCase(wrapped, runtime, ctx, DETERMINISTIC_SCORERS));
   }
 
   printSummary(results, args);

@@ -1,0 +1,34 @@
+name: M13 memo accuracy
+description: Score how accurate the staff memo is.
+model: openai/gpt-4o-mini
+modelParameters:
+  temperature: 0.0
+testData: []
+messages:
+  - role: system
+    content: |
+      You are a Vancouver municipal planning reviewer with five years of staff memo review experience.
+      Score the staff memo below for technical accuracy against the case and cited bylaws.
+      Respond with a single JSON object: {"score": <float in [0, 1]>, "rationale": "<one sentence>"}.
+      Do not return any text outside the JSON object.
+      Use these anchors:
+      - 1.0 = every numeric claim matches the application_packet, every cited bylaw_id matches one of the cited_bylaw_ids in the runtime, no factual contradictions.
+      - 0.5 = a few minor discrepancies that would not block a reviewer.
+      - 0.0 = at least one material factual error, such as a wrong number, a wrong bylaw, or a missing required citation.
+  - role: user
+    content: |
+      Application context:
+      {{case_summary}}
+
+      Runtime cited bylaw IDs:
+      {{cited_bylaw_ids}}
+
+      Runtime numeric gaps:
+      {{numeric_gaps}}
+
+      Staff memo:
+      {{memo_markdown}}
+evaluators:
+  - name: judge-output-is-valid-json
+    string:
+      contains: '"score"'

@@ -1,6 +1,7 @@
 import type { AgentId } from "@srs/shared";
 
 export * from "./mock/pipeline.js";
+export * from "./ghmodels/index.js";
 
 export interface FoundryAgentDescriptor {
   agentId: AgentId;

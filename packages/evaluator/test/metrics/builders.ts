@@ -66,6 +66,8 @@ interface BuildRuntimeOptions {
   evidence_fields_by_bylaw?: Record<string, string[]>
   redlines?: RuntimePayload["redlines"]
   memo_markdown?: string
+  letter_markdown?: string
+  reported_numeric_gaps?: RuntimePayload["reported_numeric_gaps"]
 }
 
 export const buildRuntime = (options: BuildRuntimeOptions = {}): RuntimePayload => ({
@@ -75,14 +77,14 @@ export const buildRuntime = (options: BuildRuntimeOptions = {}): RuntimePayload 
   predicted_outcome: "ready",
   cited_bylaw_ids: options.cited_bylaw_ids ?? [],
   evidence_fields_by_bylaw: options.evidence_fields_by_bylaw ?? {},
-  reported_numeric_gaps: [],
+  reported_numeric_gaps: options.reported_numeric_gaps ?? [],
   stage1_complete: true,
   stage1_missing: [],
   applicant_support_flags: options.applicant_support_flags ?? [],
   equity_notes: [],
   redlines: options.redlines ?? [],
   memo_markdown: options.memo_markdown ?? "",
-  letter_markdown: "",
+  letter_markdown: options.letter_markdown ?? "",
 })
 
 export const buildRedline = (

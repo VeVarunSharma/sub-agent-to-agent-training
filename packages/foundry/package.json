@@ -20,6 +20,7 @@
   "dependencies": {
     "@azure/identity": "^4.5.0",
     "@srs/shared": "workspace:*",
+    "yaml": "^2.9.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {

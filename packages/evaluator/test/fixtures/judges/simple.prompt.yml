@@ -1,0 +1,16 @@
+name: Fixture judge prompt
+model: openai/gpt-4o-mini
+testData: []
+messages:
+  - role: system
+    content: |
+      Score this input.
+  - role: user
+    content: |
+      Input: {{input}}
+      Repeated: {{input}}
+      Untouched: {{ missing }}
+evaluators:
+  - name: judge-output-is-valid-json
+    string:
+      contains: '"score"'

@@ -33,27 +33,42 @@ function weightedSum(metricIds: readonly SubMetricId[], subMetrics: SubMetricRes
   return total;
 }
 
-export function scoreCase(
+export async function scoreCase(
   caseRecord: CaseRecord,
   runtime: RuntimePayload,
   ctx: MetricContext,
   scorers: MetricScorerMap,
-): PerCaseEvalResult {
+): Promise<PerCaseEvalResult> {
   const caseData = caseRecord.case;
+  const [M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M11, M12, M13] = await Promise.all([
+    scorers.M1(caseData, runtime, ctx),
+    scorers.M2(caseData, runtime, ctx),
+    scorers.M3(caseData, runtime, ctx),
+    scorers.M4(caseData, runtime, ctx),
+    scorers.M5(caseData, runtime, ctx),
+    scorers.M6(caseData, runtime, ctx),
+    scorers.M7(caseData, runtime, ctx),
+    scorers.M8(caseData, runtime, ctx),
+    scorers.M9(caseData, runtime, ctx),
+    scorers.M10(caseData, runtime, ctx),
+    scorers.M11(caseData, runtime, ctx),
+    scorers.M12(caseData, runtime, ctx),
+    scorers.M13(caseData, runtime, ctx),
+  ] as const);
   const subMetrics: SubMetricResultMap = {
-    M1: scorers.M1(caseData, runtime, ctx),
-    M2: scorers.M2(caseData, runtime, ctx),
-    M3: scorers.M3(caseData, runtime, ctx),
-    M4: scorers.M4(caseData, runtime, ctx),
-    M5: scorers.M5(caseData, runtime, ctx),
-    M6: scorers.M6(caseData, runtime, ctx),
-    M7: scorers.M7(caseData, runtime, ctx),
-    M8: scorers.M8(caseData, runtime, ctx),
-    M9: scorers.M9(caseData, runtime, ctx),
-    M10: scorers.M10(caseData, runtime, ctx),
-    M11: scorers.M11(caseData, runtime, ctx),
-    M12: scorers.M12(caseData, runtime, ctx),
-    M13: scorers.M13(caseData, runtime, ctx),
+    M1,
+    M2,
+    M3,
+    M4,
+    M5,
+    M6,
+    M7,
+    M8,
+    M9,
+    M10,
+    M11,
+    M12,
+    M13,
   };
 
   for (const metricId of NON_JUDGE_METRIC_IDS) {
