@@ -46,6 +46,7 @@ Thumbs.db
 
 # session + scratch
 *.local
+.srs-iterate-tmp/
 
 # eval scratch (rounds live here once produced)
 eval-reports/*/scratch/

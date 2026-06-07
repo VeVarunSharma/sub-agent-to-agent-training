@@ -25,7 +25,7 @@
     "eval": "tsx scripts/eval-run.ts",
     "eval:deterministic": "pnpm -r --filter @srs/shared --filter @srs/evaluator build >/dev/null && node scripts/eval-deterministic.mjs",
     "baseline": "pnpm -r --filter @srs/shared --filter @srs/foundry --filter @srs/evaluator build >/dev/null && node scripts/run-baseline.mjs",
-    "iterate": "tsx scripts/iterate.ts",
+    "iterate": "pnpm -r --filter @srs/shared --filter @srs/foundry --filter @srs/evaluator build >/dev/null && tsx scripts/iterate.ts",
     "ablate": "tsx scripts/ablate.ts"
   },
   "devDependencies": {
