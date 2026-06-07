@@ -1,0 +1,27 @@
+{
+  "domain": "van-ssmuh",
+  "corpus_version": "vtest",
+  "generated_at": "2026-06-07",
+  "files": [
+    {
+      "path": "datasets/policy-corpus/public/van-ssmuh/a.md",
+      "bylaw_ids": ["A-1"],
+      "source": "fixture-a",
+      "source_url": "https://example.invalid/a",
+      "vintage_date": "2026-01-01",
+      "license": "fixture",
+      "excerpt_only": true,
+      "content_hash": "sha256:a"
+    },
+    {
+      "path": "datasets/policy-corpus/public/van-ssmuh/b.md",
+      "bylaw_ids": ["A-1"],
+      "source": "fixture-b",
+      "source_url": "https://example.invalid/b",
+      "vintage_date": "2026-01-02",
+      "license": "fixture",
+      "excerpt_only": true,
+      "content_hash": "sha256:b"
+    }
+  ]
+}

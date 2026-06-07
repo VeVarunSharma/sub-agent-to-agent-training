@@ -1,35 +1,62 @@
-export const PRQS_WEIGHTS = {
-  M1: 9,
-  M2: 4,
-  M3: 13,
-  M4: 8,
-  M5: 11,
-  M6: 8,
-  M7: 8,
-  M8: 8,
-  M9: 6,
-  M10: 5,
-  M11: 5,
-  M12: 6,
-  M13: 9,
-} as const;
+export * from "./constants.js";
+export * from "./metrics/types.js";
+export * from "./loaders.js";
+export * from "./score.js";
+export * from "./aggregate.js";
 
-export type SubMetricId = keyof typeof PRQS_WEIGHTS;
+export type { RuntimePayload, RuntimeRedline, RuntimeNumericGap, SubMetricResult, PerCaseEvalResult } from "@srs/shared";
+export { RuntimePayloadSchema, PerCaseEvalResultSchema } from "@srs/shared";
 
-export const PRQS_WEIGHT_TOTAL = Object.values(PRQS_WEIGHTS).reduce(
-  (acc, w) => acc + w,
-  0,
-);
+export { default as scoreM1 } from "./metrics/m1.js";
+export { default as scoreM2 } from "./metrics/m2.js";
+export { default as scoreM3 } from "./metrics/m3.js";
+export { default as scoreM4 } from "./metrics/m4.js";
+export { scoreM5 } from "./metrics/m5.js";
+export { scoreM6 } from "./metrics/m6.js";
+export { scoreM7 } from "./metrics/m7.js";
+export { scoreM8 } from "./metrics/m8.js";
+export { scoreM9 } from "./metrics/m9.js";
+export { default as scoreM10 } from "./metrics/m10.js";
+export { default as scoreM11 } from "./metrics/m11.js";
+export { isNumericGap } from "./metrics/m6-helpers.js";
+export { getByDotPath } from "./metrics/m8-helpers.js";
+export { extractBylawIds, parseMarkdownSections } from "./metrics/m9-helpers.js";
+export { APPLICANT_SUPPORT_FLAG_IDS } from "./metrics/applicant-support-flag-taxonomy.js";
 
-export const PRQS_DETERMINISTIC_MAX = 71;
+import scoreM1 from "./metrics/m1.js";
+import scoreM2 from "./metrics/m2.js";
+import scoreM3 from "./metrics/m3.js";
+import scoreM4 from "./metrics/m4.js";
+import { scoreM5 } from "./metrics/m5.js";
+import { scoreM6 } from "./metrics/m6.js";
+import { scoreM7 } from "./metrics/m7.js";
+import { scoreM8 } from "./metrics/m8.js";
+import { scoreM9 } from "./metrics/m9.js";
+import scoreM10 from "./metrics/m10.js";
+import scoreM11 from "./metrics/m11.js";
+import type { SubMetricResult } from "@srs/shared";
+import type { MetricScorer } from "./metrics/types.js";
+import type { MetricScorerMap } from "./score.js";
 
-if (PRQS_WEIGHT_TOTAL !== 100) {
-  throw new Error(
-    `PRQS weights must sum to 100; got ${PRQS_WEIGHT_TOTAL}. Update specs/001-eval-protocol/SPEC.md and this constant together.`,
-  );
-}
+const nullScorer: MetricScorer = (): SubMetricResult => ({
+  raw: null,
+  empty_set_branch: "not_applicable",
+});
 
-export const ACCEPTANCE_THRESHOLD_ABS = 1.5;
-export const BOOTSTRAP_RESAMPLES = 1000;
-export const BOOTSTRAP_SEED = 4242;
-export const BOOTSTRAP_CONFIDENCE_LEVEL = 0.95;
+export const NULL_JUDGE_SCORER: MetricScorer = nullScorer;
+
+export const DETERMINISTIC_SCORERS: MetricScorerMap = {
+  M1: scoreM1,
+  M2: scoreM2,
+  M3: scoreM3,
+  M4: scoreM4,
+  M5: scoreM5,
+  M6: scoreM6,
+  M7: scoreM7,
+  M8: scoreM8,
+  M9: scoreM9,
+  M10: scoreM10,
+  M11: scoreM11,
+  M12: nullScorer,
+  M13: nullScorer,
+};

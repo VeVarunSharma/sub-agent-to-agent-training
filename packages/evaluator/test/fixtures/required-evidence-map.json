@@ -1,0 +1,24 @@
+{
+  "domain": "van-ssmuh",
+  "corpus_version": "vtest",
+  "entries": {
+    "ZDB-R1-1-FSR": {
+      "required_evidence_keys": ["fsr_proposed", "lot_area_sqm"],
+      "expected_gap_ids": ["gap-fsr"],
+      "vintage_date": "2026-01-01",
+      "source_corpus_entry": "zdb-r1-1-fsr"
+    },
+    "ZDB-R1-1-HEIGHT": {
+      "required_evidence_keys": ["height_m"],
+      "expected_gap_ids": ["gap-height"],
+      "vintage_date": "2026-01-02",
+      "source_corpus_entry": "zdb-r1-1-height"
+    },
+    "PARKING-SSMUH": {
+      "required_evidence_keys": ["parking_spaces"],
+      "expected_gap_ids": ["gap-parking"],
+      "vintage_date": "2026-01-03",
+      "source_corpus_entry": "parking-ssmuh"
+    }
+  }
+}

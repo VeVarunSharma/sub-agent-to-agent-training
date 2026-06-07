@@ -23,6 +23,7 @@
     "build:splits": "tsx scripts/build-splits.ts",
     "sync:agents": "tsx scripts/sync-agents.ts",
     "eval": "tsx scripts/eval-run.ts",
+    "eval:deterministic": "pnpm -r --filter @srs/shared --filter @srs/evaluator build >/dev/null && node scripts/eval-deterministic.mjs",
     "iterate": "tsx scripts/iterate.ts",
     "ablate": "tsx scripts/ablate.ts"
   },
