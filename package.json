@@ -19,6 +19,8 @@
     "gen:data": "tsx scripts/generate-data.ts",
     "gen:few-shot": "tsx scripts/generate-few-shot.ts",
     "validate:data": "tsx scripts/validate-data.ts",
+    "seal:data": "tsx scripts/seal-data.ts",
+    "build:splits": "tsx scripts/build-splits.ts",
     "sync:agents": "tsx scripts/sync-agents.ts",
     "eval": "tsx scripts/eval-run.ts",
     "iterate": "tsx scripts/iterate.ts",

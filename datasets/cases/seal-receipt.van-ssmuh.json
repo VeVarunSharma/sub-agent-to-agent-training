@@ -1,0 +1,20 @@
+{
+  "domain": "van-ssmuh",
+  "identity_public_key": "age15lhsu57nffr700zp3j3lcj4zn2cv6s937qy8d2pcn7chx62zfv4szw6wpc",
+  "sealed_files": [
+    {
+      "path": "datasets/cases/van-ssmuh.holdout.jsonl",
+      "ciphertext_path": "datasets/cases/van-ssmuh.holdout.jsonl.age",
+      "plaintext_sha256": "sha256:aedbda6387fcc26bef39b705af35ff296432793afb86e1f73dee118eb813c2fb",
+      "ciphertext_sha256": "sha256:1452aa36ecae5e79e11aa3bda1bca2aeb977bf2f2e5a2bc2fdece3f9ddaf90d9",
+      "sealed_at": "2026-06-07T19:03:51.678Z"
+    },
+    {
+      "path": "datasets/cases/van-ssmuh.gold-holdout.jsonl",
+      "ciphertext_path": "datasets/cases/van-ssmuh.gold-holdout.jsonl.age",
+      "plaintext_sha256": "sha256:00ac360c98b1856e3339756c74a78d7bb60fada409d41275f073e9b34ae4724b",
+      "ciphertext_sha256": "sha256:ba3bd7117925680eaba55f8aef6a4854c4183855360e056099db6af90d43556d",
+      "sealed_at": "2026-06-07T19:03:51.693Z"
+    }
+  ]
+}

@@ -481,7 +481,7 @@
     },
     {
       "case_id": "van-ssmuh-train-010",
-      "split": "train",
+      "split": "holdout",
       "address_stub": "synthetic-CW-block-010",
       "project": {
         "zoning_district": "R1-1",
@@ -528,7 +528,7 @@
     },
     {
       "case_id": "van-ssmuh-train-011",
-      "split": "train",
+      "split": "holdout",
       "address_stub": "synthetic-SW-block-011",
       "project": {
         "zoning_district": "R1-1",
@@ -959,7 +959,7 @@
     },
     {
       "case_id": "van-ssmuh-train-020",
-      "split": "train",
+      "split": "holdout",
       "address_stub": "synthetic-NE-block-020",
       "project": {
         "zoning_district": "R1-1",
@@ -1056,7 +1056,7 @@
     },
     {
       "case_id": "van-ssmuh-train-022",
-      "split": "train",
+      "split": "holdout",
       "address_stub": "synthetic-CW-block-022",
       "project": {
         "zoning_district": "R1-1",
@@ -1107,7 +1107,7 @@
     },
     {
       "case_id": "van-ssmuh-train-023",
-      "split": "train",
+      "split": "holdout",
       "address_stub": "synthetic-SW-block-023",
       "project": {
         "zoning_district": "R1-1",
@@ -1157,7 +1157,7 @@
     },
     {
       "case_id": "van-ssmuh-train-024",
-      "split": "train",
+      "split": "holdout",
       "address_stub": "synthetic-E-block-024",
       "project": {
         "zoning_district": "R1-1",

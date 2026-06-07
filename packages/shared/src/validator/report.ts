@@ -229,6 +229,24 @@ function distanceHistogramSection(dataset: Dataset): string[] {
   return lines;
 }
 
+function nearNeighborSection(dataset: Dataset, bounds: DiversityBounds): string[] {
+  const lines = [
+    "## Near-neighbor cross-split pairs",
+    "",
+    "The closest 10 cross-split pairs by scenario-fingerprint Jaccard distance. Pairs flagged with ⚠ are at exactly the 0.35 floor and warrant reviewer judgment before freeze.",
+    "",
+  ];
+  const rows = crossSplitPairs(dataset)
+    .sort((a, b) => a.distance - b.distance || a.a.case.case_id.localeCompare(b.a.case.case_id) || a.b.case.case_id.localeCompare(b.b.case.case_id))
+    .slice(0, 10)
+    .map((pair): (string | number)[] => {
+      const flag = Math.abs(pair.distance - bounds.minScenarioDistance) <= 0.005 ? "⚠" : "";
+      return [`${pair.a.case.case_id} ↔ ${pair.b.case.case_id}`, pair.distance.toFixed(3), flag];
+    });
+  lines.push(table(["pair", "distance", "flag"], rows));
+  return lines;
+}
+
 function trapFamilySection(dataset: Dataset): string {
   const families = sorted(new Set(dataset.cases.map((record) => record.case.edge_case_family ?? "_none_")));
   const rows: (string | number)[][] = [];
@@ -260,6 +278,19 @@ function topClosestSection(dataset: Dataset): string[] {
   return lines;
 }
 
+function reviewerSignOffSection(generatedAt: string): string[] {
+  return [
+    "## Reviewer sign-off",
+    "",
+    `This diversity report was generated at ${generatedAt}. Before freeze, a maintainer should append below:`,
+    "",
+    "- Reviewer:",
+    "- Reviewed at:",
+    "- Commit SHA at review:",
+    "- Notes:",
+  ];
+}
+
 function buildStatusSection(dataset: Dataset, bounds: DiversityBounds): string[] {
   const diversity = assertDiversity(dataset, bounds);
   const distance = assertScenarioDistance(dataset, bounds);
@@ -276,7 +307,7 @@ export function buildDiversityReport(dataset: Dataset, bounds: DiversityBounds):
   const generatedAt = new Date().toISOString();
   const applicantHeaders = applicantTypes(dataset, bounds);
   const sections = [
-    [`# Diversity report — generated ${generatedAt}`],
+    [`# Diversity report generated ${generatedAt}`],
     countsSection(dataset),
     [
       "## Outcome class distribution per (domain, split)",
@@ -296,9 +327,11 @@ export function buildDiversityReport(dataset: Dataset, bounds: DiversityBounds):
       table(["domain", "split", ...applicantHeaders, "n"], countRows(dataset, applicantHeaders, applicantType)),
     ],
     distanceHistogramSection(dataset),
+    nearNeighborSection(dataset, bounds),
     ["## Trap-family coverage per (domain, split)", trapFamilySection(dataset)],
     topClosestSection(dataset),
     buildStatusSection(dataset, bounds),
+    reviewerSignOffSection(generatedAt),
   ];
   return `${sections.map((lines) => lines.join("\n")).join("\n\n")}\n`;
 }

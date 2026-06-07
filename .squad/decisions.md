@@ -2,6 +2,28 @@
 
 ## Active Decisions
 
+### 2026-06-07: Chunk 3a splits + sealed holdout + validator gates, Firefly cast reused
+
+Assignment id: `chunk-3a-splits-and-sealing-2026-06-07`. Branch: `vesharma/chunk-3a-splits-and-sealing`. Last freeze-blocking chunk before round-0 baseline.
+
+Cast: Firefly reused. Wash on age seal module + seal-data CLI + build-splits CLI, Kaylee on validator A20-A24 + diversity-report near-neighbor extension, Inara on promoting 6 train→holdout + authoring 4 gold-holdout cases, Mal on lead + integration + PR.
+
+Scope (locked):
+- Pure-JS age sealing via the `age-encryption` npm package (no system dep on the `age` CLI).
+- `datasets/splits.json` is frozen with `SEED=20260601`. Regen requires `--force` to land.
+- 6 train cases promoted into `van-ssmuh.holdout.jsonl` (label_review_status bumped to human-verified, new IDs `van-ssmuh-holdout-NNN`). Train shrinks from 24 to 18.
+- 4 hand-authored gold-holdout cases (`provenance.generator_id: "manual-author"`, `provider: "human"`, `decoding: null`). Full 40-case target deferred to Chunk 3b.
+- Holdout + gold-holdout plaintexts gitignored. Only `.age` files committed.
+- `splits-manifest.<domain>.json` reference file commits case IDs only so `splits.json` can rebuild on a key-less clone.
+- Validator gains A20 (splits schema + uniqueness), A21 (every case in exactly one split), A22 (sealed file present + plaintext absent), A23 (seal-receipt sha256 matches disk), A24 (diversity across 4 splits). Target: `pnpm validate:data` 24/24.
+- Diversity report gains a "Near-neighbor cross-split pairs" section (closest 10 + 0.35-floor flags) and a Reviewer sign-off field.
+
+Out of scope this assignment: hand-authoring the remaining 36 gold-holdout cases (Chunk 3b), reference outputs for holdout/gold-holdout (paired with chunk-2 fidelity follow-up), sealing per-case eval reports (Chunk 4), LLM generators (still stubbed), any Azure/Foundry wiring.
+
+Sequential constraint inside the squad: Inara's case-file changes must land before Mal stages and runs `pnpm seal:data` in the verify step. Wash + Kaylee build the *capabilities* in parallel with Inara; Mal exercises them end-to-end during verify.
+
+Reviewer rule: Mal owns the integration audit after all four sub-agents return. Same cross-file ID + fingerprint alignment audit pattern used in Chunks 1 and 2.
+
 ### 2026-06-07: Chunk 2 synthetic data, Firefly cast reused, deterministic-only scope
 
 Assignment id: `chunk-2-synthetic-data-2026-06-07`. Branch: `vesharma/chunk-2-synthetic-data`. The 12-bylaw / 12-gap contract from Chunk 1 carries forward verbatim.

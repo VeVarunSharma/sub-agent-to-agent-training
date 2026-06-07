@@ -62,3 +62,7 @@ eval-reports/*/scratch/
 .squad/.cache/
 # Squad: SubSquad activation file (local to this machine)
 .squad-workstream
+
+# Sealed-only datasets. The .age versions are committed; plaintext stays local.
+datasets/cases/van-ssmuh.holdout.jsonl
+datasets/cases/van-ssmuh.gold-holdout.jsonl

@@ -1,4 +1,6 @@
 import { z } from "zod";
+export * from "./splits.js";
+export * from "./seal-receipt.js";
 
 export const OutcomeClassSchema = z.enum([
   "ready",
@@ -65,7 +67,7 @@ export const ProvenanceSchema = z.object({
     top_p: z.number(),
     max_tokens: z.number().int().positive(),
     seed: z.number().int(),
-  }),
+  }).nullable(),
   raw_request_hash: z.string(),
   raw_response_hash: z.string(),
   package_lockfile_hash: z.string(),

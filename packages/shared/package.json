@@ -21,6 +21,10 @@
     "./generation": {
       "types": "./dist/generation/index.d.ts",
       "import": "./dist/generation/index.js"
+    },
+    "./seal": {
+      "types": "./dist/seal/index.d.ts",
+      "import": "./dist/seal/index.js"
     }
   },
   "scripts": {
@@ -30,6 +34,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "age-encryption": "0.3.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {

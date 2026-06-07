@@ -17,7 +17,12 @@ import {
   assertRequiredEvidenceCoverage,
   assertReviewStatus,
   assertScenarioDistance,
+  assertSealReceiptHashes,
+  assertSealedSplitsHygiene,
   assertSimplificationRegister,
+  assertSplitsManifest,
+  assertEveryCaseInSplits,
+  assertHoldoutDiversity,
   assertUniqueIds,
 } from "./assertions.js";
 import { DEFAULT_BOUNDS, type ValidateOpts, type ValidatorReport } from "./types.js";
@@ -46,6 +51,11 @@ export async function validateDatasets(opts: ValidateOpts): Promise<ValidatorRep
     await assertEnvAllowlist(),
     assertNoOrphanGapIds(dataset),
     assertApplicantSupportFlagsClosed(dataset),
+    assertSplitsManifest(dataset),
+    assertEveryCaseInSplits(dataset),
+    assertSealedSplitsHygiene(dataset),
+    assertSealReceiptHashes(dataset),
+    assertHoldoutDiversity(dataset, bounds),
   ];
 
   const counts = {
