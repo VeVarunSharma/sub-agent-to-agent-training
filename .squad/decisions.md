@@ -2,6 +2,56 @@
 
 ## Active Decisions
 
+### 2026-06-07: Chunk 4 evaluator close-out — integration findings
+
+Closure for assignment `chunk-4-evaluator-deterministic-2026-06-07`. All five sub-agent legs returned green and merged through Mal's integration sweep.
+
+Status:
+- M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M11 implemented and unit-tested (54 metric tests). M12, M13 stubbed as `nullScorer` per scope.
+- `DETERMINISTIC_SCORERS: MetricScorerMap` registry assembled in `packages/evaluator/src/index.ts`; bridges Kaylee's `export default` and Inara's `export const` styles transparently.
+- `scoreCase` + `aggregateSplit` + bootstrap composite verified end-to-end (5 integration tests over 4 hand-rolled fixtures plus an aggregate composition test).
+- `pnpm eval:deterministic` CLI shipped as a `.mjs` (see gotcha below). Verified against an 18-case synthesized perfect-runtime JSONL over the real train split. Result: deterministic_prqs mean 82.47 CI95 [78.72, 87.48]. M6 and M8 came in at 0.222 because the synthesized runtime did not predict expected_gap_ids; that validates the metrics rather than failing them.
+
+Findings worth recording for future chunks:
+- Export-style inconsistency between sub-agents (default vs named) is acceptable inside metric modules but the central registry must bridge both. Document this in the metric-author contract for any future scorer additions.
+- `tsx 4.22.4` under Node v25.9.0 throws `ERR_PACKAGE_PATH_NOT_EXPORTED` when a TS script imports a workspace package that itself does cross-package bare-specifier imports (e.g., `from "@srs/shared"`). Workaround: ship CLIs as `.mjs`, import from each package's compiled `dist/`, invoke with plain `node`, and prepend a `pnpm -r build` step in the package script. Existing `scripts/*.ts` continue to work because they only reach directly into `packages/*/src/`.
+- M5 evidence map and M8 redline fields read from `application_packet` by exact key. Fixtures must align field names between case + runtime + required-evidence-map or the metric correctly scores them as misses. Recommend a `p1-reference-outputs` follow-up to normalize the long-form (`rear_setback_m_proposed`) vs short-form (`rear_setback_m`) split in our actual case data.
+- Applicant-support flag IDs are pinned in `specs/001-eval-protocol/applicant-support-flags.md`. Runtime flags that fall outside the taxonomy drop silently with `droppedForTaxonomy` for audit; fixtures and downstream agents must use the exact pinned IDs (`jargon-density-high`, `next-step-ambiguous`, etc.), not shorthand.
+- `M7` is binary-on-match-of-both-fields (stage1_complete AND stage1_missing set equality). There is no `zero_gate_fail` branch; the docstring on the spec line should be aligned with the implementation when chunk 5 lands.
+
+Follow-ups (NOT chunk-4 scope; carry to plan):
+- `RuntimePathwayClass`/`RuntimeOutcomeClass` enums duplicate `PathwayClassSchema`/`OutcomeClassSchema` in shared/schemas. Consolidate during chunk 5.
+- Reference outputs for holdout/gold-holdout cases (paired with chunk 2 fidelity pass under `p1-reference-outputs`).
+- `tsx + Node 25` cross-package resolution gotcha (above) should be added to a `docs/gotchas.md` when the next contributor hits it.
+
+Branch: `vesharma/chunk-4-evaluator-deterministic`. Reviewer gate (Mal) passed. PR opened immediately after this entry lands.
+
+### 2026-06-07: Chunk 4 evaluator deterministic sub-metrics, Firefly cast reused
+
+Assignment id: `chunk-4-evaluator-deterministic-2026-06-07`. Branch: `vesharma/chunk-4-evaluator-deterministic`. First chunk that produces a number (deterministic-PRQS) from a case + a runtime payload pair.
+
+Cast: Firefly reused. Wash on schemas (RuntimePayload + PerCaseEvalResult) + score composite + bootstrap aggregator. Kaylee on classification + set sub-metrics (M1, M2, M3, M4, M10, M11). Inara on evidence + numeric + structural sub-metrics (M5, M6, M7, M8, M9). Mal on lead + runtime contract authoring + CLI (`pnpm eval:deterministic`) + integration fixtures + PR.
+
+Scope (locked):
+- Implement only deterministic + deterministic-ish sub-metrics: M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M11 (85 of 100 weight). M12 + M13 (judge-based) are out of scope and explicitly stubbed at `m12=null, m13=null` in per-case results.
+- Two composite numbers: `deterministic_prqs_case` normalized to [0, 100] over the 71-weight deterministic subset (M1, M3, M4, M5, M6, M7, M8, M9) per spec 001 line 195, AND a `partial_full_prqs_case_lower_bound` that treats M12+M13 as 0 (lower bound on full PRQS until judge lands).
+- Bootstrap: 1000 resamples, seed = 4242, regular bootstrap over per-case score vector. Paired bootstrap is implemented but only exercised when two rounds are passed.
+- Empty-set discipline rules in spec 001 lines 145-151 are first-class behavior of every set-based metric.
+- RuntimePayload is a frozen Zod schema with the per-agent fields the six Foundry agents will produce: `predicted_pathway`, `cited_bylaw_ids`, `evidence_fields_by_bylaw`, `reported_numeric_gaps`, `stage1_complete`, `stage1_missing`, `redlines`, `memo_markdown`, `letter_markdown`, `applicant_support_flags`, `equity_notes`. Mal locks the exact shape in chunk4-mal-contract before B and C dispatch.
+- `pnpm eval:deterministic --runtime <path> --domain van-ssmuh --split <name>` runs end-to-end on a runtime JSONL and prints a per-case + per-split summary. No judge calls. No Azure calls.
+- 4 hand-crafted integration fixture cases covering: clean ready, needs-clarification with gaps, complex-requires-specialist with redlines, heritage with stage1 incomplete. Each exercises all 11 sub-metrics with hand-verified expected scores.
+
+Out of scope this assignment: M12 + M13 (judge integration), Azure Foundry agent execution (Chunk 5), end-to-end Foundry roundtrip (Chunk 5), eval report markdown writer (deferred), encrypted per-case score persistence (paired with Chunk 5 baseline run), per-round CLI (deferred), iteration script (Chunk 6).
+
+Cross-spec invariants this assignment respects:
+- The `packages/evaluator` SHA will be pinned in `judge-prompts-manifest.json.evaluator_package_sha` at spec 001 freeze. After this chunk lands, anything that changes evaluator outputs is a freeze violation until a DECISIONS entry invalidates affected rounds (spec 001 line 376).
+- M5 reads `datasets/policy-corpus/oracle/<domain>/required-evidence-map.json` (frozen artifact) by path through ctx. No network. No mutation.
+- M4 reads `datasets/policy-corpus/corpus-manifest.json` by path through ctx.
+
+Parallelism: A (Wash), B (Kaylee), C (Inara) run concurrently against the schema Mal locks upfront. D (Mal CLI + integration) waits for A, B, C to return. Mal then runs the integration sweep and opens the PR.
+
+Reviewer rule: Mal owns the integration audit and must verify the composite formula matches spec 001 line 191-198 exactly and that all 6 empty-set columns in the table at line 175-182 are exercised by at least one integration fixture.
+
 ### 2026-06-07: Chunk 3a splits + sealed holdout + validator gates, Firefly cast reused
 
 Assignment id: `chunk-3a-splits-and-sealing-2026-06-07`. Branch: `vesharma/chunk-3a-splits-and-sealing`. Last freeze-blocking chunk before round-0 baseline.
