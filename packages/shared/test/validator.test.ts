@@ -447,6 +447,20 @@ describe("validateDatasets — corpus manifest fields (A13)", () => {
     const report = await validateDatasets({ root });
     expect(report.results.find((r) => r.id === "A13")?.status).toBe("failed");
   });
+
+  it("discovers oracle-only domains and ignores invalid oracle directory names", async () => {
+    mkdirSync(join(root, "datasets/cases"), { recursive: true });
+    mkdirSync(join(root, "datasets/policy-corpus/oracle/foo-domain"), { recursive: true });
+    mkdirSync(join(root, "datasets/policy-corpus/oracle/Foo_Domain"), { recursive: true });
+
+    const report = await validateDatasets({ root });
+    const a13 = report.results.find((r) => r.id === "A13");
+    const failures = a13?.failures.join("\n") ?? "";
+
+    expect(a13?.status).toBe("failed");
+    expect(failures).toContain('domain "foo-domain"');
+    expect(failures).not.toContain("Foo_Domain");
+  });
 });
 
 describe("validateDatasets — simplification register (A14)", () => {

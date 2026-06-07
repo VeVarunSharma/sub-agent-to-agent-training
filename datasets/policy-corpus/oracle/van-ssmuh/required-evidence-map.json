@@ -1,0 +1,79 @@
+{
+  "domain": "van-ssmuh",
+  "corpus_version": "v2026.06.0",
+  "generated_at": "2026-06-07",
+  "entries": {
+    "ZDB-R1-1-FSR": {
+      "required_evidence_keys": ["fsr_proposed", "lot_area_sqm"],
+      "expected_gap_ids": ["gap-fsr-over"],
+      "vintage_date": "2026-04-01",
+      "source_corpus_entry": "datasets/policy-corpus/public/van-ssmuh/zdb-r1-1-fsr.md"
+    },
+    "ZDB-R1-1-REAR-SETBACK": {
+      "required_evidence_keys": ["rear_setback_m_proposed", "zoning_district"],
+      "expected_gap_ids": ["gap-rear-setback-short"],
+      "vintage_date": "2026-04-01",
+      "source_corpus_entry": "datasets/policy-corpus/public/van-ssmuh/zdb-r1-1-setbacks.md"
+    },
+    "ZDB-R1-1-SIDE-SETBACK": {
+      "required_evidence_keys": ["side_setback_m_proposed", "zoning_district"],
+      "expected_gap_ids": ["gap-side-setback-short"],
+      "vintage_date": "2026-04-01",
+      "source_corpus_entry": "datasets/policy-corpus/public/van-ssmuh/zdb-r1-1-setbacks.md"
+    },
+    "ZDB-R1-1-FRONT-SETBACK": {
+      "required_evidence_keys": ["zoning_district"],
+      "expected_gap_ids": ["gap-front-setback-short"],
+      "vintage_date": "2026-04-01",
+      "source_corpus_entry": "datasets/policy-corpus/public/van-ssmuh/zdb-r1-1-setbacks.md"
+    },
+    "ZDB-R1-1-HEIGHT": {
+      "required_evidence_keys": ["height_m_proposed", "zoning_district"],
+      "expected_gap_ids": ["gap-height-over"],
+      "vintage_date": "2026-04-01",
+      "source_corpus_entry": "datasets/policy-corpus/public/van-ssmuh/zdb-r1-1-height.md"
+    },
+    "ZDB-R1-1-UNITS": {
+      "required_evidence_keys": ["units_proposed", "zoning_district", "neighbour-notification"],
+      "expected_gap_ids": ["gap-units-over", "gap-neighbour-notification-missing"],
+      "vintage_date": "2026-04-01",
+      "source_corpus_entry": "datasets/policy-corpus/public/van-ssmuh/zdb-r1-1-units.md"
+    },
+    "PARKING-SSMUH": {
+      "required_evidence_keys": ["parking_spaces_proposed", "units_proposed"],
+      "expected_gap_ids": ["gap-parking-short"],
+      "vintage_date": "2026-04-01",
+      "source_corpus_entry": "datasets/policy-corpus/public/van-ssmuh/parking-ssmuh.md"
+    },
+    "VBBL-PART9": {
+      "required_evidence_keys": ["architectural-set"],
+      "expected_gap_ids": ["gap-architectural-set-missing"],
+      "vintage_date": "2026-04-01",
+      "source_corpus_entry": "datasets/policy-corpus/public/van-ssmuh/vbbl-part9.md"
+    },
+    "BC-STEP-CODE": {
+      "required_evidence_keys": ["energy_step_code_proposed", "energy-compliance-report"],
+      "expected_gap_ids": ["gap-energy-step-low", "gap-energy-report-missing"],
+      "vintage_date": "2026-04-01",
+      "source_corpus_entry": "datasets/policy-corpus/public/van-ssmuh/bc-step-code.md"
+    },
+    "BILL-44-SSMUH": {
+      "required_evidence_keys": ["zoning_district", "units_proposed"],
+      "expected_gap_ids": [],
+      "vintage_date": "2026-04-01",
+      "source_corpus_entry": "datasets/policy-corpus/public/van-ssmuh/bill-44-ssmuh.md"
+    },
+    "TREE-PROTECTION": {
+      "required_evidence_keys": ["tree_inventory_count", "tree-assessment"],
+      "expected_gap_ids": ["gap-tree-assessment-missing"],
+      "vintage_date": "2026-04-01",
+      "source_corpus_entry": "datasets/policy-corpus/public/van-ssmuh/tree-protection.md"
+    },
+    "SUBDIVISION": {
+      "required_evidence_keys": ["lot_area_sqm", "lot_frontage_m"],
+      "expected_gap_ids": [],
+      "vintage_date": "2026-04-01",
+      "source_corpus_entry": "datasets/policy-corpus/public/van-ssmuh/subdivision.md"
+    }
+  }
+}

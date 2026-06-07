@@ -1,0 +1,115 @@
+{
+  "domain": "van-ssmuh",
+  "corpus_version": "v2026.06.0",
+  "generated_at": "2026-06-07",
+  "rules": [
+    {
+      "id": "VAN-SSMUH-FSR-001",
+      "title": "FSR cap for R1-1",
+      "bylaw_ids": ["ZDB-R1-1-FSR"],
+      "evidence_keys": ["fsr_proposed", "lot_area_sqm"],
+      "condition": "fsr_proposed > 1.0",
+      "emits_gap": "gap-fsr-over",
+      "classification": "deterministic"
+    },
+    {
+      "id": "VAN-SSMUH-REAR-SETBACK-002",
+      "title": "Rear setback minimum for R1-1",
+      "bylaw_ids": ["ZDB-R1-1-REAR-SETBACK"],
+      "evidence_keys": ["rear_setback_m_proposed", "zoning_district"],
+      "condition": "rear_setback_m_proposed < 7.6",
+      "emits_gap": "gap-rear-setback-short",
+      "classification": "deterministic"
+    },
+    {
+      "id": "VAN-SSMUH-SIDE-SETBACK-003",
+      "title": "Side setback minimum for R1-1",
+      "bylaw_ids": ["ZDB-R1-1-SIDE-SETBACK"],
+      "evidence_keys": ["side_setback_m_proposed", "zoning_district"],
+      "condition": "side_setback_m_proposed < 1.2",
+      "emits_gap": "gap-side-setback-short",
+      "classification": "deterministic"
+    },
+    {
+      "id": "VAN-SSMUH-FRONT-SETBACK-004",
+      "title": "Front setback informational check for R1-1",
+      "bylaw_ids": ["ZDB-R1-1-FRONT-SETBACK"],
+      "evidence_keys": ["zoning_district"],
+      "condition": "informational front setback check: proposed front setback is below 6.1 m when front-setback evidence is surfaced",
+      "emits_gap": "gap-front-setback-short",
+      "classification": "illustrative"
+    },
+    {
+      "id": "VAN-SSMUH-HEIGHT-005",
+      "title": "Height cap for R1-1",
+      "bylaw_ids": ["ZDB-R1-1-HEIGHT"],
+      "evidence_keys": ["height_m_proposed", "zoning_district"],
+      "condition": "height_m_proposed > 11.5",
+      "emits_gap": "gap-height-over",
+      "classification": "deterministic"
+    },
+    {
+      "id": "VAN-SSMUH-UNITS-006",
+      "title": "Unit cap for R1-1 SSMUH projects",
+      "bylaw_ids": ["ZDB-R1-1-UNITS"],
+      "evidence_keys": ["units_proposed", "zoning_district"],
+      "condition": "units_proposed > 4",
+      "emits_gap": "gap-units-over",
+      "classification": "deterministic"
+    },
+    {
+      "id": "VAN-SSMUH-PARKING-007",
+      "title": "Default parking supply for SSMUH projects",
+      "bylaw_ids": ["PARKING-SSMUH"],
+      "evidence_keys": ["parking_spaces_proposed", "units_proposed"],
+      "condition": "parking_spaces_proposed < units_proposed",
+      "emits_gap": "gap-parking-short",
+      "classification": "illustrative"
+    },
+    {
+      "id": "VAN-SSMUH-ENERGY-STEP-008",
+      "title": "Minimum energy step for Part 9 homes",
+      "bylaw_ids": ["BC-STEP-CODE"],
+      "evidence_keys": ["energy_step_code_proposed"],
+      "condition": "energy_step_code_proposed < 3",
+      "emits_gap": "gap-energy-step-low",
+      "classification": "deterministic"
+    },
+    {
+      "id": "VAN-SSMUH-TREE-ASSESSMENT-009",
+      "title": "Tree assessment requirement for protected trees",
+      "bylaw_ids": ["TREE-PROTECTION"],
+      "evidence_keys": ["tree_inventory_count", "tree-assessment"],
+      "condition": "tree-assessment is in missing_documents and tree_inventory_count > 0 for protected trees with DBH at least 30 cm",
+      "emits_gap": "gap-tree-assessment-missing",
+      "classification": "illustrative"
+    },
+    {
+      "id": "VAN-SSMUH-NEIGHBOUR-NOTIFICATION-010",
+      "title": "Neighbour notification package for additional units",
+      "bylaw_ids": ["ZDB-R1-1-UNITS"],
+      "evidence_keys": ["units_proposed", "neighbour-notification"],
+      "condition": "neighbour-notification is in missing_documents",
+      "emits_gap": "gap-neighbour-notification-missing",
+      "classification": "illustrative"
+    },
+    {
+      "id": "VAN-SSMUH-ENERGY-REPORT-011",
+      "title": "Energy compliance report submission",
+      "bylaw_ids": ["BC-STEP-CODE"],
+      "evidence_keys": ["energy-compliance-report"],
+      "condition": "energy-compliance-report is not in submitted_documents",
+      "emits_gap": "gap-energy-report-missing",
+      "classification": "deterministic"
+    },
+    {
+      "id": "VAN-SSMUH-ARCHITECTURAL-SET-012",
+      "title": "Architectural set submission for Part 9 review",
+      "bylaw_ids": ["VBBL-PART9"],
+      "evidence_keys": ["architectural-set"],
+      "condition": "architectural-set is not in submitted_documents",
+      "emits_gap": "gap-architectural-set-missing",
+      "classification": "deterministic"
+    }
+  ]
+}
