@@ -1,0 +1,21 @@
+{
+  "universe_usage_history": [
+    {
+      "universe": "Firefly",
+      "assignment_id": "ux-elevation-2026-06-07",
+      "used_at": "2026-06-07T15:57:39Z"
+    }
+  ],
+  "assignment_cast_snapshots": {
+    "ux-elevation-2026-06-07": {
+      "universe": "Firefly",
+      "agents": {
+        "lead": "Mal",
+        "frontend-dev": "Kaylee",
+        "ux-designer": "Inara",
+        "tester": "Wash"
+      },
+      "created_at": "2026-06-07T15:57:39Z"
+    }
+  }
+}
