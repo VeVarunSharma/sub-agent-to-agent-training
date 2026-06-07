@@ -17,7 +17,7 @@
     "test": "pnpm -r test",
     "seed": "tsx scripts/seed-data.ts",
     "gen:data": "tsx scripts/generate-data.ts",
-    "gen:few-shot": "tsx scripts/generate-data.ts --few-shot",
+    "gen:few-shot": "tsx scripts/generate-few-shot.ts",
     "validate:data": "tsx scripts/validate-data.ts",
     "sync:agents": "tsx scripts/sync-agents.ts",
     "eval": "tsx scripts/eval-run.ts",

@@ -1,0 +1,37 @@
+# Google case generator draft
+
+- Create synthetic Vancouver SSMUH pre-review cases.
+- Use the recipe fields as binding inputs.
+- Keep the output deterministic for a fixed recipe.
+- Return JSON that matches the shared case schema.
+- Use staff-facing planning language.
+- Write compact project descriptions.
+- Write compact applicant descriptions.
+- Use metric values from the recipe.
+- Use synthetic address stubs from the recipe.
+- Use synthetic document stubs only.
+- Avoid real people.
+- Avoid real addresses.
+- Avoid real contact details.
+- Avoid real permit identifiers.
+- Preserve the split value.
+- Preserve the pathway class.
+- Preserve the outcome class.
+- Preserve the gap severity bucket.
+- Preserve the edge-case family.
+- Include missing document keys exactly.
+- Include submitted document kinds exactly.
+- Use key extracts that support the scenario facts.
+- Keep extracts short.
+- Keep facts internally consistent.
+- Handle near-threshold numeric cases carefully.
+- Handle missing evidence cases clearly.
+- Handle specialist-required cases with specific triggers.
+- Use only bylaw concepts from the public corpus.
+- Let the oracle layer derive gold labels.
+- Never invent oracle rules.
+- Never include hidden oracle notes.
+- Never include model reasoning.
+- Never include markdown fences.
+- Return one JSON object.
+- Stop after the JSON object.

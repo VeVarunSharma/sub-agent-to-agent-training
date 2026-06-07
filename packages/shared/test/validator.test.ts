@@ -1,237 +1,99 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
-import { join } from "node:path";
-import { tmpdir } from "node:os";
-import { validateDatasets, type Case, type FewShot, sha256, buildScenarioFingerprint } from "../src/index.js";
+import { spawnSync } from "node:child_process";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import {
+  DEFAULT_BOUNDS,
+  buildDiversityReport,
+  loadDataset,
+  validateDatasets,
+  type Case,
+  type FewShot,
+  sha256,
+} from "../src/index.js";
+import {
+  buildMinimalCase,
+  buildMinimalFewShot,
+  createFixtureRoot,
+  provenance,
+  scenario,
+  writeApplicantSupportFlagsDoc as writeFixtureApplicantSupportFlagsDoc,
+  writeCases as writeFixtureCases,
+  writeCorpusManifest as writeFixtureCorpusManifest,
+  writeDecisionMatrix as writeFixtureDecisionMatrix,
+  writeFewShots as writeFixtureFewShots,
+  writeFixtureToTmp,
+  writeReferenceOutputs as writeFixtureReferenceOutputs,
+  writeRequiredEvidenceMap as writeFixtureRequiredEvidenceMap,
+  writeSeedReceipt as writeFixtureSeedReceipt,
+  writeSimplificationRegister as writeFixtureSimplificationRegister,
+} from "./fixtures/builders.js";
 
 let root = "";
+const roots = new Set<string>();
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
+const scriptPath = join(repoRoot, "scripts/validate-data.ts");
+
 function freshRoot() {
-  root = mkdtempSync(join(tmpdir(), "srs-validator-"));
+  root = createFixtureRoot();
+  roots.add(root);
   return root;
 }
 
-const FACT_NAMES = [
-  "zone",
-  "units",
-  "lot",
-  "fsr",
-  "rear-setback",
-  "side-setback",
-  "parking",
-  "height",
-  "energy-step",
-  "stage1-missing",
-  "trap-families",
-  "outcome",
-  "gap-severity",
-  "applicant-type",
-] as const;
-
-type FactKey = (typeof FACT_NAMES)[number];
-
-function scenario(overrides: Partial<Record<FactKey, string>> = {}): string {
-  const facts: Record<FactKey, string> = {
-    zone: "R1-1",
-    units: "4",
-    lot: "500-549",
-    fsr: "at-cap",
-    "rear-setback": "compliant",
-    "side-setback": "compliant",
-    parking: "compliant",
-    height: "compliant",
-    "energy-step": "step-3",
-    "stage1-missing": "none",
-    "trap-families": "none",
-    outcome: "ready",
-    "gap-severity": "none",
-    "applicant-type": "owner-builder",
-  };
-  return buildScenarioFingerprint({ ...facts, ...overrides });
-}
-
-function provenance(generator: string) {
-  return {
-    generator_id: generator,
-    provider: "demo",
-    model_snapshot: "demo",
-    api_version: "demo",
-    system_prompt_hash: "sha256:0",
-    generator_few_shots_hash: "sha256:0",
-    policy_corpus_hash_at_gen_time: "sha256:0",
-    case_schema_version: "v0.3.1",
-    decoding: { temperature: 0, top_p: 1, max_tokens: 1, seed: 0 },
-    raw_request_hash: "sha256:0",
-    raw_response_hash: "sha256:0",
-    package_lockfile_hash: "sha256:0",
-    generated_at: "2026-06-04",
-    reviewer: "test",
-    human_reviewed: true,
-    review_notes: "test",
-  };
-}
-
-interface CaseOpts {
-  id: string;
-  split: Case["split"];
-  outcome?: Case["outcome_class"];
-  pathway?: Case["pathway_class"];
-  gapSeverity?: Case["gap_severity_bucket"];
-  family?: string | null;
-  bylaws?: string[];
-  gaps?: string[];
-  flags?: string[];
-  memos?: string[];
-  letters?: string[];
-  reviewStatus?: Case["gold_labels"]["label_review_status"];
-  scenarioOverrides?: Partial<Record<FactKey, string>>;
-  contentSeed?: string;
-  entitySeed?: string;
-  docFps?: string[];
-  applicantType?: string;
-  stage1Complete?: boolean;
-  generator?: string;
-  domain?: string;
-}
-
-function makeCase(opts: CaseOpts): Case {
-  return {
-    case_id: opts.id,
-    domain: opts.domain ?? "van-ssmuh",
-    split: opts.split,
-    address_stub: `addr-${opts.id}`,
-    outcome_class: opts.outcome ?? "ready",
-    pathway_class: opts.pathway ?? "as-of-right-ssmuh",
-    gap_severity_bucket: opts.gapSeverity ?? "none",
-    edge_case_family: opts.family ?? null,
-    application_packet: {
-      applicant_profile: { type: opts.applicantType ?? "owner-builder" },
-    },
-    content_fingerprint: `sha256:${sha256(opts.contentSeed ?? opts.id)}`,
-    entity_fingerprint: `sha256:${sha256(opts.entitySeed ?? opts.id)}`,
-    document_stub_fingerprints: opts.docFps ?? [`sha256:${sha256(`doc-${opts.id}`)}`],
-    scenario_fingerprint: scenario(opts.scenarioOverrides),
-    gold_labels: {
-      bylaws_to_cite: opts.bylaws ?? ["ZDB-R1-1-FSR"],
-      evidence_to_surface: ["fsr"],
-      expected_gap_ids: opts.gaps ?? [],
-      expected_redlines_min: 0,
-      expected_redlines_max: 5,
-      stage1_complete: opts.stage1Complete ?? true,
-      stage1_missing: [],
-      expected_applicant_support_flags: opts.flags ?? [],
-      reference_memo_ids: opts.memos ?? [],
-      reference_letter_ids: opts.letters ?? [],
-      derivation_source: "oracle-rule:V1",
-      label_confidence: 0.95,
-      label_review_status: opts.reviewStatus ?? "human-verified",
-    },
-    provenance: provenance(opts.generator ?? "gen-a"),
-  };
-}
+const makeCase = buildMinimalCase;
+const makeFewShot = buildMinimalFewShot;
 
 function writeCases(cases: Case[]): void {
-  const dir = join(root, "datasets/cases");
-  mkdirSync(dir, { recursive: true });
-  const bySplit = new Map<string, Case[]>();
-  for (const c of cases) {
-    const list = bySplit.get(c.split);
-    if (list) list.push(c);
-    else bySplit.set(c.split, [c]);
-  }
-  for (const [split, list] of bySplit) {
-    const lines = list.map((c) => JSON.stringify(c)).join("\n");
-    writeFileSync(join(dir, `van-ssmuh.${split}.jsonl`), lines + "\n");
-  }
+  writeFixtureCases(root, cases);
 }
 
 function writeFewShots(items: FewShot[]): void {
-  const dir = join(root, "datasets/few-shots");
-  mkdirSync(dir, { recursive: true });
-  const byAgent = new Map<string, FewShot[]>();
-  for (const fs of items) {
-    const list = byAgent.get(fs.agent);
-    if (list) list.push(fs);
-    else byAgent.set(fs.agent, [fs]);
-  }
-  for (const [agent, list] of byAgent) {
-    const lines = list.map((fs) => JSON.stringify(fs)).join("\n");
-    writeFileSync(join(dir, `${agent}.jsonl`), lines + "\n");
-  }
+  writeFixtureFewShots(root, items);
 }
 
 function writeCorpusManifest(bylawIds: string[]): void {
-  const dir = join(root, "datasets/policy-corpus");
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(
-    join(dir, "corpus-manifest.van-ssmuh.json"),
-    JSON.stringify({
-      domain: "van-ssmuh",
-      files: [
-        {
-          path: "datasets/policy-corpus/public/van-ssmuh/zdb-r1-1.md",
-          license: "open-government-licence-vancouver",
-          vintage_date: "2026-05-01",
-          content_hash: "sha256:abc",
-        },
-      ],
-      bylaw_ids: bylawIds,
-    }),
-  );
+  writeFixtureCorpusManifest(root, bylawIds);
 }
 
 function writeRequiredEvidenceMap(bylaws: Record<string, { evidence: string[]; gap_ids: string[] }>): void {
-  const dir = join(root, "datasets/policy-corpus/oracle/van-ssmuh");
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(
-    join(dir, "required-evidence-map.json"),
-    JSON.stringify({ domain: "van-ssmuh", by_bylaw: bylaws }),
-  );
+  writeFixtureRequiredEvidenceMap(root, bylaws);
 }
 
 function writeDecisionMatrix(rules: string[]): void {
-  const dir = join(root, "datasets/policy-corpus/oracle/van-ssmuh");
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "decision-matrix.json"), JSON.stringify({ rules: rules.map((id) => ({ id })) }));
+  writeFixtureDecisionMatrix(root, rules);
 }
 
 function writeSimplificationRegister(ruleIds: string[]): void {
-  const dir = join(root, "datasets/policy-corpus/oracle/van-ssmuh");
-  mkdirSync(dir, { recursive: true });
-  const body = ruleIds.map((id) => `## Rule: ${id}\n\nsimplification.`).join("\n\n");
-  writeFileSync(join(dir, "simplification-register.md"), body);
+  writeFixtureSimplificationRegister(root, ruleIds);
 }
 
 function writeReferenceOutputs(memoIds: string[], letterIds: string[]): void {
-  const memoDir = join(root, "datasets/policy-corpus/oracle/van-ssmuh/reference-outputs/memos");
-  const letterDir = join(root, "datasets/policy-corpus/oracle/van-ssmuh/reference-outputs/letters");
-  mkdirSync(memoDir, { recursive: true });
-  mkdirSync(letterDir, { recursive: true });
-  for (const id of memoIds) writeFileSync(join(memoDir, `${id}.md`), `# memo ${id}`);
-  for (const id of letterIds) writeFileSync(join(letterDir, `${id}.md`), `# letter ${id}`);
+  writeFixtureReferenceOutputs(root, memoIds, letterIds);
 }
 
 function writeSeedReceipt(paths: string[]): void {
-  const dir = join(root, "datasets/policy-corpus");
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "seed-receipt.van-ssmuh.json"), JSON.stringify({ indexed_paths: paths }));
+  writeFixtureSeedReceipt(root, paths);
 }
 
 function writeApplicantSupportFlagsDoc(flags: string[]): void {
-  const dir = join(root, "specs/001-eval-protocol");
-  mkdirSync(dir, { recursive: true });
-  const body = `# Applicant-support flag taxonomy
+  writeFixtureApplicantSupportFlagsDoc(root, flags);
+}
 
-| Flag ID | Definition |
-|---|---|
-${flags.map((f) => `| \`${f}\` | demo |`).join("\n")}
-`;
-  writeFileSync(join(dir, "applicant-support-flags.md"), body);
+function trackFixture(path: string): string {
+  roots.add(path);
+  return path;
 }
 
 beforeEach(() => {
-  if (root) rmSync(root, { recursive: true, force: true });
   freshRoot();
   writeApplicantSupportFlagsDoc(["jargon-density-high", "next-step-ambiguous"]);
+});
+
+afterEach(() => {
+  for (const dir of roots) rmSync(dir, { recursive: true, force: true });
+  roots.clear();
+  root = "";
 });
 
 describe("validateDatasets — empty repo", () => {
@@ -532,5 +394,189 @@ describe("validateDatasets — applicant-support flags (A19)", () => {
       makeCase({ id: "c1", split: "train", flags: ["jargon-density-high"] }),
     ]);
     expect((await validateDatasets({ root })).results.find((r) => r.id === "A19")?.status).toBe("passed");
+  });
+});
+
+function scenarioWithChangedFacts(count: number): Partial<Record<"zone" | "units" | "lot" | "fsr" | "rear-setback", string>> {
+  const changes = [
+    ["zone", "RM-9"],
+    ["units", "5"],
+    ["lot", "600-649"],
+    ["fsr", "over-cap"],
+    ["rear-setback", "below"],
+  ] as const;
+  return Object.fromEntries(changes.slice(0, count));
+}
+
+function diversityFixtureCases(applicantType?: string): Case[] {
+  const applicantTypes = [
+    "owner-builder",
+    "owner-builder",
+    "developer",
+    "developer",
+    "agent-of-record",
+    "agent-of-record",
+    "architect-of-record",
+    "architect-of-record",
+    "first-time-applicant",
+    "first-time-applicant",
+  ];
+  const outcomes: Case["outcome_class"][] = [
+    "ready",
+    "ready",
+    "ready",
+    "needs-clarification",
+    "needs-clarification",
+    "needs-clarification",
+    "needs-clarification",
+    "complex-requires-specialist",
+    "complex-requires-specialist",
+    "complex-requires-specialist",
+  ];
+  const gaps: Case["gap_severity_bucket"][] = [
+    "none",
+    "minor-single",
+    "minor-multi",
+    "major-single",
+    "major-multi",
+    "blocking",
+    "none",
+    "minor-single",
+    "minor-multi",
+    "major-single",
+  ];
+  return outcomes.map((outcome, index) => {
+    const id = `diverse-${index + 1}`;
+    return makeCase({
+      id,
+      split: "train",
+      outcome,
+      gapSeverity: gaps[index],
+      family: index < 3 ? `edge-${index + 1}` : null,
+      stage1Complete: index % 2 === 0,
+      applicantType: applicantType ?? applicantTypes[index],
+      contentSeed: `content-${id}`,
+      entitySeed: `entity-${id}`,
+      docFps: [`sha256:${sha256(`doc-${id}`)}`],
+      scenarioOverrides: {
+        units: String(3 + index),
+        outcome,
+        "gap-severity": gaps[index] ?? "none",
+        "applicant-type": applicantType ?? applicantTypes[index] ?? "owner-builder",
+      },
+    });
+  });
+}
+
+function assertionStatus(report: Awaited<ReturnType<typeof validateDatasets>>, id: string) {
+  return report.results.find((r) => r.id === id)?.status;
+}
+
+function assertionFailures(report: Awaited<ReturnType<typeof validateDatasets>>, id: string) {
+  return report.results.find((r) => r.id === id)?.failures.join("\n") ?? "";
+}
+
+describe("validateDatasets — focused assertion fixtures", () => {
+  it("A07 fails with four changed scenario facts and passes with five", async () => {
+    writeCases([
+      makeCase({ id: "train-close", split: "train" }),
+      makeCase({
+        id: "dev-close",
+        split: "dev",
+        contentSeed: "dev-close",
+        entitySeed: "dev-close",
+        docFps: [`sha256:${sha256("dev-close")}`],
+        scenarioOverrides: scenarioWithChangedFacts(4),
+      }),
+    ]);
+    expect(assertionStatus(await validateDatasets({ root }), "A07")).toBe("failed");
+
+    freshRoot();
+    writeApplicantSupportFlagsDoc(["jargon-density-high", "next-step-ambiguous"]);
+    writeCases([
+      makeCase({ id: "train-far", split: "train" }),
+      makeCase({
+        id: "dev-far",
+        split: "dev",
+        contentSeed: "dev-far",
+        entitySeed: "dev-far",
+        docFps: [`sha256:${sha256("dev-far")}`],
+        scenarioOverrides: scenarioWithChangedFacts(5),
+      }),
+    ]);
+    expect(assertionStatus(await validateDatasets({ root }), "A07")).toBe("passed");
+  });
+
+  it("A09 passes when dev labels are human-verified", async () => {
+    writeCases([makeCase({ id: "dev-ok", split: "dev", reviewStatus: "human-verified" })]);
+    expect(assertionStatus(await validateDatasets({ root }), "A09")).toBe("passed");
+  });
+
+  it("A12 fails on a single applicant type and passes with bounded distribution", async () => {
+    writeCases(diversityFixtureCases("owner-builder"));
+    const bad = await validateDatasets({ root });
+    expect(assertionStatus(bad, "A12")).toBe("failed");
+    expect(assertionFailures(bad, "A12")).toMatch(/applicant_type/);
+
+    freshRoot();
+    writeApplicantSupportFlagsDoc(["jargon-density-high", "next-step-ambiguous"]);
+    writeCases(diversityFixtureCases());
+    expect(assertionStatus(await validateDatasets({ root }), "A12")).toBe("passed");
+  });
+
+  it("A15 passes when referenced memo files exist", async () => {
+    writeReferenceOutputs(["ref-foo-staff-a"], []);
+    writeCases([makeCase({ id: "case-ref", split: "train", memos: ["ref-foo-staff-a"] })]);
+    expect(assertionStatus(await validateDatasets({ root }), "A15")).toBe("passed");
+  });
+
+  it("A16 passes when every cited bylaw has a required-evidence-map entry", async () => {
+    writeRequiredEvidenceMap({ "ZDB-R1-1-FSR": { evidence: ["fsr"], gap_ids: [] } });
+    writeCases([makeCase({ id: "case-rem", split: "train", bylaws: ["ZDB-R1-1-FSR"] })]);
+    expect(assertionStatus(await validateDatasets({ root }), "A16")).toBe("passed");
+  });
+
+  it("A18 passes when expected gap IDs are in the required-evidence-map", async () => {
+    writeRequiredEvidenceMap({ "ZDB-R1-1-FSR": { evidence: ["fsr"], gap_ids: ["gap-fsr"] } });
+    writeCases([makeCase({ id: "case-gap", split: "train", bylaws: ["ZDB-R1-1-FSR"], gaps: ["gap-fsr"] })]);
+    expect(assertionStatus(await validateDatasets({ root }), "A18")).toBe("passed");
+  });
+});
+
+describe("buildDiversityReport", () => {
+  it("renders expected sections and counts", () => {
+    const fixtureRoot = trackFixture(writeFixtureToTmp({
+      cases: [makeCase({ id: "report-1", split: "train" }), makeCase({ id: "report-2", split: "dev", contentSeed: "report-2", entitySeed: "report-2", docFps: [`sha256:${sha256("report-2")}`], scenarioOverrides: scenarioWithChangedFacts(5) })],
+      fewShots: [makeFewShot({ id: "fs-report", agent: "planner", inspiredBy: ["report-1"] })],
+      corpusBylawIds: ["ZDB-R1-1-FSR"],
+      requiredEvidenceMap: { "ZDB-R1-1-FSR": { evidence: ["fsr"], gap_ids: [] } },
+      decisionRules: ["RULE-A"],
+      simplificationRuleIds: ["RULE-A"],
+    }));
+    const report = buildDiversityReport(loadDataset(fixtureRoot), DEFAULT_BOUNDS);
+    expect(report).toContain("# Diversity report");
+    expect(report).toContain("## Counts per pool per domain");
+    expect(report).toContain("Cases: train=1, dev=1, holdout=0, gold-holdout=0");
+    expect(report).toContain("Few-shots: planner=1");
+    expect(report).toContain("## Top 5 closest cross-split pairs");
+    expect(report).toContain("## Build status");
+  });
+});
+
+describe("validate-data CLI", () => {
+  it("writes the diversity report when --emit-report is set", () => {
+    const fixtureRoot = trackFixture(writeFixtureToTmp({
+      cases: [makeCase({ id: "cli-1", split: "train" })],
+      corpusBylawIds: ["ZDB-R1-1-FSR"],
+      requiredEvidenceMap: { "ZDB-R1-1-FSR": { evidence: ["fsr"], gap_ids: [] } },
+    }));
+    const result = spawnSync("pnpm", ["tsx", scriptPath, "--emit-report", "--root", fixtureRoot], {
+      cwd: repoRoot,
+      encoding: "utf8",
+    });
+    const reportPath = join(fixtureRoot, "datasets/diversity-report.md");
+    expect(result.stdout).toContain("diversity-report written to datasets/diversity-report.md");
+    expect(existsSync(reportPath)).toBe(true);
+    expect(readFileSync(reportPath, "utf8")).toContain("## Build status");
   });
 });
