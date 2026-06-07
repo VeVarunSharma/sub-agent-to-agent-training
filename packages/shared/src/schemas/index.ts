@@ -94,3 +94,17 @@ export const CaseSchema = z.object({
   provenance: ProvenanceSchema,
 });
 export type Case = z.infer<typeof CaseSchema>;
+
+export const FewShotSchema = z.object({
+  few_shot_id: z.string(),
+  agent: z.string(),
+  inspired_by_train_case_ids: z.array(z.string()),
+  input: z.unknown(),
+  output: z.unknown(),
+  rationale_note: z.string(),
+  content_fingerprint: z.string(),
+  entity_fingerprint: z.string(),
+  scenario_fingerprint: z.string(),
+  provenance: ProvenanceSchema,
+});
+export type FewShot = z.infer<typeof FewShotSchema>;
