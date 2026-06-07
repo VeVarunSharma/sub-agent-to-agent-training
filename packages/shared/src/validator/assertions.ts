@@ -1,7 +1,20 @@
-import type { Dataset } from "./dataset.js";
+import { createHash } from "node:crypto";
+import { existsSync, readFileSync } from "node:fs";
+import { isAbsolute, join } from "node:path";
+import { SealReceiptSchema, SplitsManifestSchema, type SplitName, type SplitsManifest } from "../schemas/index.js";
+import { loadDomainSplitContents, type Dataset } from "./dataset.js";
 import type { AssertionResult, DiversityBounds } from "./types.js";
 
 type Status = AssertionResult["status"];
+
+const SPLIT_NAMES = ["train", "dev", "holdout", "gold-holdout"] as const satisfies readonly SplitName[];
+const SEALED_SPLITS = ["holdout", "gold-holdout"] as const satisfies readonly SplitName[];
+
+interface LoadedSplitsManifest {
+  path: string;
+  manifest: SplitsManifest | null;
+  failures: string[];
+}
 
 function result(id: string, title: string, status: Status, failures: string[] = [], notes?: string[]): AssertionResult {
   return { id, title, status, failures, notes };
@@ -10,6 +23,44 @@ function result(id: string, title: string, status: Status, failures: string[] = 
 function skipIfEmpty<T>(arr: T[], id: string, title: string, reason: string): AssertionResult | null {
   if (arr.length === 0) return result(id, title, "skipped", [], [reason]);
   return null;
+}
+
+function loadSplitsManifest(root: string): LoadedSplitsManifest {
+  const path = join(root, "datasets/splits.json");
+  if (!existsSync(path)) return { path, manifest: null, failures: ["datasets/splits.json not found"] };
+  let raw: unknown;
+  try {
+    raw = JSON.parse(readFileSync(path, "utf8"));
+  } catch (err) {
+    return { path, manifest: null, failures: [`datasets/splits.json parse error: ${(err as Error).message}`] };
+  }
+  const parsed = SplitsManifestSchema.safeParse(raw);
+  if (!parsed.success) {
+    return {
+      path,
+      manifest: null,
+      failures: parsed.error.issues.map((issue) => `datasets/splits.json ${issue.path.join(".") || "<root>"}: ${issue.message}`),
+    };
+  }
+  return { path, manifest: parsed.data, failures: [] };
+}
+
+function resolveRepoPath(root: string, path: string): string {
+  return isAbsolute(path) ? path : join(root, path);
+}
+
+function splitManifestIds(manifest: SplitsManifest): Set<string> {
+  const ids = new Set<string>();
+  for (const split of SPLIT_NAMES) for (const id of manifest.splits[split]) ids.add(id);
+  return ids;
+}
+
+function sortedValues(values: Iterable<string>): string[] {
+  return [...values].sort((a, b) => a.localeCompare(b));
+}
+
+function sha256File(path: string): string {
+  return `sha256:${createHash("sha256").update(readFileSync(path)).digest("hex")}`;
 }
 
 // A01: cases parse + validate against schema.
@@ -233,8 +284,9 @@ export function assertDiversity(d: Dataset, bounds: DiversityBounds): AssertionR
   const skip = skipIfEmpty(d.cases, "A12", "Diversity assertions per domain x split x family", "no cases loaded");
   if (skip) return skip;
 
+  const diversityCases = d.cases.filter((c) => c.case.split !== "gold-holdout");
   const groups = new Map<string, { meta: DiversityBucket; cases: typeof d.cases }>();
-  for (const c of d.cases) {
+  for (const c of diversityCases) {
     const fam = c.case.edge_case_family ?? "_none_";
     const meta: DiversityBucket = { domain: c.case.domain, split: c.case.split, family: fam };
     const key = bucketKey(meta);
@@ -245,10 +297,11 @@ export function assertDiversity(d: Dataset, bounds: DiversityBounds): AssertionR
 
   const fails: string[] = [];
   const notes: string[] = [];
+  if (diversityCases.length !== d.cases.length) notes.push("gold-holdout skipped for generated-split diversity bounds");
 
   // Edge-case ratio at the (domain, split) level.
   const bySplit = new Map<string, typeof d.cases>();
-  for (const c of d.cases) {
+  for (const c of diversityCases) {
     const key = `${c.case.domain}|${c.case.split}`;
     const list = bySplit.get(key);
     if (list) list.push(c);
@@ -484,4 +537,182 @@ export function assertApplicantSupportFlagsClosed(d: Dataset): AssertionResult {
   return result("A19", "expected_applicant_support_flags is a closed set per the taxonomy doc", fails.length ? "failed" : "passed", fails, [
     `${known.size} flag IDs loaded from applicant-support-flags.md`,
   ]);
+}
+
+// A20: splits.json validates and case IDs are unique across all splits.
+export function assertSplitsManifest(d: Dataset): AssertionResult {
+  const loaded = loadSplitsManifest(d.root);
+  const fails = [...loaded.failures];
+  const manifest = loaded.manifest;
+  if (!manifest) return result("A20", "splits.json validates and case IDs are unique across all splits", "failed", fails);
+
+  const seen = new Map<string, SplitName>();
+  for (const split of SPLIT_NAMES) {
+    const ids = manifest.splits[split];
+    if (manifest.counts[split] !== ids.length) {
+      fails.push(`counts.${split}=${manifest.counts[split]} does not match splits.${split}.length=${ids.length}`);
+    }
+    for (const id of ids) {
+      const previous = seen.get(id);
+      if (previous) fails.push(`case_id "${id}" appears in both ${previous} and ${split}`);
+      else seen.set(id, split);
+    }
+  }
+  return result("A20", "splits.json validates and case IDs are unique across all splits", fails.length ? "failed" : "passed", fails);
+}
+
+// A21: every discovered case ID appears in exactly one splits.json entry.
+export function assertEveryCaseInSplits(d: Dataset): AssertionResult {
+  const loaded = loadSplitsManifest(d.root);
+  const manifest = loaded.manifest;
+  if (!manifest) {
+    return result("A21", "Every case_id from train/dev/holdout/gold-holdout files appears in exactly one splits.json entry", "skipped", [], [
+      "splits.json unavailable, see A20",
+    ]);
+  }
+
+  const discovered = loadDomainSplitContents(manifest.domain, d.root);
+  const known = new Set<string>();
+  for (const split of SPLIT_NAMES) for (const id of discovered[split]) known.add(id);
+  const declared = splitManifestIds(manifest);
+  const missing = sortedValues([...known].filter((id) => !declared.has(id)));
+  const extra = sortedValues([...declared].filter((id) => !known.has(id)));
+  const fails: string[] = [];
+  if (missing.length > 0) fails.push(`missing from splits.json: ${missing.join(", ")}`);
+  if (extra.length > 0) fails.push(`extra in splits.json: ${extra.join(", ")}`);
+
+  return result(
+    "A21",
+    "Every case_id from train/dev/holdout/gold-holdout files appears in exactly one splits.json entry",
+    fails.length ? "failed" : "passed",
+    fails,
+  );
+}
+
+// A22: sealed split ciphertext exists and plaintext stays out of the working tree.
+export function assertSealedSplitsHygiene(d: Dataset): AssertionResult {
+  const loaded = loadSplitsManifest(d.root);
+  const manifest = loaded.manifest;
+  if (!manifest) return result("A22", "Sealed splits have .age files committed and no plaintext in the working tree", "skipped", [], ["splits.json unavailable, see A20"]);
+
+  const fails: string[] = [];
+  const notes: string[] = [];
+  let checkedSealedFile = false;
+  const allowPlaintext = process.env.SRS_ALLOW_PLAINTEXT_HOLDOUT === "1";
+  for (const split of SEALED_SPLITS) {
+    if (manifest.splits[split].length === 0) continue;
+    const plaintextRel = `datasets/cases/${manifest.domain}.${split}.jsonl`;
+    const sealedRel = `${plaintextRel}.age`;
+    const plaintextExists = existsSync(resolveRepoPath(d.root, plaintextRel));
+    const sealedExists = existsSync(resolveRepoPath(d.root, sealedRel));
+    if (!sealedExists && plaintextExists) {
+      notes.push(`${split}: plaintext authoring file present before sealing`);
+      continue;
+    }
+    checkedSealedFile = true;
+    if (!sealedExists) fails.push(`missing sealed file: ${sealedRel}`);
+    if (!allowPlaintext && plaintextExists) fails.push(`plaintext holdout present: ${plaintextRel}`);
+    notes.push(`${split}: expected ${manifest.splits[split].length} sealed case IDs`);
+  }
+  if (notes.length === 0) return result("A22", "Sealed splits have .age files committed and no plaintext in the working tree", "skipped", [], ["no sealed splits referenced by splits.json"]);
+  if (!checkedSealedFile) return result("A22", "Sealed splits have .age files committed and no plaintext in the working tree", "skipped", [], notes);
+  return result("A22", "Sealed splits have .age files committed and no plaintext in the working tree", fails.length ? "failed" : "passed", fails, notes);
+}
+
+// A23: seal receipt hashes match ciphertext files.
+export function assertSealReceiptHashes(d: Dataset): AssertionResult {
+  const loaded = loadSplitsManifest(d.root);
+  const manifest = loaded.manifest;
+  const domain = manifest?.domain ?? "van-ssmuh";
+  const hasSealedRefs = manifest ? SEALED_SPLITS.some((split) => manifest.splits[split].length > 0) : false;
+  const receiptRel = `datasets/cases/seal-receipt.${domain}.json`;
+  const receiptPath = resolveRepoPath(d.root, receiptRel);
+
+  const hasCiphertext = manifest
+    ? SEALED_SPLITS.some((split) => existsSync(resolveRepoPath(d.root, `datasets/cases/${domain}.${split}.jsonl.age`)))
+    : false;
+
+  if (!existsSync(receiptPath)) {
+    if (!hasSealedRefs || !hasCiphertext) return result("A23", `seal-receipt.${domain}.json hashes match the sealed files on disk`, "skipped", [], ["no sealed files yet"]);
+    return result("A23", `seal-receipt.${domain}.json hashes match the sealed files on disk`, "failed", [`${receiptRel} not found`]);
+  }
+
+  let raw: unknown;
+  try {
+    raw = JSON.parse(readFileSync(receiptPath, "utf8"));
+  } catch (err) {
+    return result("A23", `seal-receipt.${domain}.json hashes match the sealed files on disk`, "failed", [`${receiptRel} parse error: ${(err as Error).message}`]);
+  }
+  const parsed = SealReceiptSchema.safeParse(raw);
+  if (!parsed.success) {
+    return result(
+      "A23",
+      `seal-receipt.${domain}.json hashes match the sealed files on disk`,
+      "failed",
+      parsed.error.issues.map((issue) => `${receiptRel} ${issue.path.join(".") || "<root>"}: ${issue.message}`),
+    );
+  }
+
+  const receipt = parsed.data;
+  const fails: string[] = [];
+  if (hasSealedRefs && receipt.sealed_files.length === 0) fails.push(`${receiptRel} has no sealed_files entries`);
+  for (const file of receipt.sealed_files) {
+    const ciphertextPath = resolveRepoPath(d.root, file.ciphertext_path);
+    if (!existsSync(ciphertextPath)) {
+      fails.push(`sealed file missing: ${file.ciphertext_path}`);
+      continue;
+    }
+    const actual = sha256File(ciphertextPath);
+    if (actual !== file.ciphertext_sha256) {
+      fails.push(`${file.ciphertext_path} ciphertext_sha256 ${actual} does not match receipt ${file.ciphertext_sha256}`);
+    }
+  }
+  return result("A23", `seal-receipt.${domain}.json hashes match the sealed files on disk`, fails.length ? "failed" : "passed", fails);
+}
+
+// A24: explicit diversity re-check for sealed split coverage.
+export function assertHoldoutDiversity(d: Dataset, bounds: DiversityBounds): AssertionResult {
+  const skip = skipIfEmpty(d.cases, "A24", "Diversity bounds (outcome class share, edge-case ratio) hold for holdout and gold-holdout", "no cases loaded");
+  if (skip) return skip;
+
+  const bySplit = new Map<string, typeof d.cases>();
+  for (const record of d.cases) {
+    const key = `${record.case.domain}|${record.case.split}`;
+    const list = bySplit.get(key);
+    if (list) list.push(record);
+    else bySplit.set(key, [record]);
+  }
+
+  const fails: string[] = [];
+  const notes: string[] = [];
+  let checked = 0;
+  for (const key of sortedValues(bySplit.keys())) {
+    const list = bySplit.get(key) ?? [];
+    const split = key.split("|")[1] as SplitName | undefined;
+    if (!split || !SPLIT_NAMES.includes(split)) continue;
+    if (list.length < 10) {
+      notes.push(`${key}: split too small for stratification check, n=${list.length}`);
+      continue;
+    }
+    checked += 1;
+    const edgeCount = list.filter((record) => record.case.edge_case_family !== null && record.case.edge_case_family !== "_none_").length;
+    const edgeRatio = edgeCount / list.length;
+    if (edgeRatio < bounds.edgeCaseRatioMin || edgeRatio > bounds.edgeCaseRatioMax) {
+      fails.push(`${key} edge-case ratio ${edgeRatio.toFixed(2)} outside [${bounds.edgeCaseRatioMin}, ${bounds.edgeCaseRatioMax}]`);
+    }
+
+    const outcomeCounts = new Map<string, number>();
+    for (const record of list) outcomeCounts.set(record.case.outcome_class, (outcomeCounts.get(record.case.outcome_class) ?? 0) + 1);
+    for (const [outcome, minShare] of Object.entries(bounds.outcomeClassMinShare)) {
+      const share = (outcomeCounts.get(outcome) ?? 0) / list.length;
+      if (share < minShare) fails.push(`${key} outcome_class "${outcome}" share ${share.toFixed(2)} below min ${minShare}`);
+    }
+    for (const [outcome, maxShare] of Object.entries(bounds.outcomeClassMaxShare)) {
+      const share = (outcomeCounts.get(outcome) ?? 0) / list.length;
+      if (share > maxShare) fails.push(`${key} outcome_class "${outcome}" share ${share.toFixed(2)} above max ${maxShare}`);
+    }
+  }
+
+  const status: Status = fails.length > 0 ? "failed" : checked === 0 ? "skipped" : "passed";
+  return result("A24", "Diversity bounds (outcome class share, edge-case ratio) hold for holdout and gold-holdout", status, fails, notes);
 }

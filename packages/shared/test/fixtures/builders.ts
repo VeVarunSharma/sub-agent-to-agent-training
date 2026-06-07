@@ -1,7 +1,7 @@
 import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { buildScenarioFingerprint, sha256, type Case, type FewShot } from "../../src/index.js";
+import { buildScenarioFingerprint, sha256, type Case, type FewShot, type SealReceipt, type SplitName, type SplitsManifest } from "../../src/index.js";
 
 export const FACT_NAMES = [
   "zone",
@@ -84,6 +84,7 @@ export interface CaseOpts {
   stage1Complete?: boolean;
   generator?: string;
   domain?: string;
+  scenarioFingerprint?: string;
 }
 
 export function buildMinimalCase(opts: CaseOpts = {}): Case {
@@ -103,7 +104,7 @@ export function buildMinimalCase(opts: CaseOpts = {}): Case {
     content_fingerprint: `sha256:${sha256(opts.contentSeed ?? id)}`,
     entity_fingerprint: `sha256:${sha256(opts.entitySeed ?? id)}`,
     document_stub_fingerprints: opts.docFps ?? [`sha256:${sha256(`doc-${id}`)}`],
-    scenario_fingerprint: scenario(opts.scenarioOverrides),
+    scenario_fingerprint: opts.scenarioFingerprint ?? scenario(opts.scenarioOverrides),
     gold_labels: {
       bylaws_to_cite: opts.bylaws ?? ["ZDB-R1-1-FSR"],
       evidence_to_surface: ["fsr"],
@@ -241,6 +242,66 @@ export function writeSeedReceipt(root: string, paths: string[]): void {
   const dir = join(root, "datasets/policy-corpus");
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, "seed-receipt.van-ssmuh.json"), JSON.stringify({ indexed_paths: paths }));
+}
+
+export function buildSplitsManifest(
+  splits: Partial<Record<SplitName, string[]>>,
+  domain = "van-ssmuh",
+): SplitsManifest {
+  const normalized = {
+    train: splits.train ?? [],
+    dev: splits.dev ?? [],
+    holdout: splits.holdout ?? [],
+    "gold-holdout": splits["gold-holdout"] ?? [],
+  };
+  return {
+    domain,
+    seed: 20260601,
+    splits: normalized,
+    counts: {
+      train: normalized.train.length,
+      dev: normalized.dev.length,
+      holdout: normalized.holdout.length,
+      "gold-holdout": normalized["gold-holdout"].length,
+    },
+    generated_at: "2026-06-07T00:00:00.000Z",
+  };
+}
+
+export function writeSplitsManifest(
+  root: string,
+  splits: Partial<Record<SplitName, string[]>>,
+  domain = "van-ssmuh",
+): SplitsManifest {
+  const manifest = buildSplitsManifest(splits, domain);
+  const dir = join(root, "datasets");
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, "splits.json"), JSON.stringify(manifest));
+  return manifest;
+}
+
+export function writeSplitCaseIdManifest(
+  root: string,
+  splits: Partial<Record<SplitName, string[]>>,
+  domain = "van-ssmuh",
+): void {
+  const dir = join(root, "datasets/cases");
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, `splits-manifest.${domain}.json`), JSON.stringify(buildSplitsManifest(splits, domain)));
+}
+
+export function writeSealedCaseFile(root: string, split: Extract<SplitName, "holdout" | "gold-holdout">, content = "ciphertext", domain = "van-ssmuh"): string {
+  const dir = join(root, "datasets/cases");
+  mkdirSync(dir, { recursive: true });
+  const path = join(dir, `${domain}.${split}.jsonl.age`);
+  writeFileSync(path, content);
+  return path;
+}
+
+export function writeSealReceipt(root: string, receipt: SealReceipt, domain = "van-ssmuh"): void {
+  const dir = join(root, "datasets/cases");
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, `seal-receipt.${domain}.json`), JSON.stringify(receipt));
 }
 
 export function writeApplicantSupportFlagsDoc(root: string, flags: string[]): void {

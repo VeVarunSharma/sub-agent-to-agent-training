@@ -1,0 +1,61 @@
+{
+  "domain": "van-ssmuh",
+  "seed": 20260601,
+  "splits": {
+    "train": [
+      "van-ssmuh-train-001",
+      "van-ssmuh-train-002",
+      "van-ssmuh-train-003",
+      "van-ssmuh-train-004",
+      "van-ssmuh-train-005",
+      "van-ssmuh-train-006",
+      "van-ssmuh-train-007",
+      "van-ssmuh-train-008",
+      "van-ssmuh-train-009",
+      "van-ssmuh-train-012",
+      "van-ssmuh-train-013",
+      "van-ssmuh-train-014",
+      "van-ssmuh-train-015",
+      "van-ssmuh-train-016",
+      "van-ssmuh-train-017",
+      "van-ssmuh-train-018",
+      "van-ssmuh-train-019",
+      "van-ssmuh-train-021"
+    ],
+    "dev": [
+      "van-ssmuh-dev-001",
+      "van-ssmuh-dev-002",
+      "van-ssmuh-dev-003",
+      "van-ssmuh-dev-004",
+      "van-ssmuh-dev-005",
+      "van-ssmuh-dev-006",
+      "van-ssmuh-dev-007",
+      "van-ssmuh-dev-008",
+      "van-ssmuh-dev-009",
+      "van-ssmuh-dev-010",
+      "van-ssmuh-dev-011",
+      "van-ssmuh-dev-012"
+    ],
+    "holdout": [
+      "van-ssmuh-holdout-001",
+      "van-ssmuh-holdout-002",
+      "van-ssmuh-holdout-003",
+      "van-ssmuh-holdout-004",
+      "van-ssmuh-holdout-005",
+      "van-ssmuh-holdout-006"
+    ],
+    "gold-holdout": [
+      "van-ssmuh-gold-holdout-001",
+      "van-ssmuh-gold-holdout-002",
+      "van-ssmuh-gold-holdout-003",
+      "van-ssmuh-gold-holdout-004"
+    ]
+  },
+  "counts": {
+    "train": 18,
+    "dev": 12,
+    "holdout": 6,
+    "gold-holdout": 4
+  },
+  "generated_at": "2026-06-07T18:57:43.945Z"
+}

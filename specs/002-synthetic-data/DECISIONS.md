@@ -133,3 +133,9 @@
 **Decision**: assertion 18 verifies that every gold label's `expected_gap_ids` entry exists in the domain's `required-evidence-map.json`. Assertion 19 verifies every `expected_applicant_support_flags` entry is one of the closed-set flag IDs in `specs/001-eval-protocol/applicant-support-flags.md`.
 
 **Reason**: closes the data-side surface for the M8/M12/M10/M11 fixes. Both new assertions are cheap (set-membership checks at validator time) and catch oracle-vs-taxonomy drift before any eval round consumes a bad gold label.
+
+## 2026-06-07: Manual gold-holdout provenance and diversity handling
+
+**Decision**: manual gold-holdout cases may set `provenance.decoding` to `null`. A12 applies generated-split diversity bounds to train, dev, and holdout. Gold-holdout composition waits for dedicated assertions. A22 and A23 skip the plaintext authoring phase until ciphertext exists.
+
+**Reason**: hand-authored cases have no model decoding settings. The four seed gold-holdout rows use a fixed table that intentionally concentrates edge families and cannot satisfy generated-split applicant bounds. Chunk 3a authors plaintext cases before the sealing step runs.

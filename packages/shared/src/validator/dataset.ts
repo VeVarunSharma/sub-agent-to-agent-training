@@ -1,6 +1,7 @@
-import { join } from "node:path";
+import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
-import type { Case, FewShot } from "../schemas/index.js";
+import { join } from "node:path";
+import type { Case, FewShot, SplitName } from "../schemas/index.js";
 import { CaseSchema, FewShotSchema } from "../schemas/index.js";
 import { listFilesRec, readJsonlFile, readJsonFile, rel } from "./loader.js";
 
@@ -125,8 +126,110 @@ export interface Dataset {
 }
 
 const SUPPORT_FLAG_DOC_PATH = "specs/001-eval-protocol/applicant-support-flags.md";
+const SPLIT_NAMES = ["train", "dev", "holdout", "gold-holdout"] as const satisfies readonly SplitName[];
 
 const SUPPORT_FLAG_LINE = /^\|\s*`([a-z0-9-]+)`\s*\|/;
+
+export type DomainSplitContents = Record<SplitName, string[]>;
+
+function emptyDomainSplitContents(): DomainSplitContents {
+  return { train: [], dev: [], holdout: [], "gold-holdout": [] };
+}
+
+function parseCaseIdsFromJsonl(text: string): string[] {
+  const ids: string[] = [];
+  for (const raw of text.split(/\r?\n/)) {
+    if (raw.trim() === "") continue;
+    try {
+      const value = JSON.parse(raw) as { case_id?: unknown };
+      if (typeof value.case_id === "string") ids.push(value.case_id);
+    } catch {
+      // Parse errors are reported by loadDataset for plaintext files.
+    }
+  }
+  return ids;
+}
+
+function readCaseIdsFromJsonl(path: string): string[] {
+  if (!existsSync(path)) return [];
+  return parseCaseIdsFromJsonl(readFileSync(path, "utf8"));
+}
+
+function decryptAgeFile(path: string, identityPath: string): string | null {
+  const proc = spawnSync("age", ["--decrypt", "--identity", identityPath, path], {
+    encoding: "utf8",
+    maxBuffer: 10 * 1024 * 1024,
+  });
+  if (proc.status !== 0) return null;
+  return proc.stdout;
+}
+
+function splitIdsFromValue(value: unknown): string[] {
+  if (Array.isArray(value)) return value.filter((item): item is string => typeof item === "string");
+  if (value && typeof value === "object") {
+    const ids = (value as { case_ids?: unknown }).case_ids;
+    if (Array.isArray(ids)) return ids.filter((item): item is string => typeof item === "string");
+  }
+  return [];
+}
+
+function idsFromSplitManifest(raw: unknown, split: SplitName): string[] {
+  if (!raw || typeof raw !== "object") return [];
+  const obj = raw as Record<string, unknown>;
+  const direct = splitIdsFromValue(obj[split]);
+  if (direct.length > 0) return direct;
+
+  const splits = obj.splits;
+  if (splits && typeof splits === "object") {
+    const fromSplits = splitIdsFromValue((splits as Record<string, unknown>)[split]);
+    if (fromSplits.length > 0) return fromSplits;
+  }
+
+  const caseIds = obj.case_ids;
+  if (caseIds && typeof caseIds === "object") {
+    const fromCaseIds = splitIdsFromValue((caseIds as Record<string, unknown>)[split]);
+    if (fromCaseIds.length > 0) return fromCaseIds;
+  }
+
+  const files = obj.files;
+  if (Array.isArray(files)) {
+    const ids: string[] = [];
+    for (const file of files) {
+      if (!file || typeof file !== "object") continue;
+      const record = file as { split?: unknown; case_ids?: unknown };
+      if (record.split === split) ids.push(...splitIdsFromValue(record.case_ids));
+    }
+    return ids;
+  }
+  return [];
+}
+
+export function loadDomainSplitContents(domain: string, root = process.cwd()): DomainSplitContents {
+  const out = emptyDomainSplitContents();
+  const casesDir = join(root, "datasets/cases");
+  const fallbackManifest = readJsonFile<unknown>(join(casesDir, `splits-manifest.${domain}.json`));
+  const identityPath = process.env.SRS_HOLDOUT_IDENTITY_PATH;
+
+  for (const split of SPLIT_NAMES) {
+    const plaintextPath = join(casesDir, `${domain}.${split}.jsonl`);
+    const sealedPath = `${plaintextPath}.age`;
+    if (existsSync(plaintextPath)) {
+      out[split] = readCaseIdsFromJsonl(plaintextPath);
+      continue;
+    }
+    if (existsSync(sealedPath) && identityPath) {
+      const decrypted = decryptAgeFile(sealedPath, identityPath);
+      out[split] = decrypted === null ? idsFromSplitManifest(fallbackManifest, split) : parseCaseIdsFromJsonl(decrypted);
+      continue;
+    }
+    if (existsSync(sealedPath)) {
+      out[split] = idsFromSplitManifest(fallbackManifest, split);
+      continue;
+    }
+    out[split] = idsFromSplitManifest(fallbackManifest, split);
+  }
+  return out;
+}
 
 function loadApplicantSupportFlags(root: string): ApplicantSupportFlagSet | null {
   const path = join(root, SUPPORT_FLAG_DOC_PATH);

@@ -26,8 +26,12 @@ import {
   writeFixtureToTmp,
   writeReferenceOutputs as writeFixtureReferenceOutputs,
   writeRequiredEvidenceMap as writeFixtureRequiredEvidenceMap,
+  writeSealReceipt as writeFixtureSealReceipt,
+  writeSealedCaseFile as writeFixtureSealedCaseFile,
   writeSeedReceipt as writeFixtureSeedReceipt,
   writeSimplificationRegister as writeFixtureSimplificationRegister,
+  writeSplitCaseIdManifest as writeFixtureSplitCaseIdManifest,
+  writeSplitsManifest as writeFixtureSplitsManifest,
 } from "./fixtures/builders.js";
 
 let root = "";
@@ -76,6 +80,22 @@ function writeSeedReceipt(paths: string[]): void {
   writeFixtureSeedReceipt(root, paths);
 }
 
+function writeSplitsManifest(splits: Parameters<typeof writeFixtureSplitsManifest>[1]): void {
+  writeFixtureSplitsManifest(root, splits);
+}
+
+function writeSplitCaseIdManifest(splits: Parameters<typeof writeFixtureSplitCaseIdManifest>[1]): void {
+  writeFixtureSplitCaseIdManifest(root, splits);
+}
+
+function writeSealedCaseFile(split: Parameters<typeof writeFixtureSealedCaseFile>[1], content = "ciphertext"): string {
+  return writeFixtureSealedCaseFile(root, split, content);
+}
+
+function writeSealReceipt(receipt: Parameters<typeof writeFixtureSealReceipt>[1]): void {
+  writeFixtureSealReceipt(root, receipt);
+}
+
 function writeApplicantSupportFlagsDoc(flags: string[]): void {
   writeFixtureApplicantSupportFlagsDoc(root, flags);
 }
@@ -97,13 +117,15 @@ afterEach(() => {
 });
 
 describe("validateDatasets — empty repo", () => {
-  it("skips A01-A19 and passes when no data exists", async () => {
+  it("fails A20 cleanly when splits.json is missing", async () => {
     const report = await validateDatasets({ root });
-    expect(report.passed).toBe(true);
-    expect(report.counts.failed).toBe(0);
+    expect(report.passed).toBe(false);
+    expect(report.counts.failed).toBe(1);
     expect(report.counts.skipped).toBeGreaterThan(10);
-    const a17 = report.results.find((r) => r.id === "A17");
-    expect(a17?.status).toBe("passed");
+    expect(report.results.find((r) => r.id === "A17")?.status).toBe("passed");
+    const a20 = report.results.find((r) => r.id === "A20");
+    expect(a20?.status).toBe("failed");
+    expect(a20?.failures.join("\n")).toContain("datasets/splits.json not found");
   });
 });
 
@@ -291,6 +313,17 @@ describe("validateDatasets — diversity (A12)", () => {
     expect(a12?.status).toBe("failed");
     expect(a12?.failures.some((f) => f.includes("edge-case ratio"))).toBe(true);
   });
+
+  it("skips gold-holdout for generated-split bounds", async () => {
+    writeCases([
+      makeCase({ id: "g1", split: "gold-holdout", family: "heritage-overlay", outcome: "ready", applicantType: "owner-builder" }),
+      makeCase({ id: "g2", split: "gold-holdout", family: "floodplain-overlay", outcome: "needs-clarification", applicantType: "developer" }),
+    ]);
+    const report = await validateDatasets({ root });
+    const a12 = report.results.find((r) => r.id === "A12");
+    expect(a12?.status).toBe("passed");
+    expect(a12?.notes?.some((n) => n.includes("gold-holdout skipped"))).toBe(true);
+  });
 });
 
 describe("validateDatasets — corpus manifest fields (A13)", () => {
@@ -397,6 +430,150 @@ describe("validateDatasets — applicant-support flags (A19)", () => {
   });
 });
 
+describe("validateDatasets — splits manifest (A20)", () => {
+  it("passes when splits.json validates and counts match", async () => {
+    writeSplitsManifest({ train: ["train-1"], dev: ["dev-1"], holdout: [], "gold-holdout": [] });
+    const report = await validateDatasets({ root });
+    expect(assertionStatus(report, "A20")).toBe("passed");
+  });
+
+  it("fails when a case ID appears in more than one split", async () => {
+    writeSplitsManifest({ train: ["dup"], dev: ["dup"], holdout: [], "gold-holdout": [] });
+    const report = await validateDatasets({ root });
+    expect(assertionStatus(report, "A20")).toBe("failed");
+    expect(assertionFailures(report, "A20")).toMatch(/dup/);
+  });
+});
+
+describe("validateDatasets — split coverage (A21)", () => {
+  it("passes when plaintext and sealed manifest IDs match splits.json", async () => {
+    writeCases([
+      makeCase({ id: "train-1", split: "train" }),
+      makeCase({ id: "dev-1", split: "dev", contentSeed: "dev-1", entitySeed: "dev-1", docFps: [`sha256:${sha256("dev-1")}`], scenarioOverrides: scenarioWithChangedFacts(5) }),
+    ]);
+    writeSealedCaseFile("holdout");
+    writeSealedCaseFile("gold-holdout");
+    const splits = { train: ["train-1"], dev: ["dev-1"], holdout: ["holdout-1"], "gold-holdout": ["gold-1"] };
+    writeSplitsManifest(splits);
+    writeSplitCaseIdManifest(splits);
+
+    expect(assertionStatus(await validateDatasets({ root }), "A21")).toBe("passed");
+  });
+
+  it("fails when a discovered case is missing from splits.json", async () => {
+    writeCases([
+      makeCase({ id: "train-1", split: "train" }),
+      makeCase({ id: "train-2", split: "train", contentSeed: "train-2", entitySeed: "train-2", docFps: [`sha256:${sha256("train-2")}`] }),
+    ]);
+    writeSplitsManifest({ train: ["train-1"], dev: [], holdout: [], "gold-holdout": [] });
+
+    const report = await validateDatasets({ root });
+    expect(assertionStatus(report, "A21")).toBe("failed");
+    expect(assertionFailures(report, "A21")).toContain("missing from splits.json: train-2");
+  });
+
+  it("fails when splits.json contains an extra case ID", async () => {
+    writeCases([makeCase({ id: "train-1", split: "train" })]);
+    writeSplitsManifest({ train: ["train-1", "ghost"], dev: [], holdout: [], "gold-holdout": [] });
+
+    const report = await validateDatasets({ root });
+    expect(assertionStatus(report, "A21")).toBe("failed");
+    expect(assertionFailures(report, "A21")).toContain("extra in splits.json: ghost");
+  });
+});
+
+describe("validateDatasets — sealed split hygiene (A22)", () => {
+  it("passes when sealed files exist and plaintext is absent", async () => {
+    writeSplitsManifest({ train: [], dev: [], holdout: ["holdout-1"], "gold-holdout": [] });
+    writeSealedCaseFile("holdout");
+
+    expect(assertionStatus(await validateDatasets({ root }), "A22")).toBe("passed");
+  });
+
+  it("fails when sealed split plaintext is present", async () => {
+    writeSplitsManifest({ train: [], dev: [], holdout: ["holdout-1"], "gold-holdout": [] });
+    writeSealedCaseFile("holdout");
+    writeCases([makeCase({ id: "holdout-1", split: "holdout" })]);
+
+    const report = await validateDatasets({ root });
+    expect(assertionStatus(report, "A22")).toBe("failed");
+    expect(assertionFailures(report, "A22")).toContain("plaintext holdout present");
+  });
+
+  it("skips while holdout plaintext is still in the authoring phase", async () => {
+    writeSplitsManifest({ train: [], dev: [], holdout: ["holdout-1"], "gold-holdout": [] });
+    writeCases([makeCase({ id: "holdout-1", split: "holdout" })]);
+
+    const report = await validateDatasets({ root });
+    expect(assertionStatus(report, "A22")).toBe("skipped");
+    expect(report.results.find((r) => r.id === "A22")?.notes?.join("\n")).toContain("plaintext authoring file present before sealing");
+  });
+});
+
+describe("validateDatasets — seal receipt hashes (A23)", () => {
+  it("passes when receipt hashes match ciphertext", async () => {
+    writeSplitsManifest({ train: [], dev: [], holdout: ["holdout-1"], "gold-holdout": [] });
+    writeSealedCaseFile("holdout", "ciphertext-v1");
+    writeSealReceipt({
+      domain: "van-ssmuh",
+      identity_public_key: "age1test",
+      sealed_files: [{
+        path: "datasets/cases/van-ssmuh.holdout.jsonl",
+        ciphertext_path: "datasets/cases/van-ssmuh.holdout.jsonl.age",
+        plaintext_sha256: `sha256:${sha256("plaintext")}`,
+        ciphertext_sha256: `sha256:${sha256("ciphertext-v1")}`,
+        sealed_at: "2026-06-07T00:00:00.000Z",
+      }],
+    });
+
+    expect(assertionStatus(await validateDatasets({ root }), "A23")).toBe("passed");
+  });
+
+  it("fails when ciphertext is tampered after receipt creation", async () => {
+    writeSplitsManifest({ train: [], dev: [], holdout: ["holdout-1"], "gold-holdout": [] });
+    writeSealedCaseFile("holdout", "ciphertext-v1");
+    writeSealReceipt({
+      domain: "van-ssmuh",
+      identity_public_key: "age1test",
+      sealed_files: [{
+        path: "datasets/cases/van-ssmuh.holdout.jsonl",
+        ciphertext_path: "datasets/cases/van-ssmuh.holdout.jsonl.age",
+        plaintext_sha256: `sha256:${sha256("plaintext")}`,
+        ciphertext_sha256: `sha256:${sha256("ciphertext-v1")}`,
+        sealed_at: "2026-06-07T00:00:00.000Z",
+      }],
+    });
+    writeSealedCaseFile("holdout", "tampered");
+
+    const report = await validateDatasets({ root });
+    expect(assertionStatus(report, "A23")).toBe("failed");
+    expect(assertionFailures(report, "A23")).toContain("does not match receipt");
+  });
+
+  it("skips receipt checks before sealed files exist", async () => {
+    writeSplitsManifest({ train: [], dev: [], holdout: ["holdout-1"], "gold-holdout": [] });
+    writeCases([makeCase({ id: "holdout-1", split: "holdout" })]);
+
+    const report = await validateDatasets({ root });
+    expect(assertionStatus(report, "A23")).toBe("skipped");
+    expect(report.results.find((r) => r.id === "A23")?.notes?.join("\n")).toContain("no sealed files yet");
+  });
+});
+
+describe("validateDatasets — holdout diversity (A24)", () => {
+  it("skips small splits", async () => {
+    writeCases([makeCase({ id: "small-holdout", split: "holdout" })]);
+    const report = await validateDatasets({ root });
+    expect(assertionStatus(report, "A24")).toBe("skipped");
+    expect(report.results.find((r) => r.id === "A24")?.notes?.join("\n")).toContain("n=1");
+  });
+
+  it("passes when holdout distribution stays within bounds", async () => {
+    writeCases(diversityFixtureCases(undefined, "holdout"));
+    expect(assertionStatus(await validateDatasets({ root }), "A24")).toBe("passed");
+  });
+});
+
 function scenarioWithChangedFacts(count: number): Partial<Record<"zone" | "units" | "lot" | "fsr" | "rear-setback", string>> {
   const changes = [
     ["zone", "RM-9"],
@@ -408,7 +585,12 @@ function scenarioWithChangedFacts(count: number): Partial<Record<"zone" | "units
   return Object.fromEntries(changes.slice(0, count));
 }
 
-function diversityFixtureCases(applicantType?: string): Case[] {
+function vectorWithChangedFacts(total: number, changed: number): string {
+  const tokens = Array.from({ length: total }, (_, index) => `f${index + 1}=${index < changed ? "b" : "a"}`);
+  return `vec:${tokens.join("|")}`;
+}
+
+function diversityFixtureCases(applicantType?: string, split: Case["split"] = "train"): Case[] {
   const applicantTypes = [
     "owner-builder",
     "owner-builder",
@@ -449,7 +631,7 @@ function diversityFixtureCases(applicantType?: string): Case[] {
     const id = `diverse-${index + 1}`;
     return makeCase({
       id,
-      split: "train",
+      split,
       outcome,
       gapSeverity: gaps[index],
       family: index < 3 ? `edge-${index + 1}` : null,
@@ -558,8 +740,38 @@ describe("buildDiversityReport", () => {
     expect(report).toContain("## Counts per pool per domain");
     expect(report).toContain("Cases: train=1, dev=1, holdout=0, gold-holdout=0");
     expect(report).toContain("Few-shots: planner=1");
+    expect(report).toContain("## Near-neighbor cross-split pairs");
     expect(report).toContain("## Top 5 closest cross-split pairs");
     expect(report).toContain("## Build status");
+    expect(report).toContain("## Reviewer sign-off");
+  });
+
+  it("lists near-floor cross-split pairs first and flags them", () => {
+    const nearTrain = makeCase({ id: "near-train", split: "train", scenarioFingerprint: vectorWithChangedFacts(20, 0) });
+    const nearDev = makeCase({
+      id: "near-dev",
+      split: "dev",
+      contentSeed: "near-dev",
+      entitySeed: "near-dev",
+      docFps: [`sha256:${sha256("near-dev")}`],
+      scenarioFingerprint: vectorWithChangedFacts(20, 7),
+    });
+    const farHoldout = makeCase({
+      id: "far-holdout",
+      split: "holdout",
+      contentSeed: "far-holdout",
+      entitySeed: "far-holdout",
+      docFps: [`sha256:${sha256("far-holdout")}`],
+      scenarioFingerprint: vectorWithChangedFacts(20, 20),
+    });
+    const fixtureRoot = trackFixture(writeFixtureToTmp({ cases: [nearTrain, farHoldout, nearDev] }));
+    const report = buildDiversityReport(loadDataset(fixtureRoot), DEFAULT_BOUNDS);
+    const nearSection = report.slice(report.indexOf("## Near-neighbor cross-split pairs"));
+    const rows = nearSection
+      .split("\n")
+      .filter((line) => line.startsWith("| ") && !line.includes("---") && !line.includes("pair |"));
+
+    expect(rows[0]).toMatch(/near-(train|dev) ↔ near-(train|dev) \| 0\.350 \| ⚠/);
   });
 });
 
