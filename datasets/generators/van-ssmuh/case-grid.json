@@ -1,0 +1,1788 @@
+{
+  "domain": "van-ssmuh",
+  "schema_version": "v1.0.0",
+  "generator_id": "deterministic-seed-v1",
+  "generated_at": "2026-06-07",
+  "document_templates": {
+    "architectural-set": {
+      "title": "Architectural set",
+      "excerpt": "Drawings for {case_id} show {units_proposed} units, FSR {fsr_proposed}, height {height_proposed_m} m, rear setback {rear_setback_m} m, side setback {side_setback_m} m, and {parking_spaces_proposed} parking spaces."
+    },
+    "site-survey-bcls": {
+      "title": "BCLS site survey",
+      "excerpt": "Survey for {case_id} records a synthetic lot area of {lot_area_sqm} sqm and confirms setbacks used for pre-review."
+    },
+    "form-1-owner-consent": {
+      "title": "Form 1 owner consent",
+      "excerpt": "Owner consent for {case_id} is signed for a fictional SSMUH pre-review package."
+    },
+    "energy-compliance-report": {
+      "title": "Energy compliance report",
+      "excerpt": "Energy report for {case_id} states Step Code {energy_step_code_proposed} against required Step Code {energy_step_code_required}."
+    },
+    "tree-assessment": {
+      "title": "Tree assessment",
+      "excerpt": "Arborist note for {case_id} lists synthetic tree conditions and retention notes for the lot."
+    },
+    "neighbour-notification": {
+      "title": "Neighbour notification proof",
+      "excerpt": "Notification log for {case_id} records fictional adjacent-owner notice delivery for Stage 1 completeness."
+    },
+    "heritage-statement": {
+      "title": "Heritage statement",
+      "excerpt": "Heritage statement for {case_id} flags a fictional overlay and asks staff to confirm the review path."
+    },
+    "heritage-conservation-plan": {
+      "title": "Heritage conservation plan",
+      "excerpt": "Conservation plan for {case_id} describes fictional retention measures for specialist review."
+    },
+    "floodplain-acknowledgement": {
+      "title": "Floodplain acknowledgement",
+      "excerpt": "Floodplain acknowledgement for {case_id} records a fictional covenant review trigger and routing note."
+    },
+    "tod-eligibility-letter": {
+      "title": "TOD eligibility letter",
+      "excerpt": "TOD letter for {case_id} explains why the fictional overlay does not change SSMUH unit limits."
+    },
+    "subdivision-proposal": {
+      "title": "Subdivision proposal",
+      "excerpt": "Subdivision note for {case_id} describes a fictional lot-line adjustment tied to the pre-review pathway."
+    }
+  },
+  "rows": [
+    {
+      "case_id": "van-ssmuh-train-001",
+      "split": "train",
+      "address_stub": "synthetic-NE-block-001",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 4,
+        "lot_area_sqm": 612,
+        "fsr_proposed": 0.96,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10.4,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7.9,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.4,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 4,
+        "parking_spaces_required": 4,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "architect-of-record",
+        "prior_permits": 14,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification"
+      ],
+      "documents_missing": [],
+      "edge_case_family": null,
+      "outcome_class": "ready",
+      "pathway_class": "as-of-right-ssmuh",
+      "gap_severity_bucket": "none",
+      "reviewer_notes": "Clean as-of-right package. Drawings, survey, energy report, tree note, and neighbour notice align."
+    },
+    {
+      "case_id": "van-ssmuh-train-002",
+      "split": "train",
+      "address_stub": "synthetic-SE-block-002",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 4,
+        "lot_area_sqm": 528,
+        "fsr_proposed": 0.92,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10.9,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7.8,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.3,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 2,
+        "parking_spaces_required": 4,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "owner-builder",
+        "prior_permits": 0,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report"
+      ],
+      "documents_missing": [
+        "neighbour-notification",
+        "tree-assessment"
+      ],
+      "edge_case_family": null,
+      "outcome_class": "needs-clarification",
+      "pathway_class": "as-of-right-ssmuh",
+      "gap_severity_bucket": "minor-multi",
+      "reviewer_notes": "Parking is short, and two Stage 1 documents are missing. Use plain next steps for the owner-builder."
+    },
+    {
+      "case_id": "van-ssmuh-train-003",
+      "split": "train",
+      "address_stub": "synthetic-W-block-003",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 3,
+        "lot_area_sqm": 478,
+        "fsr_proposed": 1.06,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10.8,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7.7,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.3,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 3,
+        "parking_spaces_required": 3,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 2,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "agent-of-record",
+        "prior_permits": 8,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification"
+      ],
+      "documents_missing": [],
+      "edge_case_family": null,
+      "outcome_class": "needs-clarification",
+      "pathway_class": "as-of-right-ssmuh",
+      "gap_severity_bucket": "minor-multi",
+      "reviewer_notes": "FSR exceeds the cap and Step Code is low. Stage 1 documents are otherwise complete."
+    },
+    {
+      "case_id": "van-ssmuh-train-004",
+      "split": "train",
+      "address_stub": "synthetic-CW-block-004",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 5,
+        "lot_area_sqm": 742,
+        "fsr_proposed": 1.12,
+        "fsr_allowed": 1,
+        "height_proposed_m": 11.2,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7.8,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.3,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 5,
+        "parking_spaces_required": 5,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 4,
+        "energy_step_code_required": 3,
+        "heritage_overlay": true,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "developer",
+        "prior_permits": 9,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification",
+        "heritage-statement",
+        "heritage-conservation-plan"
+      ],
+      "documents_missing": [],
+      "edge_case_family": "heritage-overlay",
+      "outcome_class": "complex-requires-specialist",
+      "pathway_class": "heritage",
+      "gap_severity_bucket": "blocking",
+      "reviewer_notes": "Heritage overlay needs specialist routing. FSR and unit count also need a quantified correction path.",
+      "extra_docs": [
+        "heritage-conservation-plan",
+        "heritage-statement"
+      ]
+    },
+    {
+      "case_id": "van-ssmuh-train-005",
+      "split": "train",
+      "address_stub": "synthetic-SW-block-005",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 4,
+        "lot_area_sqm": 566,
+        "fsr_proposed": 0.94,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10.5,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7.8,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.4,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 4,
+        "parking_spaces_required": 4,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "first-time-applicant",
+        "prior_permits": 0,
+        "language_preference": "pa"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "tree-assessment"
+      ],
+      "documents_missing": [
+        "energy-compliance-report",
+        "neighbour-notification"
+      ],
+      "edge_case_family": null,
+      "outcome_class": "needs-clarification",
+      "pathway_class": "discretionary",
+      "gap_severity_bucket": "minor-multi",
+      "reviewer_notes": "Front setback is short in the drawings. Energy report and neighbour notice must be named as Stage 1 gaps.",
+      "oracle_overrides": {
+        "front_setback_short": true
+      }
+    },
+    {
+      "case_id": "van-ssmuh-train-006",
+      "split": "train",
+      "address_stub": "synthetic-E-block-006",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 3,
+        "lot_area_sqm": 688,
+        "fsr_proposed": 0.88,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 8,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.5,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 3,
+        "parking_spaces_required": 3,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 4,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "architect-of-record",
+        "prior_permits": 22,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification"
+      ],
+      "documents_missing": [],
+      "edge_case_family": null,
+      "outcome_class": "ready",
+      "pathway_class": "as-of-right-ssmuh",
+      "gap_severity_bucket": "none",
+      "reviewer_notes": "Three-unit as-of-right package is complete. Values have clear buffers from the R1-1 limits."
+    },
+    {
+      "case_id": "van-ssmuh-train-007",
+      "split": "train",
+      "address_stub": "synthetic-NW-block-007",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 4,
+        "lot_area_sqm": 552,
+        "fsr_proposed": 0.99,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10.9,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7.4,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.3,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 4,
+        "parking_spaces_required": 4,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "owner-builder",
+        "prior_permits": 2,
+        "language_preference": "zh"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification"
+      ],
+      "documents_missing": [],
+      "edge_case_family": "rear-setback-borderline",
+      "outcome_class": "needs-clarification",
+      "pathway_class": "as-of-right-ssmuh",
+      "gap_severity_bucket": "minor-single",
+      "reviewer_notes": "Rear setback is close to the threshold and falls short by a small amount. Stage 1 is complete."
+    },
+    {
+      "case_id": "van-ssmuh-train-008",
+      "split": "train",
+      "address_stub": "synthetic-NE-block-008",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 4,
+        "lot_area_sqm": 635,
+        "fsr_proposed": 1.11,
+        "fsr_allowed": 1,
+        "height_proposed_m": 12.1,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7.9,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.4,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 4,
+        "parking_spaces_required": 4,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "agent-of-record",
+        "prior_permits": 5,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification"
+      ],
+      "documents_missing": [],
+      "edge_case_family": null,
+      "outcome_class": "needs-clarification",
+      "pathway_class": "as-of-right-ssmuh",
+      "gap_severity_bucket": "major-single",
+      "reviewer_notes": "FSR and height both exceed numeric caps. The packet is complete enough for a focused correction letter."
+    },
+    {
+      "case_id": "van-ssmuh-train-009",
+      "split": "train",
+      "address_stub": "synthetic-SE-block-009",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 5,
+        "lot_area_sqm": 704,
+        "fsr_proposed": 0.98,
+        "fsr_allowed": 1,
+        "height_proposed_m": 12,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7.8,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.4,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 5,
+        "parking_spaces_required": 5,
+        "in_ptaa": true,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": true
+      },
+      "applicant": {
+        "type": "developer",
+        "prior_permits": 11,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification",
+        "tod-eligibility-letter"
+      ],
+      "documents_missing": [],
+      "edge_case_family": "tod-overlay-noop",
+      "outcome_class": "complex-requires-specialist",
+      "pathway_class": "tod-overlap",
+      "gap_severity_bucket": "major-multi",
+      "reviewer_notes": "TOD overlay does not remove the unit and height checks. Route for specialist confirmation before writing redlines.",
+      "extra_docs": [
+        "tod-eligibility-letter"
+      ]
+    },
+    {
+      "case_id": "van-ssmuh-train-010",
+      "split": "train",
+      "address_stub": "synthetic-CW-block-010",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 4,
+        "lot_area_sqm": 498,
+        "fsr_proposed": 0.97,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10.7,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7.7,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 0.9,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 4,
+        "parking_spaces_required": 4,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "first-time-applicant",
+        "prior_permits": 0,
+        "language_preference": "other"
+      },
+      "documents_present": [
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "neighbour-notification"
+      ],
+      "documents_missing": [
+        "architectural-set",
+        "tree-assessment"
+      ],
+      "edge_case_family": "side-setback-borderline",
+      "outcome_class": "needs-clarification",
+      "pathway_class": "discretionary",
+      "gap_severity_bucket": "minor-multi",
+      "reviewer_notes": "Side setback is short, and core drawings plus tree assessment are missing. Keep the response concrete."
+    },
+    {
+      "case_id": "van-ssmuh-train-011",
+      "split": "train",
+      "address_stub": "synthetic-SW-block-011",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "duplex",
+        "units_proposed": 2,
+        "lot_area_sqm": 451,
+        "fsr_proposed": 0.82,
+        "fsr_allowed": 1,
+        "height_proposed_m": 9.8,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 8.1,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.6,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 2,
+        "parking_spaces_required": 2,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "architect-of-record",
+        "prior_permits": 17,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification"
+      ],
+      "documents_missing": [],
+      "edge_case_family": null,
+      "outcome_class": "ready",
+      "pathway_class": "as-of-right-ssmuh",
+      "gap_severity_bucket": "none",
+      "reviewer_notes": "Duplex package is ready for staff review. All Stage 1 documents are present."
+    },
+    {
+      "case_id": "van-ssmuh-train-012",
+      "split": "train",
+      "address_stub": "synthetic-E-block-012",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 4,
+        "lot_area_sqm": 584,
+        "fsr_proposed": 0.93,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10.6,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7.9,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.5,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 3,
+        "parking_spaces_required": 4,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "owner-builder",
+        "prior_permits": 1,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment"
+      ],
+      "documents_missing": [
+        "neighbour-notification"
+      ],
+      "edge_case_family": null,
+      "outcome_class": "needs-clarification",
+      "pathway_class": "as-of-right-ssmuh",
+      "gap_severity_bucket": "minor-multi",
+      "reviewer_notes": "Parking is one stall short and neighbour notice is missing. The rest of the packet is consistent."
+    },
+    {
+      "case_id": "van-ssmuh-train-013",
+      "split": "train",
+      "address_stub": "synthetic-NW-block-013",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 3,
+        "lot_area_sqm": 624,
+        "fsr_proposed": 0.89,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10.2,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 8,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.4,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 3,
+        "parking_spaces_required": 3,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 2,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "agent-of-record",
+        "prior_permits": 4,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "tree-assessment",
+        "neighbour-notification"
+      ],
+      "documents_missing": [
+        "energy-compliance-report"
+      ],
+      "edge_case_family": null,
+      "outcome_class": "needs-clarification",
+      "pathway_class": "as-of-right-ssmuh",
+      "gap_severity_bucket": "minor-multi",
+      "reviewer_notes": "Step Code is below the minimum, and the supporting energy report is missing. Other metrics comply."
+    },
+    {
+      "case_id": "van-ssmuh-train-014",
+      "split": "train",
+      "address_stub": "synthetic-NE-block-014",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 5,
+        "lot_area_sqm": 516,
+        "fsr_proposed": 1.18,
+        "fsr_allowed": 1,
+        "height_proposed_m": 12.3,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7.1,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.3,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 5,
+        "parking_spaces_required": 5,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": true,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "developer",
+        "prior_permits": 7,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "heritage-statement"
+      ],
+      "documents_missing": [
+        "neighbour-notification",
+        "tree-assessment"
+      ],
+      "edge_case_family": "missing-stage1-trio",
+      "outcome_class": "complex-requires-specialist",
+      "pathway_class": "heritage",
+      "gap_severity_bucket": "blocking",
+      "reviewer_notes": "Heritage routing combines with FSR, rear setback, height, and missing Stage 1 items. Treat as a blocking case.",
+      "extra_docs": [
+        "heritage-statement"
+      ]
+    },
+    {
+      "case_id": "van-ssmuh-train-015",
+      "split": "train",
+      "address_stub": "synthetic-SE-block-015",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 4,
+        "lot_area_sqm": 536,
+        "fsr_proposed": 0.91,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10.3,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7.9,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.4,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 4,
+        "parking_spaces_required": 4,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "first-time-applicant",
+        "prior_permits": 0,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "tree-assessment",
+        "neighbour-notification"
+      ],
+      "documents_missing": [
+        "architectural-set",
+        "energy-compliance-report"
+      ],
+      "edge_case_family": null,
+      "outcome_class": "needs-clarification",
+      "pathway_class": "discretionary",
+      "gap_severity_bucket": "minor-multi",
+      "reviewer_notes": "Front setback cannot be cleared from the current drawings. Architectural set and energy report must be resubmitted.",
+      "oracle_overrides": {
+        "front_setback_short": true
+      }
+    },
+    {
+      "case_id": "van-ssmuh-train-016",
+      "split": "train",
+      "address_stub": "synthetic-CW-block-016",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 4,
+        "lot_area_sqm": 776,
+        "fsr_proposed": 0.9,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10.1,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 8.2,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.5,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 4,
+        "parking_spaces_required": 4,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 4,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "architect-of-record",
+        "prior_permits": 19,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification"
+      ],
+      "documents_missing": [],
+      "edge_case_family": null,
+      "outcome_class": "ready",
+      "pathway_class": "as-of-right-ssmuh",
+      "gap_severity_bucket": "none",
+      "reviewer_notes": "Large-lot multiplex package is ready. The submitted evidence gives comfortable compliance margins."
+    },
+    {
+      "case_id": "van-ssmuh-train-017",
+      "split": "train",
+      "address_stub": "synthetic-SW-block-017",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 4,
+        "lot_area_sqm": 603,
+        "fsr_proposed": 0.95,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10.8,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7.2,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.3,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 4,
+        "parking_spaces_required": 4,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "first-time-applicant",
+        "prior_permits": 1,
+        "language_preference": "zh"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "neighbour-notification"
+      ],
+      "documents_missing": [
+        "tree-assessment"
+      ],
+      "edge_case_family": null,
+      "outcome_class": "needs-clarification",
+      "pathway_class": "as-of-right-ssmuh",
+      "gap_severity_bucket": "minor-multi",
+      "reviewer_notes": "Rear setback is short and the tree assessment is missing. The applicant needs a concise correction list."
+    },
+    {
+      "case_id": "van-ssmuh-train-018",
+      "split": "train",
+      "address_stub": "synthetic-E-block-018",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 4,
+        "lot_area_sqm": 666,
+        "fsr_proposed": 0.94,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10.6,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7.7,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 3,
+        "parking_spaces_required": 4,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "owner-builder",
+        "prior_permits": 0,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment"
+      ],
+      "documents_missing": [
+        "neighbour-notification"
+      ],
+      "edge_case_family": null,
+      "outcome_class": "needs-clarification",
+      "pathway_class": "as-of-right-ssmuh",
+      "gap_severity_bucket": "minor-multi",
+      "reviewer_notes": "Side setback, parking, and neighbour notice need correction. Tone should stay practical for a first permit."
+    },
+    {
+      "case_id": "van-ssmuh-train-019",
+      "split": "train",
+      "address_stub": "synthetic-NW-block-019",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 5,
+        "lot_area_sqm": 694,
+        "fsr_proposed": 0.99,
+        "fsr_allowed": 1,
+        "height_proposed_m": 11,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7.8,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.4,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 4,
+        "parking_spaces_required": 5,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": true,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "developer",
+        "prior_permits": 12,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification",
+        "floodplain-acknowledgement"
+      ],
+      "documents_missing": [],
+      "edge_case_family": "floodplain-overlay",
+      "outcome_class": "complex-requires-specialist",
+      "pathway_class": "floodplain",
+      "gap_severity_bucket": "blocking",
+      "reviewer_notes": "Floodplain overlay requires specialist routing. Units and parking also need a clear compliance path.",
+      "extra_docs": [
+        "floodplain-acknowledgement"
+      ]
+    },
+    {
+      "case_id": "van-ssmuh-train-020",
+      "split": "train",
+      "address_stub": "synthetic-NE-block-020",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 4,
+        "lot_area_sqm": 514,
+        "fsr_proposed": 0.93,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10.9,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7.8,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.4,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 4,
+        "parking_spaces_required": 4,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 2,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": true
+      },
+      "applicant": {
+        "type": "agent-of-record",
+        "prior_permits": 6,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "tree-assessment",
+        "neighbour-notification",
+        "tod-eligibility-letter"
+      ],
+      "documents_missing": [
+        "energy-compliance-report"
+      ],
+      "edge_case_family": null,
+      "outcome_class": "needs-clarification",
+      "pathway_class": "tod-overlap",
+      "gap_severity_bucket": "minor-multi",
+      "reviewer_notes": "TOD overlap is present, but the correction is energy-focused. Energy report is missing and Step Code is low.",
+      "extra_docs": [
+        "tod-eligibility-letter"
+      ]
+    },
+    {
+      "case_id": "van-ssmuh-train-021",
+      "split": "train",
+      "address_stub": "synthetic-SE-block-021",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "laneway",
+        "units_proposed": 1,
+        "lot_area_sqm": 422,
+        "fsr_proposed": 0.58,
+        "fsr_allowed": 1,
+        "height_proposed_m": 6.2,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 8.4,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.8,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 1,
+        "parking_spaces_required": 1,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "architect-of-record",
+        "prior_permits": 16,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification"
+      ],
+      "documents_missing": [],
+      "edge_case_family": "laneway-uplift",
+      "outcome_class": "ready",
+      "pathway_class": "specialist-required",
+      "gap_severity_bucket": "none",
+      "reviewer_notes": "Laneway uplift is ready for specialist routing. The package has complete evidence and no oracle compliance gaps."
+    },
+    {
+      "case_id": "van-ssmuh-train-022",
+      "split": "train",
+      "address_stub": "synthetic-CW-block-022",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 5,
+        "lot_area_sqm": 734,
+        "fsr_proposed": 0.98,
+        "fsr_allowed": 1,
+        "height_proposed_m": 11.1,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7.8,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.4,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 5,
+        "parking_spaces_required": 5,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 2,
+        "energy_step_code_required": 3,
+        "heritage_overlay": true,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "first-time-applicant",
+        "prior_permits": 0,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification",
+        "heritage-statement"
+      ],
+      "documents_missing": [
+        "architectural-set"
+      ],
+      "edge_case_family": null,
+      "outcome_class": "complex-requires-specialist",
+      "pathway_class": "heritage",
+      "gap_severity_bucket": "blocking",
+      "reviewer_notes": "Heritage overlay combines with unit count, Step Code, and missing drawings. Give a direct specialist handoff.",
+      "extra_docs": [
+        "heritage-statement"
+      ]
+    },
+    {
+      "case_id": "van-ssmuh-train-023",
+      "split": "train",
+      "address_stub": "synthetic-SW-block-023",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 5,
+        "lot_area_sqm": 486,
+        "fsr_proposed": 1.16,
+        "fsr_allowed": 1,
+        "height_proposed_m": 11.9,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 0.9,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 4,
+        "parking_spaces_required": 5,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 2,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "owner-builder",
+        "prior_permits": 0,
+        "language_preference": "other"
+      },
+      "documents_present": [
+        "site-survey-bcls",
+        "form-1-owner-consent"
+      ],
+      "documents_missing": [
+        "architectural-set",
+        "energy-compliance-report",
+        "neighbour-notification",
+        "tree-assessment"
+      ],
+      "edge_case_family": "stage1-incomplete+numeric-over",
+      "outcome_class": "complex-requires-specialist",
+      "pathway_class": "specialist-required",
+      "gap_severity_bucket": "blocking",
+      "reviewer_notes": "Many numeric gaps and all Stage 1 documents are missing. This needs specialist triage and plain applicant support.",
+      "oracle_overrides": {
+        "front_setback_short": true
+      }
+    },
+    {
+      "case_id": "van-ssmuh-train-024",
+      "split": "train",
+      "address_stub": "synthetic-E-block-024",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 3,
+        "lot_area_sqm": 718,
+        "fsr_proposed": 0.87,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10.2,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 8.3,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.6,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 3,
+        "parking_spaces_required": 3,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 4,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": true,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "developer",
+        "prior_permits": 10,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification",
+        "floodplain-acknowledgement"
+      ],
+      "documents_missing": [],
+      "edge_case_family": null,
+      "outcome_class": "ready",
+      "pathway_class": "floodplain",
+      "gap_severity_bucket": "none",
+      "reviewer_notes": "Floodplain acknowledgement is present and no oracle gap fires. The case is ready for the floodplain pathway queue.",
+      "extra_docs": [
+        "floodplain-acknowledgement"
+      ]
+    },
+    {
+      "case_id": "van-ssmuh-dev-001",
+      "split": "dev",
+      "address_stub": "synthetic-DV-block-101",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "duplex",
+        "units_proposed": 2,
+        "lot_area_sqm": 842,
+        "fsr_proposed": 0.72,
+        "fsr_allowed": 1,
+        "height_proposed_m": 9.4,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 8.8,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.8,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 2,
+        "parking_spaces_required": 2,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 4,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "owner-builder",
+        "prior_permits": 3,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification"
+      ],
+      "documents_missing": [],
+      "edge_case_family": null,
+      "outcome_class": "ready",
+      "pathway_class": "as-of-right-ssmuh",
+      "gap_severity_bucket": "none",
+      "reviewer_notes": "Complete duplex submission has wide buffers. It is a clean dev ready case."
+    },
+    {
+      "case_id": "van-ssmuh-dev-002",
+      "split": "dev",
+      "address_stub": "synthetic-DV-block-102",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 3,
+        "lot_area_sqm": 392,
+        "fsr_proposed": 0.84,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10.1,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 8.2,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.6,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 2,
+        "parking_spaces_required": 3,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "developer",
+        "prior_permits": 13,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "neighbour-notification"
+      ],
+      "documents_missing": [
+        "tree-assessment"
+      ],
+      "edge_case_family": null,
+      "outcome_class": "needs-clarification",
+      "pathway_class": "as-of-right-ssmuh",
+      "gap_severity_bucket": "minor-multi",
+      "reviewer_notes": "Parking is one stall short and the tree assessment is missing. Other values comply."
+    },
+    {
+      "case_id": "van-ssmuh-dev-003",
+      "split": "dev",
+      "address_stub": "synthetic-DV-block-103",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 4,
+        "lot_area_sqm": 912,
+        "fsr_proposed": 1.07,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10.7,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 8,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 4,
+        "parking_spaces_required": 4,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 4,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "architect-of-record",
+        "prior_permits": 25,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification"
+      ],
+      "documents_missing": [],
+      "edge_case_family": "side-setback-borderline",
+      "outcome_class": "needs-clarification",
+      "pathway_class": "as-of-right-ssmuh",
+      "gap_severity_bucket": "major-single",
+      "reviewer_notes": "FSR and side setback need quantified redlines. The Stage 1 package is complete."
+    },
+    {
+      "case_id": "van-ssmuh-dev-004",
+      "split": "dev",
+      "address_stub": "synthetic-DV-block-104",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 3,
+        "lot_area_sqm": 438,
+        "fsr_proposed": 0.86,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 7,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.5,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 3,
+        "parking_spaces_required": 3,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "agent-of-record",
+        "prior_permits": 7,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment"
+      ],
+      "documents_missing": [
+        "neighbour-notification"
+      ],
+      "edge_case_family": null,
+      "outcome_class": "needs-clarification",
+      "pathway_class": "as-of-right-ssmuh",
+      "gap_severity_bucket": "minor-multi",
+      "reviewer_notes": "Rear setback is short and neighbour notification is missing. Keep the correction path narrow."
+    },
+    {
+      "case_id": "van-ssmuh-dev-005",
+      "split": "dev",
+      "address_stub": "synthetic-DV-block-105",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 4,
+        "lot_area_sqm": 958,
+        "fsr_proposed": 0.9,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10.4,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 8.4,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.7,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 4,
+        "parking_spaces_required": 4,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 4,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "first-time-applicant",
+        "prior_permits": 0,
+        "language_preference": "pa"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "tree-assessment",
+        "neighbour-notification"
+      ],
+      "documents_missing": [
+        "energy-compliance-report"
+      ],
+      "edge_case_family": null,
+      "outcome_class": "needs-clarification",
+      "pathway_class": "discretionary",
+      "gap_severity_bucket": "minor-multi",
+      "reviewer_notes": "Front setback is short in the architectural set. The energy report is also missing from Stage 1.",
+      "oracle_overrides": {
+        "front_setback_short": true
+      }
+    },
+    {
+      "case_id": "van-ssmuh-dev-006",
+      "split": "dev",
+      "address_stub": "synthetic-DV-block-106",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "infill",
+        "units_proposed": 1,
+        "lot_area_sqm": 768,
+        "fsr_proposed": 0.54,
+        "fsr_allowed": 1,
+        "height_proposed_m": 7,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 8.6,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.9,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 1,
+        "parking_spaces_required": 1,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 4,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "first-time-applicant",
+        "prior_permits": 1,
+        "language_preference": "zh"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification"
+      ],
+      "documents_missing": [],
+      "edge_case_family": null,
+      "outcome_class": "ready",
+      "pathway_class": "as-of-right-ssmuh",
+      "gap_severity_bucket": "none",
+      "reviewer_notes": "Small infill case is complete and ready. The lot metrics stay below all oracle thresholds."
+    },
+    {
+      "case_id": "van-ssmuh-dev-007",
+      "split": "dev",
+      "address_stub": "synthetic-DV-block-107",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 3,
+        "lot_area_sqm": 884,
+        "fsr_proposed": 0.81,
+        "fsr_allowed": 1,
+        "height_proposed_m": 9.9,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 8.5,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.6,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 3,
+        "parking_spaces_required": 3,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 2,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "owner-builder",
+        "prior_permits": 0,
+        "language_preference": "other"
+      },
+      "documents_present": [
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification"
+      ],
+      "documents_missing": [
+        "architectural-set"
+      ],
+      "edge_case_family": null,
+      "outcome_class": "needs-clarification",
+      "pathway_class": "as-of-right-ssmuh",
+      "gap_severity_bucket": "minor-multi",
+      "reviewer_notes": "Step Code is low and the architectural set is missing. Use direct wording for the first-time owner-builder."
+    },
+    {
+      "case_id": "van-ssmuh-dev-008",
+      "split": "dev",
+      "address_stub": "synthetic-DV-block-108",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 5,
+        "lot_area_sqm": 948,
+        "fsr_proposed": 1.14,
+        "fsr_allowed": 1,
+        "height_proposed_m": 12.4,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 8.1,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.5,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 5,
+        "parking_spaces_required": 5,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 4,
+        "energy_step_code_required": 3,
+        "heritage_overlay": true,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "developer",
+        "prior_permits": 15,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification",
+        "heritage-statement",
+        "heritage-conservation-plan"
+      ],
+      "documents_missing": [],
+      "edge_case_family": "heritage-overlay",
+      "outcome_class": "complex-requires-specialist",
+      "pathway_class": "heritage",
+      "gap_severity_bucket": "blocking",
+      "reviewer_notes": "Heritage specialist review is required, with FSR, height, and unit count also over threshold.",
+      "extra_docs": [
+        "heritage-conservation-plan",
+        "heritage-statement"
+      ]
+    },
+    {
+      "case_id": "van-ssmuh-dev-009",
+      "split": "dev",
+      "address_stub": "synthetic-DV-block-109",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 5,
+        "lot_area_sqm": 378,
+        "fsr_proposed": 0.95,
+        "fsr_allowed": 1,
+        "height_proposed_m": 10.6,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 8.3,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.7,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 3,
+        "parking_spaces_required": 5,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": true,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "architect-of-record",
+        "prior_permits": 21,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification",
+        "floodplain-acknowledgement"
+      ],
+      "documents_missing": [],
+      "edge_case_family": null,
+      "outcome_class": "complex-requires-specialist",
+      "pathway_class": "floodplain",
+      "gap_severity_bucket": "blocking",
+      "reviewer_notes": "Floodplain routing combines with unit and parking gaps. Stage 1 evidence is otherwise complete.",
+      "extra_docs": [
+        "floodplain-acknowledgement"
+      ]
+    },
+    {
+      "case_id": "van-ssmuh-dev-010",
+      "split": "dev",
+      "address_stub": "synthetic-DV-block-110",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 4,
+        "lot_area_sqm": 918,
+        "fsr_proposed": 0.89,
+        "fsr_allowed": 1,
+        "height_proposed_m": 12.2,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 8.1,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.5,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 4,
+        "parking_spaces_required": 4,
+        "in_ptaa": true,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": true
+      },
+      "applicant": {
+        "type": "agent-of-record",
+        "prior_permits": 9,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "tree-assessment",
+        "neighbour-notification",
+        "tod-eligibility-letter"
+      ],
+      "documents_missing": [
+        "energy-compliance-report"
+      ],
+      "edge_case_family": "tod-overlay-noop",
+      "outcome_class": "needs-clarification",
+      "pathway_class": "tod-overlap",
+      "gap_severity_bucket": "minor-multi",
+      "reviewer_notes": "TOD overlap needs careful wording. Height is over the cap and the energy report is missing.",
+      "extra_docs": [
+        "tod-eligibility-letter"
+      ]
+    },
+    {
+      "case_id": "van-ssmuh-dev-011",
+      "split": "dev",
+      "address_stub": "synthetic-DV-block-111",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "multiplex",
+        "units_proposed": 5,
+        "lot_area_sqm": 804,
+        "fsr_proposed": 0.97,
+        "fsr_allowed": 1,
+        "height_proposed_m": 11,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 8.4,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.5,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 5,
+        "parking_spaces_required": 5,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 2,
+        "energy_step_code_required": 3,
+        "heritage_overlay": true,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "first-time-applicant",
+        "prior_permits": 0,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "heritage-statement"
+      ],
+      "documents_missing": [
+        "architectural-set",
+        "neighbour-notification",
+        "tree-assessment"
+      ],
+      "edge_case_family": null,
+      "outcome_class": "complex-requires-specialist",
+      "pathway_class": "heritage",
+      "gap_severity_bucket": "blocking",
+      "reviewer_notes": "Heritage overlay combines with units, Step Code, and missing Stage 1 documents. The applicant needs a staged handoff.",
+      "extra_docs": [
+        "heritage-statement"
+      ]
+    },
+    {
+      "case_id": "van-ssmuh-dev-012",
+      "split": "dev",
+      "address_stub": "synthetic-DV-block-112",
+      "project": {
+        "zoning_district": "R1-1",
+        "project_type": "laneway",
+        "units_proposed": 1,
+        "lot_area_sqm": 338,
+        "fsr_proposed": 0.49,
+        "fsr_allowed": 1,
+        "height_proposed_m": 6.8,
+        "height_allowed_m": 11.5,
+        "rear_setback_m": 8.7,
+        "rear_setback_required_m": 7.6,
+        "side_setback_m": 1.9,
+        "side_setback_required_m": 1.2,
+        "parking_spaces_proposed": 1,
+        "parking_spaces_required": 1,
+        "in_ptaa": false,
+        "energy_step_code_proposed": 3,
+        "energy_step_code_required": 3,
+        "heritage_overlay": false,
+        "floodplain_overlay": false,
+        "tod_overlay": false
+      },
+      "applicant": {
+        "type": "architect-of-record",
+        "prior_permits": 18,
+        "language_preference": "en"
+      },
+      "documents_present": [
+        "architectural-set",
+        "site-survey-bcls",
+        "form-1-owner-consent",
+        "energy-compliance-report",
+        "tree-assessment",
+        "neighbour-notification"
+      ],
+      "documents_missing": [],
+      "edge_case_family": "laneway-uplift",
+      "outcome_class": "ready",
+      "pathway_class": "specialist-required",
+      "gap_severity_bucket": "none",
+      "reviewer_notes": "Laneway case is complete and ready for specialist routing. No oracle gap fires."
+    }
+  ]
+}

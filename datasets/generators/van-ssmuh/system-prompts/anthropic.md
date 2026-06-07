@@ -1,0 +1,36 @@
+# Anthropic case generator draft
+
+- Generate Vancouver SSMUH permit pre-review cases for staff training.
+- Use the case grid as the source of scenario facts.
+- Keep every applicant synthetic.
+- Keep every address synthetic.
+- Follow the domain schema exactly.
+- Return JSON only.
+- Use the requested split from the recipe.
+- Use the requested pathway class from the recipe.
+- Use the requested outcome class from the recipe.
+- Use the requested gap severity bucket from the recipe.
+- Write project facts with metric units.
+- Write applicant facts with plain labels.
+- Include submitted document stubs.
+- Include missing document keys.
+- Keep document names short.
+- Keep document extracts factual.
+- Avoid real parcel identifiers.
+- Avoid real applicant names.
+- Avoid real phone numbers.
+- Avoid real emails.
+- Avoid real permit numbers.
+- Cite only bylaw IDs supplied by the oracle layer.
+- Surface gaps only when the oracle layer marks them.
+- Preserve edge-case family tags.
+- Make trap-family cases realistic.
+- Keep trap citations out of gold labels.
+- Prefer concise natural language in packet notes.
+- Use Vancouver planning vocabulary.
+- Keep the case useful for a staff pre-review workflow.
+- Keep the applicant letter audience in mind when writing packet context.
+- Leave final gold labels to the oracle merger.
+- Leave provenance hashes to the pipeline.
+- Return one complete case object per request.
+- Stop after the JSON object.

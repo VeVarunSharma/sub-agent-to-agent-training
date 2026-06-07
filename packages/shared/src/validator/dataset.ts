@@ -27,6 +27,7 @@ export interface CorpusManifestEntry {
   license: string;
   vintage_date: string;
   content_hash: string;
+  bylaw_ids?: string[];
 }
 export interface CorpusManifest {
   domain?: string;
@@ -34,9 +35,66 @@ export interface CorpusManifest {
   bylaw_ids: string[];
 }
 
+function normalizeCorpusManifest(raw: unknown): CorpusManifest | null {
+  if (!raw || typeof raw !== "object") return null;
+  const obj = raw as { domain?: string; files?: CorpusManifestEntry[]; bylaw_ids?: string[] };
+  if (!Array.isArray(obj.files)) return null;
+  const aggregated = new Set<string>(obj.bylaw_ids ?? []);
+  for (const entry of obj.files) {
+    if (Array.isArray(entry.bylaw_ids)) {
+      for (const id of entry.bylaw_ids) aggregated.add(id);
+    }
+  }
+  return {
+    domain: obj.domain,
+    files: obj.files,
+    bylaw_ids: [...aggregated].sort(),
+  };
+}
+
 export interface RequiredEvidenceMap {
   domain: string;
   by_bylaw: Record<string, { evidence: string[]; gap_ids: string[] }>;
+}
+
+// Raw on-disk shape per specs/002-synthetic-data/SPEC.md section "Required evidence map".
+interface RequiredEvidenceMapOnDisk {
+  domain?: string;
+  entries?: Record<
+    string,
+    {
+      required_evidence_keys?: string[];
+      expected_gap_ids?: string[];
+      evidence?: string[];
+      gap_ids?: string[];
+    }
+  >;
+  by_bylaw?: Record<string, { evidence?: string[]; gap_ids?: string[] }>;
+}
+
+function normalizeRequiredEvidenceMap(
+  raw: RequiredEvidenceMapOnDisk | null,
+  domain: string,
+): RequiredEvidenceMap | null {
+  if (!raw) return null;
+  const by_bylaw: Record<string, { evidence: string[]; gap_ids: string[] }> = {};
+  if (raw.entries) {
+    for (const [bylawId, entry] of Object.entries(raw.entries)) {
+      by_bylaw[bylawId] = {
+        evidence: entry.required_evidence_keys ?? entry.evidence ?? [],
+        gap_ids: entry.expected_gap_ids ?? entry.gap_ids ?? [],
+      };
+    }
+  }
+  if (raw.by_bylaw) {
+    for (const [bylawId, entry] of Object.entries(raw.by_bylaw)) {
+      by_bylaw[bylawId] = {
+        evidence: entry.evidence ?? [],
+        gap_ids: entry.gap_ids ?? [],
+      };
+    }
+  }
+  return { domain: raw.domain ?? domain, by_bylaw };
 }
 
 export interface ApplicantSupportFlagSet {
@@ -44,7 +102,7 @@ export interface ApplicantSupportFlagSet {
   raw: string;
 }
 
-export interface SeedReceipt {
+export interface ValidatorSeedReceipt {
   indexed_paths: string[];
 }
 
@@ -62,7 +120,7 @@ export interface Dataset {
   referenceMemoIds: { domain: string; ids: Set<string>; path: string }[];
   referenceLetterIds: { domain: string; ids: Set<string>; path: string }[];
   oraclePaths: { domain: string; paths: string[] }[];
-  seedReceipts: { domain: string; receipt: SeedReceipt | null; path: string }[];
+  seedReceipts: { domain: string; receipt: ValidatorSeedReceipt | null; path: string }[];
   applicantSupportFlags: ApplicantSupportFlagSet | null;
 }
 
@@ -128,15 +186,18 @@ function loadDomain(root: string, dataset: Dataset, domain: string): void {
   const seedReceiptPath = join(root, "datasets/policy-corpus", `seed-receipt.${domain}.json`);
 
   const manifest =
-    readJsonFile<CorpusManifest>(manifestPath) ??
-    readJsonFile<CorpusManifest>(fallbackManifestPath);
+    normalizeCorpusManifest(readJsonFile<unknown>(manifestPath)) ??
+    normalizeCorpusManifest(readJsonFile<unknown>(fallbackManifestPath));
   dataset.corpusManifests.push({
     domain,
     manifest,
     path: manifest === null ? manifestPath : (existsSync(manifestPath) ? manifestPath : fallbackManifestPath),
   });
 
-  const reMap = readJsonFile<RequiredEvidenceMap>(requiredEvidencePath);
+  const reMap = normalizeRequiredEvidenceMap(
+    readJsonFile<RequiredEvidenceMapOnDisk>(requiredEvidencePath),
+    domain,
+  );
   dataset.requiredEvidenceMaps.push({ domain, map: reMap, path: requiredEvidencePath });
 
   const oracleIds = loadOracleRuleIds(decisionMatrixPath);
@@ -159,7 +220,7 @@ function loadDomain(root: string, dataset: Dataset, domain: string): void {
 
   dataset.seedReceipts.push({
     domain,
-    receipt: readJsonFile<SeedReceipt>(seedReceiptPath),
+    receipt: readJsonFile<ValidatorSeedReceipt>(seedReceiptPath),
     path: seedReceiptPath,
   });
 }

@@ -1,4 +1,3 @@
-import { jaccardDistance } from "../fingerprint/index.js";
 import type { Dataset } from "./dataset.js";
 import type { AssertionResult, DiversityBounds } from "./types.js";
 
@@ -96,6 +95,28 @@ export const assertEntityFpUnique = (d: Dataset) =>
 export const assertDocStubFpUnique = (d: Dataset) =>
   collisionAssertion(d, "A06", "No document-stub fingerprint collisions across pools", "document-stub");
 
+function scenarioFacts(fingerprint: string): Map<string, string> {
+  const facts = new Map<string, string>();
+  for (const token of fingerprint.replace(/^vec:/, "").split("|")) {
+    const idx = token.indexOf("=");
+    if (idx <= 0) continue;
+    facts.set(token.slice(0, idx), token.slice(idx + 1));
+  }
+  return facts;
+}
+
+export function scenarioFactDistance(a: string, b: string): number {
+  const A = scenarioFacts(a);
+  const B = scenarioFacts(b);
+  const names = new Set([...A.keys(), ...B.keys()]);
+  if (names.size === 0) return 0;
+  let changed = 0;
+  for (const name of names) {
+    if (A.get(name) !== B.get(name)) changed += 1;
+  }
+  return changed / names.size;
+}
+
 // A07: cross-split scenario distance >= 0.35.
 export function assertScenarioDistance(d: Dataset, bounds: DiversityBounds): AssertionResult {
   const skip = skipIfEmpty(d.cases, "A07", `Scenario-fingerprint Jaccard distance >= ${bounds.minScenarioDistance} between every cross-split pair`, "no cases loaded");
@@ -109,7 +130,7 @@ export function assertScenarioDistance(d: Dataset, bounds: DiversityBounds): Ass
       const b = d.cases[j];
       if (!a || !b) continue;
       if (a.case.split === b.case.split) continue;
-      const dist = jaccardDistance(a.case.scenario_fingerprint, b.case.scenario_fingerprint);
+      const dist = scenarioFactDistance(a.case.scenario_fingerprint, b.case.scenario_fingerprint);
       if (dist < closest.distance) {
         closest = { pair: `${a.case.case_id} <-> ${b.case.case_id}`, distance: dist };
       }

@@ -1,0 +1,33 @@
+{
+  "domain": "van-ssmuh",
+  "vector_store_id": "deterministic-local-seed-v1",
+  "corpus_version": "v2026.06.0",
+  "indexed_paths": [
+    "datasets/policy-corpus/public/van-ssmuh/bc-step-code.md",
+    "datasets/policy-corpus/public/van-ssmuh/bill-44-ssmuh.md",
+    "datasets/policy-corpus/public/van-ssmuh/parking-ssmuh.md",
+    "datasets/policy-corpus/public/van-ssmuh/subdivision.md",
+    "datasets/policy-corpus/public/van-ssmuh/tree-protection.md",
+    "datasets/policy-corpus/public/van-ssmuh/vbbl-part9.md",
+    "datasets/policy-corpus/public/van-ssmuh/zdb-r1-1-fsr.md",
+    "datasets/policy-corpus/public/van-ssmuh/zdb-r1-1-height.md",
+    "datasets/policy-corpus/public/van-ssmuh/zdb-r1-1-setbacks.md",
+    "datasets/policy-corpus/public/van-ssmuh/zdb-r1-1-units.md"
+  ],
+  "indexed_path_hashes": {
+    "datasets/policy-corpus/public/van-ssmuh/bc-step-code.md": "sha256:99032105f6ce4abe5d5878aa938b058c0207fee466db44ee3e23f94246c11e50",
+    "datasets/policy-corpus/public/van-ssmuh/bill-44-ssmuh.md": "sha256:161a4fc3b676e5d912cc1f351b32abb82d50fd2024b430153bebcc25c72e46eb",
+    "datasets/policy-corpus/public/van-ssmuh/parking-ssmuh.md": "sha256:440475e0b82fc582becc26721672789b394c9a1c927e3b0b8ed3f608173e54eb",
+    "datasets/policy-corpus/public/van-ssmuh/subdivision.md": "sha256:41d0b978546cbc9161a50ff6d72cf1eee4347a3b0ec9d7971452fb9d3dc28b9e",
+    "datasets/policy-corpus/public/van-ssmuh/tree-protection.md": "sha256:da5b49071b92d23afac3e679dda196344923a3ea58d53b80904b35d34a73d00e",
+    "datasets/policy-corpus/public/van-ssmuh/vbbl-part9.md": "sha256:b7d0d0ada3babaa6e44ef8931b94679d1bc2b8b84c76f04d4506a268dcb9d325",
+    "datasets/policy-corpus/public/van-ssmuh/zdb-r1-1-fsr.md": "sha256:9ce789fda49752f5ec2727359ea39e05eebe5bac82b18ae56b0bf2415ed76b68",
+    "datasets/policy-corpus/public/van-ssmuh/zdb-r1-1-height.md": "sha256:e06141e82e3bb46294645d51145dfa22ef9abe4e3f3eb88ed327d947dc305703",
+    "datasets/policy-corpus/public/van-ssmuh/zdb-r1-1-setbacks.md": "sha256:f0f9e79f5a6084617a87947c6fc35fbb20101fdb69a45031caed26a54f6054d1",
+    "datasets/policy-corpus/public/van-ssmuh/zdb-r1-1-units.md": "sha256:93e4ae082744864713a6db4ad64749a853f119e3cda291235c780b836fd2990c"
+  },
+  "generated_at": "2026-06-07T00:00:00.000Z",
+  "asserts": {
+    "oracle_files_indexed": false
+  }
+}

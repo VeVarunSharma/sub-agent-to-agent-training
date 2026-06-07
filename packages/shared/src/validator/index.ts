@@ -75,3 +75,4 @@ export function formatReport(report: ValidatorReport): string {
 export * from "./types.js";
 export * from "./dataset.js";
 export * from "./assertions.js";
+export * from "./report.js";

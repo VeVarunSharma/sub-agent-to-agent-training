@@ -17,6 +17,10 @@
     "./fingerprint": {
       "types": "./dist/fingerprint/index.d.ts",
       "import": "./dist/fingerprint/index.js"
+    },
+    "./generation": {
+      "types": "./dist/generation/index.d.ts",
+      "import": "./dist/generation/index.js"
     }
   },
   "scripts": {
