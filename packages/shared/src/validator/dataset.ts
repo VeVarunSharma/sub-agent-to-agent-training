@@ -1,5 +1,5 @@
 import { join } from "node:path";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import type { Case, FewShot } from "../schemas/index.js";
 import { CaseSchema, FewShotSchema } from "../schemas/index.js";
 import { listFilesRec, readJsonlFile, readJsonFile, rel } from "./loader.js";
@@ -175,13 +175,12 @@ function discoverDomains(root: string): string[] {
       if (m && m[1]) out.add(m[1]);
     }
   }
-  const oracleRoot = join(root, "datasets/policy-corpus/oracle");
-  if (existsSync(oracleRoot)) {
-    for (const entry of listFilesRec(oracleRoot)) {
-      const parts = rel(root, entry).split("/");
-      const idx = parts.indexOf("oracle");
-      const next = idx >= 0 ? parts[idx + 1] : undefined;
-      if (next) out.add(next);
+  const oracleDir = join(root, "datasets/policy-corpus/oracle");
+  if (existsSync(oracleDir)) {
+    for (const entry of readdirSync(oracleDir)) {
+      if (!/^[a-z0-9-]+$/.test(entry)) continue;
+      const full = join(oracleDir, entry);
+      if (statSync(full).isDirectory()) out.add(entry);
     }
   }
   const corpusDir = join(root, "datasets/policy-corpus");
