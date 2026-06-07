@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, rmSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
+import { parse as parseYaml } from "yaml"
 import { afterEach, describe, expect, it } from "vitest"
 import {
   GhModelsJudgeRunner,
@@ -15,12 +16,9 @@ const TEMP_DIR = join(HERE, "..", ".judge-tmp")
 
 function validStdout(score = 0.91): string {
   return JSON.stringify({
-    rows: [
+    testResults: [
       {
-        message: {
-          role: "assistant",
-          content: JSON.stringify({ score, rationale: "Clear enough." }),
-        },
+        modelResponse: JSON.stringify({ score, rationale: "Clear enough." }),
       },
     ],
   })
@@ -31,12 +29,18 @@ describe("GhModelsJudgeRunner", () => {
     rmSync(TEMP_DIR, { recursive: true, force: true })
   })
 
-  it("substitutes only plain double-brace keys", () => {
+  it("injects call-time variables into testData[0] while preserving messages", () => {
     const template = readFileSync(FIXTURE_PROMPT, "utf8")
     const substituted = substitutePromptTemplate(template, { input: "hello" })
+    const parsed = parseYaml(substituted) as Record<string, unknown>
 
-    expect(substituted).toContain("Input: hello")
-    expect(substituted).toContain("Repeated: hello")
+    expect(Array.isArray(parsed.testData)).toBe(true)
+    const rows = parsed.testData as Array<Record<string, unknown>>
+    expect(rows).toHaveLength(1)
+    expect(rows[0]?.input).toBe("hello")
+    // Messages keep their original `{{var}}` placeholders so gh models eval
+    // interpolates them per-row at run time.
+    expect(substituted).toContain("Input: {{input}}")
     expect(substituted).toContain("Untouched: {{ missing }}")
   })
 
@@ -51,7 +55,10 @@ describe("GhModelsJudgeRunner", () => {
       if (!promptPath) throw new Error("missing prompt path")
       tempPromptPath = promptPath
       expect(existsSync(tempPromptPath)).toBe(true)
-      expect(readFileSync(tempPromptPath, "utf8")).toContain("Input: hello")
+      const writtenYaml = readFileSync(tempPromptPath, "utf8")
+      const writtenDoc = parseYaml(writtenYaml) as Record<string, unknown>
+      const rows = writtenDoc.testData as Array<Record<string, unknown>>
+      expect(rows[0]?.input).toBe("hello")
 
       return { status: 0, stdout: validStdout(), stderr: "" }
     }
@@ -63,11 +70,9 @@ describe("GhModelsJudgeRunner", () => {
     })
     const result = await runner.run(FIXTURE_PROMPT, { input: "hello" })
 
-    expect(result).toEqual({
-      score: 0.91,
-      rationale: "Clear enough.",
-      raw: JSON.stringify({ score: 0.91, rationale: "Clear enough." }),
-    })
+    expect(result.score).toBe(0.91)
+    expect(result.rationale).toBe("Clear enough.")
+    expect(result.raw).toContain('"score"')
     expect(existsSync(tempPromptPath)).toBe(false)
   })
 

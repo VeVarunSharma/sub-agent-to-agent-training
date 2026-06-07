@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto"
 import { existsSync, mkdirSync, readFileSync, rmSync, rmdirSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { z } from "zod"
+import { parse as parseYaml, stringify as stringifyYaml } from "yaml"
 import type { Case } from "@srs/shared"
 
 export type JudgeErrorStage = "spawn" | "exit" | "parse" | "timeout"
@@ -83,12 +84,26 @@ function defaultTempDir(): string {
 }
 
 export function substitutePromptTemplate(template: string, vars: Record<string, string>): string {
-  let substituted = template
-  for (const [key, value] of Object.entries(vars)) {
-    // Keep substitution simple. Replace {{key}} only, with no Jinja or nesting.
-    substituted = substituted.split(`{{${key}}}`).join(value)
+  // `gh models eval` interpolates `{{var}}` placeholders from `testData[*]` rows.
+  // The committed judge templates declare `testData: []` because the values are
+  // per-case. We inject a single row carrying the call-time variables. If a
+  // template author already supplies testData, we extend the first row to
+  // preserve any non-default fields they pinned.
+  const parsed: unknown = parseYaml(template)
+  if (!isRecord(parsed)) {
+    throw new JudgeError("parse", "judge prompt YAML did not deserialize to a mapping", 1)
   }
-  return substituted
+
+  const existing = Array.isArray(parsed.testData) ? (parsed.testData as unknown[]) : []
+  const firstRow = existing.length > 0 && isRecord(existing[0])
+    ? (existing[0] as Record<string, unknown>)
+    : {}
+  const row: Record<string, unknown> = { ...firstRow }
+  for (const [key, value] of Object.entries(vars)) {
+    row[key] = value
+  }
+  parsed.testData = [row]
+  return stringifyYaml(parsed)
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -142,6 +157,31 @@ function parseGhModelsOutput(stdout: string, attempts: number): { score: number;
     throw new JudgeError("parse", `gh models eval returned non-JSON output: ${message}`, attempts)
   }
 
+  // Preferred path: the `gh models eval --json` envelope places the model's
+  // reply at `testResults[*].modelResponse`. Parse it directly. Fall back to
+  // walking the tree for any future envelope changes or top-level payloads.
+  const candidates: string[] = []
+  if (isRecord(decoded) && Array.isArray(decoded.testResults)) {
+    for (const entry of decoded.testResults) {
+      if (isRecord(entry) && typeof entry.modelResponse === "string") {
+        candidates.push(entry.modelResponse)
+      }
+    }
+  }
+
+  for (const candidate of candidates) {
+    const objectText = extractJsonObjectText(candidate)
+    if (!objectText) continue
+    try {
+      const parsed = parseJudgePayload(JSON.parse(objectText))
+      if (parsed) {
+        return { ...parsed, raw: candidate }
+      }
+    } catch {
+      continue
+    }
+  }
+
   const direct = parseJudgePayload(decoded)
   if (direct) {
     return { ...direct, raw: JSON.stringify(decoded) }
@@ -149,10 +189,7 @@ function parseGhModelsOutput(stdout: string, attempts: number): { score: number;
 
   for (const candidate of collectCandidateStrings(decoded)) {
     const objectText = extractJsonObjectText(candidate)
-    if (!objectText) {
-      continue
-    }
-
+    if (!objectText) continue
     try {
       const parsed = parseJudgePayload(JSON.parse(objectText))
       if (parsed) {
