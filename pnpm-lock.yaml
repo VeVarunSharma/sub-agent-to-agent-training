@@ -23,6 +23,9 @@ importers:
       '@base-ui/react':
         specifier: ^1.5.0
         version: 1.5.0(@types/react@19.2.16)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@srs/foundry':
+        specifier: workspace:*
+        version: link:../../packages/foundry
       '@srs/shared':
         specifier: workspace:*
         version: link:../../packages/shared
