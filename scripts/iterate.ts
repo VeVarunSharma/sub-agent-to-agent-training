@@ -14,6 +14,7 @@ import {
   loadPriorRoundReport,
   loadRoundReport,
   padRound,
+  perAgentEditFiles,
   roundDirName,
   scrubEnv,
   toRepoRelative,
@@ -289,14 +290,19 @@ function formatExecuteInstructions(entries: DispatchEntry[]): string {
 function applyAllEdits(args: CliArgs & { round: number; split: Split; outDir: string; fromRound: number; fromDir: string }, repoRoot: string, stdout: (text: string) => void): boolean {
   let foundAny = false;
   for (const agentId of SSMUH_AGENT_IDS) {
-    const proposedEditsPath = join(args.outDir, "per-agent", agentId, "proposed-edits.json");
-    const result = applyProposedEdits({ agentId, proposedEditsPath, repoRoot, agentsDir: args.agentsDir });
-    if (!result.found) continue;
-    foundAny = true;
-    if (result.diff) {
-      stdout(`${result.diff}\n`);
-    } else {
-      stdout(`${agentId}: no changes\n`);
+    for (const { role, path: proposedEditsPath } of perAgentEditFiles(args.outDir, agentId)) {
+      const result = applyProposedEdits({ agentId, proposedEditsPath, repoRoot, agentsDir: args.agentsDir });
+      if (!result.found) continue;
+      foundAny = true;
+      const diffFileName = role === "prompt-iterator" ? "prompt-diff.md" : "fewshot-diff.md";
+      const diffPath = join(args.outDir, "per-agent", agentId, diffFileName);
+      mkdirSync(dirname(diffPath), { recursive: true });
+      writeFileSync(diffPath, result.diff ? `\`\`\`diff\n${result.diff}\n\`\`\`\n` : `${agentId} ${role}: no changes\n`, "utf8");
+      if (result.diff) {
+        stdout(`${agentId} ${role}:\n${result.diff}\n`);
+      } else {
+        stdout(`${agentId} ${role}: no changes\n`);
+      }
     }
   }
   if (!foundAny) {

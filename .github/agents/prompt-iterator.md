@@ -18,10 +18,10 @@ out_of_scope:
   - "*.age"
   - "datasets/policy-corpus/oracle/**"
 output_contract:
-  path: "eval-reports/round-<bind: round>-fleet/per-agent/<bind: agent_id>/proposed-edits.json"
+  path: "eval-reports/round-<bind: round>-fleet/per-agent/<bind: agent_id>/prompt-edits.json"
   schema: |
     Write exactly this JSON object shape with no extra top-level keys.
-    { "system_prompt_diff": "unified diff string", "fewshot_proposals": [], "rationale": "short rationale" }
+    { "agent_id": "<bind: agent_id>", "system_prompt_md": "full new contents of system_prompt.md", "rationale": "short rationale" }
 bindings:
   - name: agent_id
     type: enum
@@ -57,14 +57,14 @@ Use this metric guide when choosing prompt changes:
 | M8, M12 | redline validity, gap links, and actionability |
 | M9, M13 | memo structure, citation validity, and reader clarity |
 
-Write `eval-reports/round-<bind: round>-fleet/per-agent/<bind: agent_id>/proposed-edits.json` as JSON only. Use exactly this shape:
+Write `eval-reports/round-<bind: round>-fleet/per-agent/<bind: agent_id>/prompt-edits.json` as JSON only. Use exactly this shape:
 
 ```json
 {
-  "system_prompt_diff": "diff --git a/agents/<bind: agent_id>/system_prompt.md b/agents/<bind: agent_id>/system_prompt.md\n...",
-  "fewshot_proposals": [],
-  "rationale": "One or two short sentences tying the diff to the triage findings and PRQS metrics."
+  "agent_id": "<bind: agent_id>",
+  "system_prompt_md": "<full new contents of agents/<bind: agent_id>/system_prompt.md after your edit>",
+  "rationale": "One or two short sentences tying the change to the triage findings and PRQS metrics."
 }
 ```
 
-Keep `fewshot_proposals` as an empty array. Put all proposed work in `system_prompt_diff`. The diff must apply cleanly to the current `system_prompt.md`. If no prompt change is justified, set `system_prompt_diff` to an empty string and explain why in `rationale`.
+`system_prompt_md` MUST contain the entire new file contents, not a diff and not a patch fragment. The orchestrator computes diffs against the current file when applying. If no prompt change is justified, set `system_prompt_md` to the unchanged current file contents and explain why in `rationale`. Never set it to an empty string.

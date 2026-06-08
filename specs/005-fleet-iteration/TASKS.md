@@ -18,7 +18,7 @@
 ## Acceptance gates per task
 
 - 005-subagents: each `.md` file parses against the frontmatter schema, declares a non-empty context_allowlist, names every binding variable used in path templates.
-- 005-orchestrator: `pnpm iterate --help` works, `pnpm iterate --round 1 --dispatch plan` emits a JSON plan with one entry per (sub-agent role, binding), `pnpm iterate --round 1 --apply-edits` is a no-op when proposed-edits.json files are missing, the env scrub allowlist matches spec 000.
+- 005-orchestrator: `pnpm iterate --help` works, `pnpm iterate --round 1 --dispatch plan` emits a JSON plan with one entry per (sub-agent role, binding), `pnpm iterate --round 1 --apply-edits` is a no-op when prompt-edits.json and fewshot-edits.json files are missing, the env scrub allowlist matches spec 000.
 - 005-playbook: documents the dispatch primitive, the context-bundle shape, the env-scrub allowlist, the round-summary contract, and one annotated transcript from round 1.
 - 005-round-1: round-1 outputs land under `eval-reports/round-001-fleet/`, the round-summary.md is committed, the orchestrator exit code matches the PRQS delta sign.
 - 005-integration: full sweep green (`pnpm -r typecheck && pnpm -r lint && pnpm -r test && pnpm validate:data && pnpm --filter @srs/web build`).

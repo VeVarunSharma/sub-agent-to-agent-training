@@ -55,7 +55,7 @@ A round consumes:
 A round emits:
 - `eval-reports/round-N+1-fleet/<split>.{runtime,eval,report}` after the iterated baseline runs.
 - `eval-reports/round-N+1-fleet/triage.json` — the `error-triager` output, one entry per (agent, error-category).
-- `eval-reports/round-N+1-fleet/per-agent/<agent-id>/{prompt-diff.md, fewshot-diff.md, proposed-edits.json}` — one folder per SSMUH agent, written by the corresponding iterator pair.
+- `eval-reports/round-N+1-fleet/per-agent/<agent-id>/{prompt-edits.json, fewshot-edits.json, prompt-diff.md, fewshot-diff.md}` — one folder per SSMUH agent. The two `*-edits.json` files are written by the corresponding iterator sub-agents. The two `*-diff.md` files are written by the orchestrator during apply.
 - `eval-reports/round-N+1-fleet/round-summary.md` — the `round-summarizer` output. Diff in PRQS, per-metric movement, per-agent change rationale, the operator's accept-or-reject decision.
 
 ## Orchestrator contract
@@ -77,7 +77,7 @@ Behavior:
 1. Load round N-1 report. Refuse if missing.
 2. Build a per-agent triage context bundle. Write it to a temp dir.
 3. Emit a dispatch plan (`dispatch <plan>`) or a dispatch script the operator executes via the GHCP CLI Task tool (`dispatch <execute>`).
-4. Once the operator confirms the sub-agents have written their proposed-edits files into the round folder, run `--apply-edits` to overlay the edits onto `agents/<agent-id>/` with a per-agent diff preview before write.
+4. Once the operator confirms the sub-agents have written their edits files (`prompt-edits.json` and `fewshot-edits.json` per agent) into the round folder, run `--apply-edits` to overlay the edits onto `agents/<agent-id>/` with a per-agent diff preview before write.
 5. Run `pnpm baseline --split <split>` with `--out eval-reports/round-N-fleet/` to produce the round-N runtime + eval.
 6. Invoke the `round-summarizer` agent with the prior + new report context.
 7. Print a summary table. Exit 0 if PRQS improved or held within CI95. Exit 3 if PRQS regressed beyond CI95.
@@ -104,7 +104,7 @@ tool_allowlist:
   - view
   - edit
   - grep
-output_contract: eval-reports/round-<bind: round>/per-agent/<bind: agent_id>/proposed-edits.json
+output_contract: eval-reports/round-<bind: round>/per-agent/<bind: agent_id>/prompt-edits.json
 ---
 
 # Body: system prompt for the iterator role

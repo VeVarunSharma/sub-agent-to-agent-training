@@ -50,7 +50,7 @@ End with a single line: `Recommendation: <accept | escalate | revert>`.
 ## Receipts
 
 - triage.json: eval-reports/round-NNN-fleet/triage.json
-- per-agent proposed-edits: eval-reports/round-NNN-fleet/per-agent/<agent_id>/proposed-edits.json
+- per-agent edits: `eval-reports/round-NNN-fleet/per-agent/<agent_id>/{prompt-edits.json, fewshot-edits.json}`
 - runtime jsonl: eval-reports/round-NNN-fleet/<split>.runtime.jsonl
 - eval jsonl: eval-reports/round-NNN-fleet/<split>.eval.jsonl
 ```

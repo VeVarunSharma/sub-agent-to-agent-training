@@ -210,6 +210,7 @@ export function buildPerAgentContext(options) {
     base.push(toRepoRelative(repoRoot, join(datasetsRoot, "cases", `${domain}.train.jsonl`)));
   }
 
+  const outputFile = role === "prompt-iterator" ? "prompt-edits.json" : "fewshot-edits.json";
   return {
     role,
     round,
@@ -217,9 +218,16 @@ export function buildPerAgentContext(options) {
     split,
     domain,
     binding: { agent_id: agentId },
-    output_contract: toRepoRelative(repoRoot, join(outDir, "per-agent", agentId, "proposed-edits.json")),
+    output_contract: toRepoRelative(repoRoot, join(outDir, "per-agent", agentId, outputFile)),
     context_allowlist: safeContextPaths(base),
   };
+}
+
+export function perAgentEditFiles(outDir, agentId) {
+  return [
+    { role: "prompt-iterator", path: join(outDir, "per-agent", agentId, "prompt-edits.json") },
+    { role: "fewshot-iterator", path: join(outDir, "per-agent", agentId, "fewshot-edits.json") },
+  ];
 }
 
 export function buildRoundSummarizerContext(options) {
@@ -231,6 +239,8 @@ export function buildRoundSummarizerContext(options) {
   ];
   for (const agentId of SSMUH_AGENT_IDS) {
     paths.push(toRepoRelative(repoRoot, join(outDir, "per-agent", agentId, "triage.json")));
+    paths.push(toRepoRelative(repoRoot, join(outDir, "per-agent", agentId, "prompt-edits.json")));
+    paths.push(toRepoRelative(repoRoot, join(outDir, "per-agent", agentId, "fewshot-edits.json")));
     paths.push(toRepoRelative(repoRoot, join(outDir, "per-agent", agentId, "prompt-diff.md")));
     paths.push(toRepoRelative(repoRoot, join(outDir, "per-agent", agentId, "fewshot-diff.md")));
   }

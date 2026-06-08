@@ -20,11 +20,11 @@ out_of_scope:
   - "*.age"
   - "datasets/policy-corpus/oracle/**"
 output_contract:
-  path: "eval-reports/round-<bind: round>-fleet/per-agent/<bind: agent_id>/proposed-edits.json"
+  path: "eval-reports/round-<bind: round>-fleet/per-agent/<bind: agent_id>/fewshot-edits.json"
   schema: |
     Write exactly this JSON object shape with no extra top-level keys.
-    { "system_prompt_diff": "", "fewshot_proposals": [proposal objects], "rationale": "short rationale" }
-    Each proposal object has operation, target_file, synthetic_case_summary, input, expected_output, cited_train_case_ids, metric_targets, and rationale.
+    { "agent_id": "<bind: agent_id>", "few_shots_jsonl": "full new contents of few-shots.jsonl", "proposals": [annotation objects], "rationale": "short rationale" }
+    Each annotation object has operation, synthetic_case_summary, metric_targets, and rationale.
 bindings:
   - name: agent_id
     type: enum
@@ -52,19 +52,16 @@ Use train cases only to identify error patterns and cite synthetic case ids that
 
 You may invoke `pnpm gen:few-shot` if the orchestrator exposes it. Do not invoke any other pnpm script. Do not call evals or model runs.
 
-Write `eval-reports/round-<bind: round>-fleet/per-agent/<bind: agent_id>/proposed-edits.json` as JSON only. Use exactly this shape:
+Write `eval-reports/round-<bind: round>-fleet/per-agent/<bind: agent_id>/fewshot-edits.json` as JSON only. Use exactly this shape:
 
 ```json
 {
-  "system_prompt_diff": "",
-  "fewshot_proposals": [
+  "agent_id": "<bind: agent_id>",
+  "few_shots_jsonl": "<full new contents of agents/<bind: agent_id>/few-shots.jsonl, including all preserved rows plus any added rows, one JSON object per line>",
+  "proposals": [
     {
       "operation": "add",
-      "target_file": "agents/<bind: agent_id>/few-shots.jsonl",
       "synthetic_case_summary": "Short synthetic scenario summary.",
-      "input": { "example": "Agent-specific input object." },
-      "expected_output": { "example": "Agent-specific expected JSON output." },
-      "cited_train_case_ids": ["synthetic-train-case-id-used-as-pattern"],
       "metric_targets": ["M5", "M6"],
       "rationale": "One short sentence tying the proposal to triage."
     }
@@ -73,4 +70,4 @@ Write `eval-reports/round-<bind: round>-fleet/per-agent/<bind: agent_id>/propose
 }
 ```
 
-Keep `system_prompt_diff` as an empty string. Put all proposed work in `fewshot_proposals`. If no few-shot change is justified, use an empty array and explain why in `rationale`.
+`few_shots_jsonl` MUST contain the entire new file contents as raw JSONL text, one valid JSON object per line. Preserve every existing row that is still valid. Append new rows for the cases you want to teach. The orchestrator computes a diff against the current file when applying. `proposals` is an annotation list for human review and the round summary. If no few-shot change is justified, set `few_shots_jsonl` to the unchanged current file contents, use an empty `proposals` array, and explain why in `rationale`. Never set `few_shots_jsonl` to an empty string when the current file is non-empty.

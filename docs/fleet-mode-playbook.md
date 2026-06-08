@@ -37,8 +37,8 @@ Confirm the report lands under `eval-reports/round-000-baseline/` and matches th
 | Role | Scope | Context allowlist summary | Output contract |
 | --- | --- | --- | --- |
 | [`error-triager`](../.github/agents/error-triager.md) | One per round. Reads prior round train artifacts. | Prior `<split>.eval.jsonl`, `<split>.runtime.jsonl`, `<split>.report.md`, and [`specs/001-eval-protocol/SPEC.md`](../specs/001-eval-protocol/SPEC.md). | Writes `eval-reports/round-NNN-fleet/triage.json` with ranked error categories by agent. |
-| [`prompt-iterator`](../.github/agents/prompt-iterator.md) | Six per round, one per SSMUH agent folder. Edits `system_prompt.md`. | The bound agent's `system_prompt.md`, `agent.yaml`, `few-shots.jsonl`, its triage slice, and spec 001. | Writes prompt changes into `eval-reports/round-NNN-fleet/per-agent/<agent-id>/proposed-edits.json`, plus `prompt-diff.md`. |
-| [`fewshot-iterator`](../.github/agents/fewshot-iterator.md) | Six per round, one per SSMUH agent folder. Edits `few-shots.jsonl`. | Same agent files as `prompt-iterator`, plus `datasets/cases/van-ssmuh.train.jsonl`. It never reads dev, holdout, sealed, or oracle files. | Writes few-shot changes into the same per-agent `proposed-edits.json`, plus `fewshot-diff.md`. |
+| [`prompt-iterator`](../.github/agents/prompt-iterator.md) | Six per round, one per SSMUH agent folder. Edits `system_prompt.md`. | The bound agent's `system_prompt.md`, `agent.yaml`, `few-shots.jsonl`, its triage slice, and spec 001. | Writes prompt changes into `eval-reports/round-NNN-fleet/per-agent/<agent-id>/prompt-edits.json`. The orchestrator writes `prompt-diff.md` during apply. |
+| [`fewshot-iterator`](../.github/agents/fewshot-iterator.md) | Six per round, one per SSMUH agent folder. Edits `few-shots.jsonl`. | Same agent files as `prompt-iterator`, plus `datasets/cases/van-ssmuh.train.jsonl`. It never reads dev, holdout, sealed, or oracle files. | Writes few-shot changes into `eval-reports/round-NNN-fleet/per-agent/<agent-id>/fewshot-edits.json`. The orchestrator writes `fewshot-diff.md` during apply. |
 | [`round-summarizer`](../.github/agents/round-summarizer.md) | One per round after the baseline rerun. Reads summary artifacts. | Prior and new reports, triage output, and per-agent diff summaries. | Writes `eval-reports/round-NNN-fleet/round-summary.md` using the spec 005 template. |
 
 Mal is the synchronous lead. Mal has full repo context, reviews the diff previews, and owns the accept, revert, or escalate decision.
@@ -89,15 +89,15 @@ Mal is the synchronous lead. Mal has full repo context, reviews the diff preview
    Improve the system prompt only where the triage report names a PRQS miss.
    Preserve the output JSON schema.
    Write the proposed edit contract to:
-   eval-reports/round-001-fleet/per-agent/scope-pathway-classifier/proposed-edits.json
-   Include rationale, target files, and exact replacement hunks.
+   eval-reports/round-001-fleet/per-agent/scope-pathway-classifier/prompt-edits.json
+   Include rationale and the full new contents of system_prompt.md under the `system_prompt_md` key.
    ```
 
-   Dispatch few-shot entries with the same shape, and include `datasets/cases/van-ssmuh.train.jsonl` only when the plan allows it. Dispatch `error-triager` first so iterator entries can consume the triage slices.
+   Dispatch few-shot entries with the same shape, writing to `fewshot-edits.json` with the full new file contents under `few_shots_jsonl`. Include `datasets/cases/van-ssmuh.train.jsonl` only when the plan allows it. Dispatch `error-triager` first so iterator entries can consume the triage slices.
 
-4. **Wait for every expected `proposed-edits.json`.**
+4. **Wait for every expected `prompt-edits.json` and `fewshot-edits.json`.**
 
-   Check the per-agent folders under `eval-reports/round-001-fleet/per-agent/`. Each iterator pair should leave a proposal and a small rationale. Do not hand-edit agent folders while the fleet is still writing.
+   Check the per-agent folders under `eval-reports/round-001-fleet/per-agent/`. Each iterator should leave one edits file and a short rationale. Do not hand-edit agent folders while the fleet is still writing.
 
 5. **Apply edits and review diff previews.**
 
@@ -156,7 +156,7 @@ Use this context bundle shape when reading or debugging a plan entry:
     "specs/001-eval-protocol/SPEC.md"
   ],
   "tool_allowlist": ["view", "edit", "grep", "glob"],
-  "output_contract": "eval-reports/round-001-fleet/per-agent/scope-pathway-classifier/proposed-edits.json"
+  "output_contract": "eval-reports/round-001-fleet/per-agent/scope-pathway-classifier/prompt-edits.json"
 }
 ```
 
@@ -164,11 +164,11 @@ Let the orchestrator scrub the environment. Spec 005 allows `PATH`, `HOME`, `LAN
 
 Keep the tool rule narrow. Sub-agents may use `view`, `edit`, `grep`, and `glob` against their bound scope. They may invoke `pnpm gen:few-shot` when the role allows it. They may not use shell escape, network, `gh models run`, `gh models eval`, `pnpm baseline`, `pnpm eval`, or `pnpm gen:data`. The orchestrator owns model calls and scoring.
 
-Preserve the output contract. `proposed-edits.json` should name target files, exact hunks, rationale, and PRQS categories addressed. Diff markdown files are receipts for the operator. The round-summary must follow [`specs/005-fleet-iteration/round-summary-template.md`](../specs/005-fleet-iteration/round-summary-template.md).
+Preserve the output contract. The iterator writes a single edits JSON per agent (`prompt-edits.json` from the prompt-iterator, `fewshot-edits.json` from the fewshot-iterator) that holds the full new file contents under `system_prompt_md` or `few_shots_jsonl`, plus a short rationale. The orchestrator computes diff markdown files during apply, and those receipts feed the round summary. The round-summary must follow [`specs/005-fleet-iteration/round-summary-template.md`](../specs/005-fleet-iteration/round-summary-template.md).
 
 ## Operator pitfalls
 
-**Missing `proposed-edits.json`.** Treat a missing proposal as no change for that agent. Re-dispatch the exact plan entry if the triage report expected work. Do not create placeholder JSON, because the apply step should stay an audit of sub-agent output.
+**Missing edits file.** Treat a missing `prompt-edits.json` or `fewshot-edits.json` as no change for that agent. Re-dispatch the exact plan entry if the triage report expected work. Do not create placeholder JSON, because the apply step should stay an audit of sub-agent output.
 
 **Edits outside scope.** The orchestrator refuses proposals that touch another agent folder, dev data, sealed files, or oracle files. Keep the refusal. Re-dispatch with the denied path called out, or drop that proposal from the round.
 
@@ -190,8 +190,8 @@ Mal fills this section after `chunk6-round-1` executes. Keep the structure pinne
 | --- | --- | --- |
 | `<YYYY-MM-DD HH:MM TZ>` | Dispatch plan generated | Command, git SHA, split, round number, plan file path, and number of entries. |
 | `<YYYY-MM-DD HH:MM TZ>` | `error-triager` dispatched | Task dispatch ID, model, prompt sent, context bundle path, and output path. |
-| `<YYYY-MM-DD HH:MM TZ>` | Iterator dispatched | One row per agent and role. Include Task dispatch ID, prompt sent, allowed paths, and expected `proposed-edits.json`. |
-| `<YYYY-MM-DD HH:MM TZ>` | JSON output received | Path to each `proposed-edits.json`, schema status, rationale summary, and denied-path audit result. |
+| `<YYYY-MM-DD HH:MM TZ>` | Iterator dispatched | One row per agent and role. Include Task dispatch ID, prompt sent, allowed paths, and expected edits file (`prompt-edits.json` or `fewshot-edits.json`). |
+| `<YYYY-MM-DD HH:MM TZ>` | JSON output received | Path to each edits file, schema status, rationale summary, and denied-path audit result. |
 | `<YYYY-MM-DD HH:MM TZ>` | Diff applied | Per-agent prompt diff, few-shot diff, lines added, lines removed, and operator notes. |
 | `<YYYY-MM-DD HH:MM TZ>` | Round-1 baseline run | Command, exit code, runtime errors, `deterministic_prqs`, CI95, and changed M metrics. |
 | `<YYYY-MM-DD HH:MM TZ>` | Operator decision | Accept, revert, or escalate. Include the reason and any follow-up task IDs. |

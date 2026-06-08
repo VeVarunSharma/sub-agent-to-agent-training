@@ -77,8 +77,8 @@ function setupProposedEdit(outDir: string, agentId = "scope-pathway-classifier")
   const perAgent = join(outDir, "per-agent", agentId);
   mkdirSync(perAgent, { recursive: true });
   writeFileSync(
-    join(perAgent, "proposed-edits.json"),
-    JSON.stringify({ agent_id: agentId, edits: [{ path: `agents/${agentId}/system_prompt.md`, content: "new prompt\n" }] }, null, 2),
+    join(perAgent, "prompt-edits.json"),
+    JSON.stringify({ agent_id: agentId, system_prompt_md: "new prompt\n" }, null, 2),
     "utf8",
   );
 }
