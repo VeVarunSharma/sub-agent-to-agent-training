@@ -1,0 +1,114 @@
+{
+  "agent_id": "compliance-evidence-compiler",
+  "round": "001",
+  "source_round": "000-baseline",
+  "split": "train",
+  "ranked_errors": [
+    {
+      "agent_id": "compliance-evidence-compiler",
+      "metric": "M5",
+      "error_class": "missing_required_field_neighbour_notification",
+      "frequency": 17,
+      "case_ids": [
+        "van-ssmuh-train-001", "van-ssmuh-train-002", "van-ssmuh-train-003",
+        "van-ssmuh-train-004", "van-ssmuh-train-006", "van-ssmuh-train-007",
+        "van-ssmuh-train-008", "van-ssmuh-train-009", "van-ssmuh-train-012",
+        "van-ssmuh-train-013", "van-ssmuh-train-014", "van-ssmuh-train-015",
+        "van-ssmuh-train-016", "van-ssmuh-train-017", "van-ssmuh-train-018",
+        "van-ssmuh-train-019", "van-ssmuh-train-021"
+      ],
+      "severity": "high",
+      "evidence": "neighbour-notification is missing from ZDB-R1-1-UNITS evidence map in every case where that bylaw is gold-required (17 of 18 cases). Per-bylaw score for ZDB-R1-1-UNITS is 0.667 across all affected cases.",
+      "recommended_owner_action": "Add neighbour-notification to the required-evidence-map entry for ZDB-R1-1-UNITS. Update the compiler few-shot to always populate neighbour-notification when citing ZDB-R1-1-UNITS."
+    },
+    {
+      "agent_id": "compliance-evidence-compiler",
+      "metric": "M5",
+      "error_class": "missing_required_fields_zdb_height",
+      "frequency": 6,
+      "case_ids": [
+        "van-ssmuh-train-001", "van-ssmuh-train-006", "van-ssmuh-train-008",
+        "van-ssmuh-train-009", "van-ssmuh-train-014", "van-ssmuh-train-016"
+      ],
+      "severity": "high",
+      "evidence": "ZDB-R1-1-HEIGHT has per-bylaw score=0 in all 6 cases. Missing fields are height_m_proposed and zoning_district. Compiler cites the bylaw but does not populate these two required fields.",
+      "recommended_owner_action": "Add height_m_proposed and zoning_district to the required-evidence-map entry for ZDB-R1-1-HEIGHT. Update the few-shot to include both fields when emitting HEIGHT evidence."
+    },
+    {
+      "agent_id": "compliance-evidence-compiler",
+      "metric": "M5",
+      "error_class": "missing_required_fields_zdb_rear_setback",
+      "frequency": 6,
+      "case_ids": [
+        "van-ssmuh-train-001", "van-ssmuh-train-006", "van-ssmuh-train-007",
+        "van-ssmuh-train-014", "van-ssmuh-train-016", "van-ssmuh-train-017"
+      ],
+      "severity": "high",
+      "evidence": "ZDB-R1-1-REAR-SETBACK has per-bylaw score=0 in all 6 cases. Missing fields are rear_setback_m_proposed and zoning_district. Pattern matches the HEIGHT failure.",
+      "recommended_owner_action": "Add rear_setback_m_proposed and zoning_district to the required-evidence-map for ZDB-R1-1-REAR-SETBACK. Mirror the fix applied to ZDB-R1-1-HEIGHT."
+    },
+    {
+      "agent_id": "compliance-evidence-compiler",
+      "metric": "M5",
+      "error_class": "missing_required_fields_zdb_side_setback",
+      "frequency": 4,
+      "case_ids": [
+        "van-ssmuh-train-001", "van-ssmuh-train-006",
+        "van-ssmuh-train-016", "van-ssmuh-train-018"
+      ],
+      "severity": "medium",
+      "evidence": "ZDB-R1-1-SIDE-SETBACK has per-bylaw score=0 in all 4 cases. Missing fields are side_setback_m_proposed and zoning_district.",
+      "recommended_owner_action": "Add side_setback_m_proposed and zoning_district to the required-evidence-map for ZDB-R1-1-SIDE-SETBACK."
+    },
+    {
+      "agent_id": "compliance-evidence-compiler",
+      "metric": "M5",
+      "error_class": "missing_required_field_tree_inventory_count",
+      "frequency": 3,
+      "case_ids": ["van-ssmuh-train-002", "van-ssmuh-train-004", "van-ssmuh-train-017"],
+      "severity": "medium",
+      "evidence": "TREE-PROTECTION per-bylaw score=0.5 in all 3 cases. tree_inventory_count is the only missing field. Compiler populates tree-assessment but not tree_inventory_count.",
+      "recommended_owner_action": "Add tree_inventory_count to the required-evidence-map entry for TREE-PROTECTION."
+    },
+    {
+      "agent_id": "compliance-evidence-compiler",
+      "metric": "M5",
+      "error_class": "missing_bylaw_evidence_uncited",
+      "frequency": 2,
+      "case_ids": ["van-ssmuh-train-005", "van-ssmuh-train-015"],
+      "severity": "medium",
+      "evidence": "ZDB-R1-1-FRONT-SETBACK not cited by the compiler in either case (per-bylaw score=0). Downstream of the bylaw-retriever miss: the bylaw is absent from top-10 retrieval.",
+      "recommended_owner_action": "Primary fix is owned by bylaw-retriever (missing_bylaw_in_top10_front_setback). After retrieval is fixed, verify compiler produces correct evidence fields for ZDB-R1-1-FRONT-SETBACK."
+    },
+    {
+      "agent_id": "compliance-evidence-compiler",
+      "metric": "M6",
+      "error_class": "false_positive_numeric_gap",
+      "frequency": 2,
+      "case_ids": ["van-ssmuh-train-006", "van-ssmuh-train-016"],
+      "severity": "high",
+      "evidence": "Oracle has 0 numeric gaps but compiler emitted gap-energy-step-low in both cases (energy_step_code_proposed=4, required=3, delta=-1). Proposed step exceeds the minimum, so no gap exists. M6=0 for both cases.",
+      "recommended_owner_action": "Add a direction check to the numeric gap detector for BC-STEP-CODE: a gap exists only when proposed < required, not when proposed > required. Add a few-shot example showing Step 4 with no gap."
+    },
+    {
+      "agent_id": "compliance-evidence-compiler",
+      "metric": "M6",
+      "error_class": "wrong_gap_id_energy_instead_of_front_setback",
+      "frequency": 2,
+      "case_ids": ["van-ssmuh-train-005", "van-ssmuh-train-015"],
+      "severity": "medium",
+      "evidence": "Compiler emitted gap-energy-step-low instead of gap-front-setback-short. Oracle expected gap-front-setback-short. The front setback bylaw was not retrieved, so the compiler detected the wrong gap.",
+      "recommended_owner_action": "Downstream of bylaw-retriever miss. Once ZDB-R1-1-FRONT-SETBACK is retrieved, verify that front-setback gap detection fires correctly. Remove the spurious energy-step gap emission for these cases."
+    },
+    {
+      "agent_id": "compliance-evidence-compiler",
+      "metric": "M6",
+      "error_class": "extra_gaps_beyond_oracle",
+      "frequency": 1,
+      "case_ids": ["van-ssmuh-train-008"],
+      "severity": "low",
+      "evidence": "Oracle has 2 numeric gaps (fsr-over, height-over). Compiler emitted 4 gaps, adding gap-rear-setback-short and gap-side-setback-short. M6=0.5.",
+      "recommended_owner_action": "Add a few-shot example showing a case where setback values are non-conforming but not gold gaps, teaching the compiler when not to emit setback gaps."
+    }
+  ]
+}

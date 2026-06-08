@@ -1,0 +1,28 @@
+{
+  "agent_id": "bylaw-retriever",
+  "round": "001",
+  "source_round": "000-baseline",
+  "split": "train",
+  "ranked_errors": [
+    {
+      "agent_id": "bylaw-retriever",
+      "metric": "M3",
+      "error_class": "missing_bylaw_in_top10_front_setback",
+      "frequency": 2,
+      "case_ids": ["van-ssmuh-train-005", "van-ssmuh-train-015"],
+      "severity": "medium",
+      "evidence": "ZDB-R1-1-FRONT-SETBACK absent from top-10 retrieval in both discretionary cases with front-setback violations. M3=0.75 and M3=0.80 respectively. This also causes M5 score=0 for that bylaw.",
+      "recommended_owner_action": "Add ZDB-R1-1-FRONT-SETBACK to the retrieval candidate pool for discretionary pathway cases. Add a few-shot example pairing a front-setback violation with ZDB-R1-1-FRONT-SETBACK in the retrieved set."
+    },
+    {
+      "agent_id": "bylaw-retriever",
+      "metric": "M3",
+      "error_class": "missing_bylaw_in_top10_isolated",
+      "frequency": 3,
+      "case_ids": ["van-ssmuh-train-018", "van-ssmuh-train-019", "van-ssmuh-train-021"],
+      "severity": "low",
+      "evidence": "train-018 missed ZDB-R1-1-SIDE-SETBACK (M3=0.80). train-019 missed VBBL-PART9 (M3=0.75). train-021 missed SUBDIVISION (M3=0.75). Each miss is a distinct bylaw for a distinct pathway type.",
+      "recommended_owner_action": "Ensure SUBDIVISION appears in top-10 for specialist-required and floodplain cases. Ensure VBBL-PART9 appears for all floodplain cases. Verify side-setback bylaw is surfaced when side setback values are present in the application."
+    }
+  ]
+}

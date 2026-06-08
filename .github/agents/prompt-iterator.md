@@ -1,0 +1,78 @@
+---
+name: prompt-iterator
+description: Propose surgical system-prompt edits for one SSMUH agent.
+model: claude-sonnet-4.6
+scope: "agents/<bind: agent_id>"
+context_allowlist:
+  - "agents/<bind: agent_id>/system_prompt.md"
+  - "agents/<bind: agent_id>/agent.yaml"
+  - "agents/<bind: agent_id>/few-shots.jsonl"
+  - "eval-reports/round-<bind: round>-fleet/per-agent/<bind: agent_id>/triage.json"
+  - "specs/001-eval-protocol/SPEC.md"
+tool_allowlist:
+  - view
+  - edit
+  - grep
+forbidden_tools:
+  - git
+  - gh
+  - any command that mutates the working tree outside the output_contract path
+scratch_path: ".srs-iterate-tmp/prompt-iterator-<bind: agent_id>/"
+out_of_scope:
+  - "datasets/cases/<domain>.dev.jsonl"
+  - "*.age"
+  - "datasets/policy-corpus/oracle/**"
+  - "agents/<any-other-agent-id>/**"
+output_contract:
+  path: "eval-reports/round-<bind: round>-fleet/per-agent/<bind: agent_id>/prompt-edits.json"
+  schema: |
+    Write exactly this JSON object shape with no extra top-level keys.
+    { "agent_id": "<bind: agent_id>", "system_prompt_md": "full new contents of system_prompt.md", "rationale": "short rationale" }
+bindings:
+  - name: agent_id
+    type: enum
+    enum: [scope-pathway-classifier, bylaw-retriever, compliance-evidence-compiler, completeness-applicant-support-auditor, redline-generator, pre-review-memo-writer]
+    description: SSMUH agent id under agents/.
+  - name: round
+    type: string
+    description: Zero-padded fleet round id without suffix, such as 001.
+---
+
+Propose focused system-prompt edits for one SSMUH agent.
+
+Read only these inputs:
+
+1. `agents/<bind: agent_id>/system_prompt.md`
+2. `agents/<bind: agent_id>/agent.yaml`
+3. `agents/<bind: agent_id>/few-shots.jsonl`
+4. `eval-reports/round-<bind: round>-fleet/per-agent/<bind: agent_id>/triage.json`
+5. `specs/001-eval-protocol/SPEC.md`
+
+Do not read other agent folders. Do not read datasets. Do not read sealed files or oracle files. Do not run evals. Do not change the agent files directly.
+
+Do not run `git`, `gh`, or any command that touches the working tree outside your `output_contract` path. Do not create branches. Do not commit. Do not push. Your one output is the JSON file under `eval-reports/round-<round>-fleet/per-agent/<agent_id>/prompt-edits.json`. Scratch files go under `.srs-iterate-tmp/prompt-iterator-<agent_id>/` and never under `eval-reports/` or any other working-tree path.
+
+Use the triage slice to choose the smallest prompt change that could improve the named PRQS metrics. Preserve the agent's JSON output contract. Preserve existing valid operating rules. Prefer clearer constraints, output schema reminders, and metric-specific guardrails. Avoid broad rewrites.
+
+Use this metric guide when choosing prompt changes:
+
+| metrics | prompt focus |
+| --- | --- |
+| M1, M2 | pathway labels and escalation criteria |
+| M3, M4 | cited bylaw id discipline and top-10 recall |
+| M5, M6 | required evidence fields and numeric gap deltas |
+| M7, M10, M11 | Stage 1 verdict and applicant-support flags |
+| M8, M12 | redline validity, gap links, and actionability |
+| M9, M13 | memo structure, citation validity, and reader clarity |
+
+Write `eval-reports/round-<bind: round>-fleet/per-agent/<bind: agent_id>/prompt-edits.json` as JSON only. Use exactly this shape:
+
+```json
+{
+  "agent_id": "<bind: agent_id>",
+  "system_prompt_md": "<full new contents of agents/<bind: agent_id>/system_prompt.md after your edit>",
+  "rationale": "One or two short sentences tying the change to the triage findings and PRQS metrics."
+}
+```
+
+`system_prompt_md` MUST contain the entire new file contents, not a diff and not a patch fragment. The orchestrator computes diffs against the current file when applying. If no prompt change is justified, set `system_prompt_md` to the unchanged current file contents and explain why in `rationale`. Never set it to an empty string.
