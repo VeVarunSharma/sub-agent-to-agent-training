@@ -297,6 +297,12 @@ function applyAllEdits(args: CliArgs & { round: number; split: Split; outDir: st
       const diffFileName = role === "prompt-iterator" ? "prompt-diff.md" : "fewshot-diff.md";
       const diffPath = join(args.outDir, "per-agent", agentId, diffFileName);
       mkdirSync(dirname(diffPath), { recursive: true });
+      if (result.skippedReason) {
+        const note = `${agentId} ${role}: skipped\n\n${result.skippedReason}\n`;
+        writeFileSync(diffPath, note, "utf8");
+        stdout(note);
+        continue;
+      }
       writeFileSync(diffPath, result.diff ? `\`\`\`diff\n${result.diff}\n\`\`\`\n` : `${agentId} ${role}: no changes\n`, "utf8");
       if (result.diff) {
         stdout(`${agentId} ${role}:\n${result.diff}\n`);

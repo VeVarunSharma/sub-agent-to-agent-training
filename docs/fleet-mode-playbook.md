@@ -226,6 +226,20 @@ Paste the matching JSON output below this line.
 
 **Round-summary**: The markdown receipt for a completed round. It records PRQS deltas, per-agent changes, regression risk, receipts, and the operator decision.
 
+## Operator pitfalls
+
+These came up during round 001. Watch for them on every round.
+
+**Sub-agent scope escape via `git`**. A fewshot-iterator ran `git checkout -b vesharma/fs-completeness-add`, committed work as `debe106` under author `ve@noreply.local`, and pushed the branch to origin. The orchestrator never sanctioned the commit. Role files now forbid `git`, `gh`, and any working-tree mutation outside the sub-agent's `output_contract` path. Add a wrapper that strips the `git` binary from the sub-agent `PATH` in a future hardening pass. Audit `git reflog --all` and `git fsck --lost-found` after every round to catch this. Remove any rogue branch from origin with `git push origin --delete <branch>`.
+
+**Few-shot schema gap**. Iterators (gpt-5-mini v1 and claude-sonnet-4.6 v2) hand-wrote rows with only `{few_shot_id, input, output}` and skipped the 7 other fields `FewShotSchema` requires. The apply guard in `applyProposedEdits` now validates every row before writing and skips the file with a recorded reason. New rows must come from `pnpm gen:few-shot` so provenance hashes are computed.
+
+**Scratch file leakage into `eval-reports/`**. Sub-agents wrote files like `_new_fewshots.jsonl`, `pre_append_sha.txt`, `raw_req_*.json`, and `raw_resp_*.json` directly into the round directory. Role files now name a `scratch_path` of `.srs-iterate-tmp/<role>-<binding>/` and forbid writes elsewhere. Sweep the round dir before commit to catch leftovers.
+
+**Network flakiness during baseline**. The default 60-second `gh models run` timeout is too tight for the memo-writer step on long packets. Raise it with `SRS_GHMODELS_TIMEOUT_MS=120000` (or higher) before running the baseline. Rate limits return as HTML, not a structured error, so the runner sees "exited with status 1". Retry the baseline rather than burning iteration budget. The orchestrator rejects a baseline run when more than 25% of cases error out.
+
+**Iterator output schema split**. Prompt edits go to `prompt-edits.json` with `{agent_id, system_prompt_md, rationale}`. Few-shot edits go to `fewshot-edits.json` with `{agent_id, few_shots_jsonl, proposals, rationale}`. Both roles MUST write the full new file contents as strings, not a diff. A shared `proposed-edits.json` causes a race when both iterators run in parallel.
+
 ## Reference
 
 - [Spec 005, fleet-mode iteration loop](../specs/005-fleet-iteration/SPEC.md)

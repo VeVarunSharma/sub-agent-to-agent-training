@@ -15,10 +15,16 @@ tool_allowlist:
   - edit
   - grep
   - glob
+forbidden_tools:
+  - git
+  - gh
+  - any command that mutates the working tree outside the output_contract path
+scratch_path: ".srs-iterate-tmp/round-summarizer/"
 out_of_scope:
   - "datasets/cases/<domain>.dev.jsonl"
   - "*.age"
   - "datasets/policy-corpus/oracle/**"
+  - "agents/**"
 output_contract:
   path: "eval-reports/round-<bind: round>-fleet/round-summary.md"
   schema: |
@@ -49,6 +55,8 @@ Read only these inputs:
 6. `specs/005-fleet-iteration/round-summary-template.md`
 
 Do not read case datasets, sealed files, oracle files, agent prompts, or few-shots. Do not run evals. Do not edit proposed-edits files.
+
+Do not run `git`, `gh`, or any command that touches the working tree outside your `output_contract` path. Do not create branches. Do not commit. Do not push. Your one output is `eval-reports/round-<round>-fleet/round-summary.md`. Scratch files go under `.srs-iterate-tmp/round-summarizer/`.
 
 Write `eval-reports/round-<bind: round>-fleet/round-summary.md`. Follow the template exactly. Use these section headings:
 

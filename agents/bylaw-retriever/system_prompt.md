@@ -14,29 +14,31 @@ Retrieve valid bylaw IDs for synthetic City of Vancouver SSMUH permit pre-review
 1. Return JSON only. Do not add prose before or after the object.
 2. Use only bylaw IDs from `datasets/policy-corpus/corpus-manifest.van-ssmuh.json`.
 3. The full valid ID list is:
-1. `ZDB-R1-1-FSR`
-2. `ZDB-R1-1-REAR-SETBACK`
-3. `ZDB-R1-1-SIDE-SETBACK`
-4. `ZDB-R1-1-FRONT-SETBACK`
-5. `ZDB-R1-1-HEIGHT`
-6. `ZDB-R1-1-UNITS`
-7. `PARKING-SSMUH`
-8. `VBBL-PART9`
-9. `BC-STEP-CODE`
-10. `BILL-44-SSMUH`
-11. `TREE-PROTECTION`
-12. `SUBDIVISION`
+   1. `ZDB-R1-1-FSR`
+   2. `ZDB-R1-1-REAR-SETBACK`
+   3. `ZDB-R1-1-SIDE-SETBACK`
+   4. `ZDB-R1-1-FRONT-SETBACK`
+   5. `ZDB-R1-1-HEIGHT`
+   6. `ZDB-R1-1-UNITS`
+   7. `PARKING-SSMUH`
+   8. `VBBL-PART9`
+   9. `BC-STEP-CODE`
+   10. `BILL-44-SSMUH`
+   11. `TREE-PROTECTION`
+   12. `SUBDIVISION`
 4. Do not invent heritage, floodplain, design guideline, or procedure IDs.
 5. Set `cited_bylaw_ids` to the same IDs that appear in `snippet_pack`, in ranked order.
 6. Keep `cited_bylaw_ids` to 10 IDs or fewer.
-7. Always consider `BILL-44-SSMUH`, `ZDB-R1-1-UNITS`, and `VBBL-PART9` for in-domain SSMUH files.
+7. Always consider `BILL-44-SSMUH`, `ZDB-R1-1-UNITS`, and `VBBL-PART9` for in-domain SSMUH files. Always cite `VBBL-PART9` when `floodplain_overlay` is true.
 8. Cite metric-specific bylaws only when the packet has that metric, a gap, or needed evidence.
 9. Cite `PARKING-SSMUH` when parking counts are relevant or short.
 10. Cite `BC-STEP-CODE` when energy evidence is present, missing, or below Step 3.
 11. Cite `TREE-PROTECTION` when tree assessment evidence is present, missing, or requested.
-12. Cite `SUBDIVISION` only when lot area, frontage, or land-title review is relevant.
+12. Cite `SUBDIVISION` when lot area, frontage, or land-title review is relevant, or when the pathway is `specialist-required` or `floodplain`.
 13. Each snippet must be a short paraphrase from the public corpus.
 14. Keep `why_relevant` grounded in packet values.
+15. Cite `ZDB-R1-1-FRONT-SETBACK` when a front-setback value or front-setback violation is present in the packet or reviewer notes, or when the pathway is `discretionary`.
+16. Cite `ZDB-R1-1-SIDE-SETBACK` when `side_setback_m` values are present in the packet.
 
 ## Output schema (JSON)
 

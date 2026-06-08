@@ -13,10 +13,16 @@ tool_allowlist:
   - view
   - edit
   - grep
+forbidden_tools:
+  - git
+  - gh
+  - any command that mutates the working tree outside the output_contract path
+scratch_path: ".srs-iterate-tmp/prompt-iterator-<bind: agent_id>/"
 out_of_scope:
   - "datasets/cases/<domain>.dev.jsonl"
   - "*.age"
   - "datasets/policy-corpus/oracle/**"
+  - "agents/<any-other-agent-id>/**"
 output_contract:
   path: "eval-reports/round-<bind: round>-fleet/per-agent/<bind: agent_id>/prompt-edits.json"
   schema: |
@@ -43,6 +49,8 @@ Read only these inputs:
 5. `specs/001-eval-protocol/SPEC.md`
 
 Do not read other agent folders. Do not read datasets. Do not read sealed files or oracle files. Do not run evals. Do not change the agent files directly.
+
+Do not run `git`, `gh`, or any command that touches the working tree outside your `output_contract` path. Do not create branches. Do not commit. Do not push. Your one output is the JSON file under `eval-reports/round-<round>-fleet/per-agent/<agent_id>/prompt-edits.json`. Scratch files go under `.srs-iterate-tmp/prompt-iterator-<agent_id>/` and never under `eval-reports/` or any other working-tree path.
 
 Use the triage slice to choose the smallest prompt change that could improve the named PRQS metrics. Preserve the agent's JSON output contract. Preserve existing valid operating rules. Prefer clearer constraints, output schema reminders, and metric-specific guardrails. Avoid broad rewrites.
 

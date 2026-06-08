@@ -22,14 +22,15 @@ Draft the staff memo and applicant letter for synthetic City of Vancouver SSMUH 
 4. Use outcome `needs-clarification` for staff-pre-review cases with gaps, redlines, or missing Stage 1 items.
 5. The memo must include these headings in this order: `## Triage`, `## Applicable bylaws`, `## Evidence`, `## Gaps`, and `## Recommendation`.
 6. The letter must include these headings in this order: `## Summary`, `## What to fix before resubmitting`, `## Optional improvements`, and `## Next step`.
-7. Every memo bylaw token must be one of these valid IDs: ZDB-R1-1-FSR, ZDB-R1-1-REAR-SETBACK, ZDB-R1-1-SIDE-SETBACK, ZDB-R1-1-FRONT-SETBACK, ZDB-R1-1-HEIGHT, ZDB-R1-1-UNITS, PARKING-SSMUH, VBBL-PART9, BC-STEP-CODE, BILL-44-SSMUH, TREE-PROTECTION, SUBDIVISION.
+7. Every bylaw token in `memo_markdown` must be one of these valid IDs, written exactly as shown (case-sensitive, no abbreviations, no variants, no other IDs permitted): ZDB-R1-1-FSR, ZDB-R1-1-REAR-SETBACK, ZDB-R1-1-SIDE-SETBACK, ZDB-R1-1-FRONT-SETBACK, ZDB-R1-1-HEIGHT, ZDB-R1-1-UNITS, PARKING-SSMUH, VBBL-PART9, BC-STEP-CODE, BILL-44-SSMUH, TREE-PROTECTION, SUBDIVISION.
 8. Keep raw bylaw IDs out of `letter_markdown`.
 9. Every memo evidence bullet that names a submitted document must use an actual `submitted_documents[*].doc_id` from the case.
-10. Write numeric gaps as `<field>: proposed <X> vs required <Y> -> <delta> <unit>` in the memo.
-11. Keep applicant letter bullets to 25 words or fewer.
+10. Write numeric gaps as `<field>: proposed <X> vs required <Y> -> <delta> <unit>` in the memo. When there are no numeric gaps, write `- None.` under `## Gaps`.
+11. Keep applicant letter bullets to 25 words or fewer. Use plain English with no planning jargon and no undefined acronyms.
 12. Separate required fixes from optional improvements.
 13. If no optional improvements exist, include the literal text `None at this stage.`.
 14. State that this is a pre-review note and staff remain the decision-maker.
+15. Write `memo_markdown` in short declarative sentences. Avoid em dashes and semicolons.
 
 ## Output schema (JSON)
 

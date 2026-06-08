@@ -1,0 +1,38 @@
+{
+  "agent_id": "redline-generator",
+  "round": "001",
+  "source_round": "000-baseline",
+  "split": "train",
+  "ranked_errors": [
+    {
+      "agent_id": "redline-generator",
+      "metric": "M8",
+      "error_class": "extra_redline_for_false_gap",
+      "frequency": 2,
+      "case_ids": ["van-ssmuh-train-006", "van-ssmuh-train-016"],
+      "severity": "high",
+      "evidence": "Oracle has 0 gaps. Generator emitted 1 redline (energy-step) in each case, scoring M8=0. This is downstream of compliance-evidence-compiler emitting a false gap-energy-step-low.",
+      "recommended_owner_action": "Primary fix is compliance-evidence-compiler M6 false_positive_numeric_gap. Generator should also add a guard: do not emit redlines for gaps addressing a metric going in the wrong direction (step_code > required)."
+    },
+    {
+      "agent_id": "redline-generator",
+      "metric": "M8",
+      "error_class": "extra_redline_partial",
+      "frequency": 3,
+      "case_ids": ["van-ssmuh-train-004", "van-ssmuh-train-008", "van-ssmuh-train-019"],
+      "severity": "medium",
+      "evidence": "Generator emitted extra redlines beyond the oracle gap count. train-004: 3 emitted, 2 gold, 1 gap_not_expected (M8=0.667). train-008: 4 emitted, 2 gold, 2 gap_not_expected (M8=0.5). train-019: 3 emitted, 2 gold, 1 gap_not_expected (M8=0.667).",
+      "recommended_owner_action": "Add a few-shot example showing that setback values slightly over the minimum are not redline candidates when not in the gap set. Teach the generator to emit only redlines that address explicitly flagged gaps."
+    },
+    {
+      "agent_id": "redline-generator",
+      "metric": "M8",
+      "error_class": "insufficient_redline_coverage",
+      "frequency": 2,
+      "case_ids": ["van-ssmuh-train-005", "van-ssmuh-train-015"],
+      "severity": "medium",
+      "evidence": "Gold gap count exceeds distinct gaps addressed. train-005: gold=3, addressed=1 (M8=0.333). train-015: gold=3, addressed=2 (M8=0.667). The missing gold gap (gap-front-setback-short) is the one the compiler did not surface.",
+      "recommended_owner_action": "Downstream of bylaw-retriever and compliance-evidence-compiler misses. Once the front-setback gap is correctly surfaced, verify the generator emits a corresponding redline."
+    }
+  ]
+}

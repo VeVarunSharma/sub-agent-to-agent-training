@@ -12,10 +12,16 @@ tool_allowlist:
   - view
   - edit
   - grep
+forbidden_tools:
+  - git
+  - gh
+  - any command that mutates the working tree outside the output_contract path
+scratch_path: ".srs-iterate-tmp/error-triager/"
 out_of_scope:
   - "datasets/cases/<domain>.dev.jsonl"
   - "*.age"
   - "datasets/policy-corpus/oracle/**"
+  - "agents/**"
 output_contract:
   path: "eval-reports/round-<bind: round_plus_1>-fleet/triage.json"
   schema: |
@@ -46,6 +52,8 @@ Read only these inputs:
 4. `specs/001-eval-protocol/SPEC.md`
 
 Do not read sealed files, dev case files, or oracle files. Do not read agent prompts or few-shots. Do not call network tools. Do not run evals.
+
+Do not run `git`, `gh`, or any command that touches the working tree outside your `output_contract` paths. Do not create branches. Do not commit. Do not push. Your only outputs are the JSON files under `eval-reports/round-<round_plus_1>-fleet/`. Scratch files go under `.srs-iterate-tmp/error-triager/`.
 
 Use the PRQS contract in spec 001. Treat M1 through M13 as frozen metric names. Map likely ownership this way unless the evidence clearly shows a cross-agent root cause:
 

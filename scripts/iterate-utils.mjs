@@ -371,6 +371,45 @@ function unifiedDiff(path, before, after) {
   return [`--- ${path}`, `+++ ${path}`, ...body].join("\n");
 }
 
+const FEWSHOT_REQUIRED_KEYS = [
+  "few_shot_id",
+  "agent",
+  "inspired_by_train_case_ids",
+  "input",
+  "output",
+  "rationale_note",
+  "content_fingerprint",
+  "entity_fingerprint",
+  "scenario_fingerprint",
+  "provenance",
+];
+
+function validateFewShotJsonl(content, repoPath) {
+  const lines = content.split(/\r?\n/u).filter((line) => line.trim() !== "");
+  const failures = [];
+  for (let i = 0; i < lines.length; i += 1) {
+    let row;
+    try {
+      row = JSON.parse(lines[i]);
+    } catch (err) {
+      failures.push(`row ${i + 1}: invalid JSON (${err instanceof Error ? err.message : String(err)})`);
+      continue;
+    }
+    if (!row || typeof row !== "object" || Array.isArray(row)) {
+      failures.push(`row ${i + 1}: must be a JSON object`);
+      continue;
+    }
+    const missing = FEWSHOT_REQUIRED_KEYS.filter((k) => !(k in row));
+    if (missing.length > 0) {
+      failures.push(`row ${i + 1}: missing required keys ${missing.join(", ")}`);
+    }
+  }
+  if (failures.length > 0) {
+    return { ok: false, error: `${repoPath} contains ${failures.length} schema-invalid few-shot row(s). Use \`pnpm gen:few-shot\` to author new rows with provenance. First issue: ${failures[0]}` };
+  }
+  return { ok: true };
+}
+
 export function applyProposedEdits(options) {
   const {
     agentId,
@@ -380,7 +419,7 @@ export function applyProposedEdits(options) {
     write = true,
   } = options;
   if (!existsSync(proposedEditsPath)) {
-    return { found: false, agentId, changed: 0, edits: [], diff: "" };
+    return { found: false, agentId, changed: 0, edits: [], diff: "", skippedReason: null };
   }
 
   const raw = readProposedEdits(proposedEditsPath);
@@ -391,6 +430,19 @@ export function applyProposedEdits(options) {
     const before = existsSync(edit.targetPath) ? readFileSync(edit.targetPath, "utf8") : "";
     const diff = unifiedDiff(edit.repoPath, before, edit.content);
     if (!diff) continue;
+    if (edit.repoPath.endsWith("few-shots.jsonl")) {
+      const result = validateFewShotJsonl(edit.content, edit.repoPath);
+      if (!result.ok) {
+        return {
+          found: true,
+          agentId,
+          changed: 0,
+          edits,
+          diff: "",
+          skippedReason: result.error,
+        };
+      }
+    }
     changed += 1;
     diffParts.push(diff);
     if (write) {
@@ -405,6 +457,7 @@ export function applyProposedEdits(options) {
     changed,
     edits,
     diff: diffParts.join("\n"),
+    skippedReason: null,
   };
 }
 

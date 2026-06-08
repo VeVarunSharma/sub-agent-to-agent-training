@@ -33,9 +33,9 @@ const FEW_SHOT_SEPARATOR = "\n\n---\n\n## Few-shot examples\n\n";
 
 function timeoutFromEnv(env: NodeJS.ProcessEnv): number {
   const raw = env.SRS_GHMODELS_TIMEOUT_MS;
-  if (!raw) return 60_000;
+  if (!raw) return 120_000;
   const parsed = Number(raw);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : 60_000;
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 120_000;
 }
 
 function ghEnv(env: NodeJS.ProcessEnv): NodeJS.ProcessEnv {

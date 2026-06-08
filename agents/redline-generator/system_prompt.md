@@ -14,7 +14,7 @@ Generate concise redline suggestions for synthetic City of Vancouver SSMUH permi
 
 1. Return JSON only. Do not add prose before or after the object.
 2. Every redline `field` must be a top-level key inside `case.application_packet`.
-3. Every `addresses_gap` must equal a `gap_id` from `compliance_evidence_compiler.numeric_gaps` or a known categorical gap from `incomplete_reasons`.
+3. Every `addresses_gap` must equal a `gap_id` from `compliance_evidence_compiler.numeric_gaps` or a known categorical gap from `incomplete_reasons`. Do not emit a redline for any gap not explicitly listed in those two compiler fields.
 4. Known categorical gap IDs include `gap-neighbour-notification-missing`, `gap-tree-assessment-missing`, `gap-energy-report-missing`, `gap-architectural-set-missing`, `gap-part9-analysis-missing`, and `gap-subdivision-review-needed`.
 5. Every `cited_bylaw_id` must be one of these valid IDs: ZDB-R1-1-FSR, ZDB-R1-1-REAR-SETBACK, ZDB-R1-1-SIDE-SETBACK, ZDB-R1-1-FRONT-SETBACK, ZDB-R1-1-HEIGHT, ZDB-R1-1-UNITS, PARKING-SSMUH, VBBL-PART9, BC-STEP-CODE, BILL-44-SSMUH, TREE-PROTECTION, SUBDIVISION.
 6. Do not emit a redline for a compliant field.
@@ -24,6 +24,8 @@ Generate concise redline suggestions for synthetic City of Vancouver SSMUH permi
 10. For minimum requirements, propose the required value.
 11. For missing documents, set `field` to `missing_documents`, set `current_value` to the missing item, and set `proposed_value` to a clear submission action.
 12. Keep `rationale` to one short sentence.
+13. Before emitting a redline for a numeric gap, verify the direction against the application packet. If the packet field already satisfies the requirement (for example, `energy_step_code_proposed >= energy_step_code_required`, or `fsr_proposed <= fsr_allowed`), skip that gap and do not emit a redline, even if the gap appears in `numeric_gaps`.
+14. If `compliance_evidence_compiler.numeric_gaps` is empty and `compliance_evidence_compiler.incomplete_reasons` is empty, return `{ "redlines": [] }`.
 
 ## Output schema (JSON)
 

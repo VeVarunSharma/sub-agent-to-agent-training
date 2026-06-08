@@ -1,0 +1,273 @@
+{
+  "round": "001",
+  "source_round": "000-baseline",
+  "split": "train",
+  "ranked_errors": [
+    {
+      "agent_id": "bylaw-retriever",
+      "metric": "M3",
+      "error_class": "missing_bylaw_in_top10_front_setback",
+      "frequency": 2,
+      "case_ids": ["van-ssmuh-train-005", "van-ssmuh-train-015"],
+      "severity": "medium",
+      "evidence": "ZDB-R1-1-FRONT-SETBACK absent from top-10 retrieval in both discretionary cases with front-setback violations. M3=0.75 and M3=0.80 respectively. This also causes M5 score=0 for that bylaw.",
+      "recommended_owner_action": "Add ZDB-R1-1-FRONT-SETBACK to the retrieval candidate pool for discretionary pathway cases. Add a few-shot example pairing a front-setback violation with ZDB-R1-1-FRONT-SETBACK in the retrieved set."
+    },
+    {
+      "agent_id": "bylaw-retriever",
+      "metric": "M3",
+      "error_class": "missing_bylaw_in_top10_isolated",
+      "frequency": 3,
+      "case_ids": ["van-ssmuh-train-018", "van-ssmuh-train-019", "van-ssmuh-train-021"],
+      "severity": "low",
+      "evidence": "train-018 missed ZDB-R1-1-SIDE-SETBACK (M3=0.80). train-019 missed VBBL-PART9 (M3=0.75). train-021 missed SUBDIVISION (M3=0.75). Each miss is a distinct bylaw for a distinct pathway type.",
+      "recommended_owner_action": "Ensure SUBDIVISION appears in top-10 for specialist-required and floodplain cases. Ensure VBBL-PART9 appears for all floodplain cases. Verify side-setback bylaw is surfaced when side setback values are present in the application."
+    },
+    {
+      "agent_id": "compliance-evidence-compiler",
+      "metric": "M5",
+      "error_class": "missing_required_field_neighbour_notification",
+      "frequency": 17,
+      "case_ids": [
+        "van-ssmuh-train-001", "van-ssmuh-train-002", "van-ssmuh-train-003",
+        "van-ssmuh-train-004", "van-ssmuh-train-006", "van-ssmuh-train-007",
+        "van-ssmuh-train-008", "van-ssmuh-train-009", "van-ssmuh-train-012",
+        "van-ssmuh-train-013", "van-ssmuh-train-014", "van-ssmuh-train-015",
+        "van-ssmuh-train-016", "van-ssmuh-train-017", "van-ssmuh-train-018",
+        "van-ssmuh-train-019", "van-ssmuh-train-021"
+      ],
+      "severity": "high",
+      "evidence": "neighbour-notification is missing from ZDB-R1-1-UNITS evidence map in every case where that bylaw is gold-required (17 of 18 cases). This is a systematic gap. Per-bylaw score for ZDB-R1-1-UNITS is 0.667 across all affected cases.",
+      "recommended_owner_action": "Add neighbour-notification to the required-evidence-map entry for ZDB-R1-1-UNITS. Update the compiler few-shot to always populate neighbour-notification when citing ZDB-R1-1-UNITS."
+    },
+    {
+      "agent_id": "compliance-evidence-compiler",
+      "metric": "M5",
+      "error_class": "missing_required_fields_zdb_height",
+      "frequency": 6,
+      "case_ids": [
+        "van-ssmuh-train-001", "van-ssmuh-train-006", "van-ssmuh-train-008",
+        "van-ssmuh-train-009", "van-ssmuh-train-014", "van-ssmuh-train-016"
+      ],
+      "severity": "high",
+      "evidence": "ZDB-R1-1-HEIGHT has per-bylaw score=0 in all 6 cases. Missing fields are height_m_proposed and zoning_district. The compiler cites the bylaw but does not populate these two required fields.",
+      "recommended_owner_action": "Add height_m_proposed and zoning_district to the required-evidence-map entry for ZDB-R1-1-HEIGHT. Update the few-shot to include both fields when emitting HEIGHT evidence."
+    },
+    {
+      "agent_id": "compliance-evidence-compiler",
+      "metric": "M5",
+      "error_class": "missing_required_fields_zdb_rear_setback",
+      "frequency": 6,
+      "case_ids": [
+        "van-ssmuh-train-001", "van-ssmuh-train-006", "van-ssmuh-train-007",
+        "van-ssmuh-train-014", "van-ssmuh-train-016", "van-ssmuh-train-017"
+      ],
+      "severity": "high",
+      "evidence": "ZDB-R1-1-REAR-SETBACK has per-bylaw score=0 in all 6 cases. Missing fields are rear_setback_m_proposed and zoning_district. Pattern matches the HEIGHT failure.",
+      "recommended_owner_action": "Add rear_setback_m_proposed and zoning_district to the required-evidence-map for ZDB-R1-1-REAR-SETBACK. Mirror the fix applied to ZDB-R1-1-HEIGHT."
+    },
+    {
+      "agent_id": "compliance-evidence-compiler",
+      "metric": "M5",
+      "error_class": "missing_required_fields_zdb_side_setback",
+      "frequency": 4,
+      "case_ids": [
+        "van-ssmuh-train-001", "van-ssmuh-train-006",
+        "van-ssmuh-train-016", "van-ssmuh-train-018"
+      ],
+      "severity": "medium",
+      "evidence": "ZDB-R1-1-SIDE-SETBACK has per-bylaw score=0 in all 4 cases. Missing fields are side_setback_m_proposed and zoning_district.",
+      "recommended_owner_action": "Add side_setback_m_proposed and zoning_district to the required-evidence-map for ZDB-R1-1-SIDE-SETBACK."
+    },
+    {
+      "agent_id": "compliance-evidence-compiler",
+      "metric": "M5",
+      "error_class": "missing_required_field_tree_inventory_count",
+      "frequency": 3,
+      "case_ids": ["van-ssmuh-train-002", "van-ssmuh-train-004", "van-ssmuh-train-017"],
+      "severity": "medium",
+      "evidence": "TREE-PROTECTION per-bylaw score=0.5 in all 3 cases. tree_inventory_count is the only missing field. The compiler populates tree-assessment but not tree_inventory_count.",
+      "recommended_owner_action": "Add tree_inventory_count to the required-evidence-map entry for TREE-PROTECTION."
+    },
+    {
+      "agent_id": "compliance-evidence-compiler",
+      "metric": "M5",
+      "error_class": "missing_bylaw_evidence_uncited",
+      "frequency": 2,
+      "case_ids": ["van-ssmuh-train-005", "van-ssmuh-train-015"],
+      "severity": "medium",
+      "evidence": "ZDB-R1-1-FRONT-SETBACK not cited by the compiler in either case (per-bylaw score=0). This is downstream of the bylaw-retriever miss: the bylaw is not in the top-10 retrieval, so no evidence is compiled for it.",
+      "recommended_owner_action": "Fix is primarily owned by bylaw-retriever (missing_bylaw_in_top10_front_setback). After retrieval is fixed, verify compiler produces correct evidence fields for ZDB-R1-1-FRONT-SETBACK."
+    },
+    {
+      "agent_id": "compliance-evidence-compiler",
+      "metric": "M6",
+      "error_class": "false_positive_numeric_gap",
+      "frequency": 2,
+      "case_ids": ["van-ssmuh-train-006", "van-ssmuh-train-016"],
+      "severity": "high",
+      "evidence": "Oracle has 0 numeric gaps but compiler emitted gap-energy-step-low in both cases (energy_step_code_proposed=4, required=3, delta=-1). The energy step code exceeds the minimum, so no gap exists. M6=0 for both cases.",
+      "recommended_owner_action": "Add a direction check to the numeric gap detector for BC-STEP-CODE: a gap exists only when proposed < required, not when proposed > required. Add a few-shot example showing Step 4 with no gap."
+    },
+    {
+      "agent_id": "compliance-evidence-compiler",
+      "metric": "M6",
+      "error_class": "wrong_gap_id_energy_instead_of_front_setback",
+      "frequency": 2,
+      "case_ids": ["van-ssmuh-train-005", "van-ssmuh-train-015"],
+      "severity": "medium",
+      "evidence": "Compiler emitted gap-energy-step-low in both cases instead of gap-front-setback-short. Oracle expected gap-front-setback-short. The front setback bylaw was not retrieved, so the compiler produced the wrong gap.",
+      "recommended_owner_action": "Downstream of bylaw-retriever miss. Once ZDB-R1-1-FRONT-SETBACK is retrieved, verify that gap detection for front setback fires correctly. Remove the spurious energy-step gap emission for these cases."
+    },
+    {
+      "agent_id": "compliance-evidence-compiler",
+      "metric": "M6",
+      "error_class": "extra_gaps_beyond_oracle",
+      "frequency": 1,
+      "case_ids": ["van-ssmuh-train-008"],
+      "severity": "low",
+      "evidence": "Oracle has 2 numeric gaps (fsr-over, height-over). Compiler emitted 4 gaps, adding gap-rear-setback-short and gap-side-setback-short. M6=0.5.",
+      "recommended_owner_action": "Add a few-shot example showing a case where setback values are non-conforming but not gold gaps, to teach the compiler when not to emit setback gaps."
+    },
+    {
+      "agent_id": "completeness-applicant-support-auditor",
+      "metric": "M7",
+      "error_class": "wrong_stage1_complete_boolean",
+      "frequency": 4,
+      "case_ids": [
+        "van-ssmuh-train-003", "van-ssmuh-train-004",
+        "van-ssmuh-train-008", "van-ssmuh-train-019"
+      ],
+      "severity": "high",
+      "evidence": "Agent set stage1_complete=false with stage1_missing=[] (empty missing list) in all 4 cases. Gold verdict is stage1_complete=true. Boolean mismatch is isolated; the missing-item set is correct (both empty). M7=0 in all 4 cases.",
+      "recommended_owner_action": "Add a guard rule: if stage1_missing is empty, set stage1_complete=true. Add few-shot examples where numeric compliance gaps exist but Stage 1 documents are complete, showing stage1_complete=true with stage1_missing=[]."
+    },
+    {
+      "agent_id": "completeness-applicant-support-auditor",
+      "metric": "M10",
+      "error_class": "false_positive_applicant_flags",
+      "frequency": 3,
+      "case_ids": ["van-ssmuh-train-009", "van-ssmuh-train-012", "van-ssmuh-train-013"],
+      "severity": "high",
+      "evidence": "Agent emitted applicant-support flags when gold expects none. train-009: 1 flag (numeric-gap-not-quantified), gold=0. train-012: 3 flags, gold=0. train-013: 2 flags, gold=0. M10=0 in all 3. Flags were plausible but not required by gold.",
+      "recommended_owner_action": "Add few-shot examples of cases without applicant-support indicators (specialist cases with complete docs, simple energy-step cases with no first-time markers) that correctly produce empty flag lists."
+    },
+    {
+      "agent_id": "completeness-applicant-support-auditor",
+      "metric": "M10",
+      "error_class": "wrong_flag_type",
+      "frequency": 4,
+      "case_ids": [
+        "van-ssmuh-train-005", "van-ssmuh-train-015",
+        "van-ssmuh-train-017", "van-ssmuh-train-018"
+      ],
+      "severity": "medium",
+      "evidence": "Partial or zero intersection with gold flags. train-017: predicted 2 flags, gold 1, intersection=0 (completely wrong taxonomy). train-005 and train-015: 1 of 2 gold flags matched. train-018: 1 of 2 gold flags matched but over-predicted.",
+      "recommended_owner_action": "Review flag taxonomy in the few-shots. Ensure flag selection is grounded in case-specific evidence (first-time-applicant marker, document specificity signals) rather than generic gap patterns."
+    },
+    {
+      "agent_id": "completeness-applicant-support-auditor",
+      "metric": "M10",
+      "error_class": "missed_applicant_flag",
+      "frequency": 1,
+      "case_ids": ["van-ssmuh-train-007"],
+      "severity": "low",
+      "evidence": "Agent emitted 0 flags when gold expects 1 flag. M10=0 via zero_gold_nonempty_predicted_empty branch.",
+      "recommended_owner_action": "Add a few-shot example where a case with a small numeric gap and complete docs still requires an applicant-support flag."
+    },
+    {
+      "agent_id": "completeness-applicant-support-auditor",
+      "metric": "M11",
+      "error_class": "false_positive_applicant_flags",
+      "frequency": 3,
+      "case_ids": ["van-ssmuh-train-009", "van-ssmuh-train-012", "van-ssmuh-train-013"],
+      "severity": "high",
+      "evidence": "Same three cases as M10 false positives. Emitting flags when gold=0 scores M11=0 via zero_predicted_nonempty_gold_empty branch in all 3 cases.",
+      "recommended_owner_action": "Same fix as M10 false_positive_applicant_flags: add few-shots with empty flag lists for clean specialist and simple energy-step cases."
+    },
+    {
+      "agent_id": "completeness-applicant-support-auditor",
+      "metric": "M11",
+      "error_class": "wrong_flag_type",
+      "frequency": 4,
+      "case_ids": [
+        "van-ssmuh-train-005", "van-ssmuh-train-015",
+        "van-ssmuh-train-017", "van-ssmuh-train-018"
+      ],
+      "severity": "medium",
+      "evidence": "Recall is partial or zero due to wrong flag taxonomy. train-017: intersection=0 (M11=0). train-005, 015, 018: intersection=1 with gold 2 (M11=0.5 each).",
+      "recommended_owner_action": "Same taxonomy fix as M10 wrong_flag_type. Align few-shot flag labels to the pinned taxonomy in the judge-prompts-manifest."
+    },
+    {
+      "agent_id": "completeness-applicant-support-auditor",
+      "metric": "M11",
+      "error_class": "missed_applicant_flag",
+      "frequency": 1,
+      "case_ids": ["van-ssmuh-train-007"],
+      "severity": "low",
+      "evidence": "Agent emitted 0 flags when gold expects 1. M11=0 via standard branch (predicted=0, gold=1, intersection=0).",
+      "recommended_owner_action": "Same fix as M10 missed_applicant_flag."
+    },
+    {
+      "agent_id": "redline-generator",
+      "metric": "M8",
+      "error_class": "extra_redline_for_false_gap",
+      "frequency": 2,
+      "case_ids": ["van-ssmuh-train-006", "van-ssmuh-train-016"],
+      "severity": "high",
+      "evidence": "Oracle has 0 gaps. Generator emitted 1 redline (energy-step) in each case, scoring M8=0. This is downstream of compliance-evidence-compiler emitting a false gap-energy-step-low.",
+      "recommended_owner_action": "Primary fix is compliance-evidence-compiler M6 false_positive_numeric_gap. Generator should also add a guard: do not emit redlines for gaps that address a metric going in the wrong direction (step_code > required)."
+    },
+    {
+      "agent_id": "redline-generator",
+      "metric": "M8",
+      "error_class": "extra_redline_partial",
+      "frequency": 3,
+      "case_ids": ["van-ssmuh-train-004", "van-ssmuh-train-008", "van-ssmuh-train-019"],
+      "severity": "medium",
+      "evidence": "Generator emitted extra redlines beyond the oracle gap count. train-004: 3 emitted, 2 gold, 1 gap_not_expected (M8=0.667). train-008: 4 emitted, 2 gold, 2 gap_not_expected (M8=0.5). train-019: 3 emitted, 2 gold, 1 gap_not_expected (M8=0.667).",
+      "recommended_owner_action": "Add a few-shot example showing that setback values slightly over the minimum are not redline candidates when they are not in the gap set. Teach the generator to emit only redlines that address explicitly flagged gaps."
+    },
+    {
+      "agent_id": "redline-generator",
+      "metric": "M8",
+      "error_class": "insufficient_redline_coverage",
+      "frequency": 2,
+      "case_ids": ["van-ssmuh-train-005", "van-ssmuh-train-015"],
+      "severity": "medium",
+      "evidence": "Gold gap count exceeds distinct gaps addressed. train-005: gold=3, addressed=1 (M8=0.333). train-015: gold=3, addressed=2 (M8=0.667). The missing gold gap (gap-front-setback-short) is the one the compiler missed.",
+      "recommended_owner_action": "Downstream of bylaw-retriever and compliance-evidence-compiler misses. Once the front-setback gap is correctly surfaced, verify the generator emits a corresponding redline."
+    },
+    {
+      "agent_id": "scope-pathway-classifier",
+      "metric": "M1",
+      "error_class": "wrong_pathway_label_aor_predicted_as_discretionary",
+      "frequency": 6,
+      "case_ids": [
+        "van-ssmuh-train-002", "van-ssmuh-train-003", "van-ssmuh-train-008",
+        "van-ssmuh-train-012", "van-ssmuh-train-013", "van-ssmuh-train-018"
+      ],
+      "severity": "high",
+      "evidence": "Classifier predicted discretionary for 6 cases whose gold label is as-of-right-ssmuh. These cases have missing documents or minor numeric gaps. Classifier appears to conflate compliance gaps with discretionary routing.",
+      "recommended_owner_action": "Add 3-4 few-shot examples of as-of-right-ssmuh cases that have minor gaps or missing documents but still route as-of-right. Make the prompt explicit: discretionary routing requires a discretionary policy trigger, not just a gap or missing document."
+    },
+    {
+      "agent_id": "scope-pathway-classifier",
+      "metric": "M1",
+      "error_class": "wrong_pathway_label_discretionary_predicted_as_aor",
+      "frequency": 2,
+      "case_ids": ["van-ssmuh-train-005", "van-ssmuh-train-015"],
+      "severity": "medium",
+      "evidence": "Classifier predicted as-of-right-ssmuh for 2 cases whose gold label is discretionary. Both cases involve front-setback violations under ZDB-R1-1-FRONT-SETBACK, which triggers discretionary review.",
+      "recommended_owner_action": "Add few-shot examples pairing a front-setback violation with the discretionary pathway label. Clarify in the prompt that front-setback non-conformance in R1-1 triggers discretionary routing."
+    }
+  ],
+  "per_agent_paths": {
+    "bylaw-retriever": "eval-reports/round-001-fleet/per-agent/bylaw-retriever/triage.json",
+    "compliance-evidence-compiler": "eval-reports/round-001-fleet/per-agent/compliance-evidence-compiler/triage.json",
+    "completeness-applicant-support-auditor": "eval-reports/round-001-fleet/per-agent/completeness-applicant-support-auditor/triage.json",
+    "pre-review-memo-writer": "eval-reports/round-001-fleet/per-agent/pre-review-memo-writer/triage.json",
+    "redline-generator": "eval-reports/round-001-fleet/per-agent/redline-generator/triage.json",
+    "scope-pathway-classifier": "eval-reports/round-001-fleet/per-agent/scope-pathway-classifier/triage.json"
+  }
+}
