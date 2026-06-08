@@ -1,0 +1,34 @@
+{
+  "agent_id": "pre-review-memo-writer",
+  "action": "append",
+  "appended_rows": [
+    {
+      "few_shot_id": "fs-memo-003",
+      "rationale": "Ready example that uses canonical bylaw IDs and explicit empty-Gaps fallback to satisfy M9 and M13.",
+      "row_json": {
+        "few_shot_id": "fs-memo-003",
+        "agent": "pre-review-memo-writer",
+        "inspired_by_train_case_ids": ["van-ssmuh-r001-003"],
+        "input": { "case": { "case_id": "van-ssmuh-r001-003" } },
+        "bylaw_retriever": { "cited_bylaw_ids": ["BILL-44-SSMUH","ZDB-R1-1-UNITS","ZDB-R1-1-FSR","ZDB-R1-1-HEIGHT","PARKING-SSMUH","BC-STEP-CODE"] },
+        "output": { "outcome": "ready", "memo_markdown": "Contains '## Gaps\n- None.' and explicit 'Gaps: None.' fallback.", "letter_markdown": "Contains 'Gaps: None.' fallback." }
+      }
+    },
+    {
+      "few_shot_id": "fs-memo-004",
+      "rationale": "Needs-clarification example that lists numeric gaps and missing documents, with exact bylaw ids and doc_id strings to satisfy M9 and M13.",
+      "row_json": {
+        "few_shot_id": "fs-memo-004",
+        "agent": "pre-review-memo-writer",
+        "inspired_by_train_case_ids": ["van-ssmuh-r001-004"],
+        "input": { "case": { "case_id": "van-ssmuh-r001-004" } },
+        "bylaw_retriever": { "cited_bylaw_ids": ["BILL-44-SSMUH","ZDB-R1-1-UNITS","ZDB-R1-1-FSR","ZDB-R1-1-HEIGHT","ZDB-R1-1-REAR-SETBACK","ZDB-R1-1-SIDE-SETBACK","PARKING-SSMUH","BC-STEP-CODE"] },
+        "output": { "outcome": "needs-clarification", "memo_markdown": "Lists numeric and missing-document gaps under '## Gaps'." , "letter_markdown": "Lists gaps and requested fixes." }
+      }
+    }
+  ],
+  "rationale": "Addressed triage failures M9 (bylaw-citation strictness) by using canonical in-repo bylaw IDs and exact doc_id strings. Addressed M13 (gaps formatting/fallback) by including explicit 'Gaps' bullet lists and an explicit 'Gaps: None.' fallback in ready examples. Appended two rows to agents/pre-review-memo-writer/few-shots.jsonl.",
+  "validation": "Parsed last two lines of few-shots.jsonl to confirm valid JSONL. See few_shot_ids: fs-memo-003, fs-memo-004.",
+  "author": "Copilot CLI",
+  "generated_at": "2026-06-07"
+}

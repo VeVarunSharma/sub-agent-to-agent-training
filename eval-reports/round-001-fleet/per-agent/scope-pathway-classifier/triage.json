@@ -1,0 +1,31 @@
+{
+  "agent_id": "scope-pathway-classifier",
+  "round": "001",
+  "source_round": "000-baseline",
+  "split": "train",
+  "ranked_errors": [
+    {
+      "agent_id": "scope-pathway-classifier",
+      "metric": "M1",
+      "error_class": "wrong_pathway_label_aor_predicted_as_discretionary",
+      "frequency": 6,
+      "case_ids": [
+        "van-ssmuh-train-002", "van-ssmuh-train-003", "van-ssmuh-train-008",
+        "van-ssmuh-train-012", "van-ssmuh-train-013", "van-ssmuh-train-018"
+      ],
+      "severity": "high",
+      "evidence": "Classifier predicted discretionary for 6 cases whose gold label is as-of-right-ssmuh. These cases have missing documents or minor numeric gaps. Classifier conflates compliance gaps with discretionary routing.",
+      "recommended_owner_action": "Add 3-4 few-shot examples of as-of-right-ssmuh cases that have minor gaps or missing documents but still route as-of-right. Make the prompt explicit: discretionary routing requires a discretionary policy trigger, not just a gap or missing document."
+    },
+    {
+      "agent_id": "scope-pathway-classifier",
+      "metric": "M1",
+      "error_class": "wrong_pathway_label_discretionary_predicted_as_aor",
+      "frequency": 2,
+      "case_ids": ["van-ssmuh-train-005", "van-ssmuh-train-015"],
+      "severity": "medium",
+      "evidence": "Classifier predicted as-of-right-ssmuh for 2 cases whose gold label is discretionary. Both involve front-setback violations under ZDB-R1-1-FRONT-SETBACK, which triggers discretionary review.",
+      "recommended_owner_action": "Add few-shot examples pairing a front-setback violation with the discretionary pathway label. Clarify in the prompt that front-setback non-conformance in R1-1 triggers discretionary routing."
+    }
+  ]
+}

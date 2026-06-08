@@ -1,0 +1,87 @@
+{
+  "agent_id": "completeness-applicant-support-auditor",
+  "round": "001",
+  "source_round": "000-baseline",
+  "split": "train",
+  "ranked_errors": [
+    {
+      "agent_id": "completeness-applicant-support-auditor",
+      "metric": "M7",
+      "error_class": "wrong_stage1_complete_boolean",
+      "frequency": 4,
+      "case_ids": [
+        "van-ssmuh-train-003", "van-ssmuh-train-004",
+        "van-ssmuh-train-008", "van-ssmuh-train-019"
+      ],
+      "severity": "high",
+      "evidence": "Agent set stage1_complete=false with stage1_missing=[] in all 4 cases. Gold verdict is stage1_complete=true. Boolean mismatch is isolated; the missing-item set is correct (both empty). M7=0 in all 4 cases.",
+      "recommended_owner_action": "Add a guard rule: if stage1_missing is empty, set stage1_complete=true. Add few-shot examples where numeric compliance gaps exist but Stage 1 documents are complete, showing stage1_complete=true with stage1_missing=[]."
+    },
+    {
+      "agent_id": "completeness-applicant-support-auditor",
+      "metric": "M10",
+      "error_class": "false_positive_applicant_flags",
+      "frequency": 3,
+      "case_ids": ["van-ssmuh-train-009", "van-ssmuh-train-012", "van-ssmuh-train-013"],
+      "severity": "high",
+      "evidence": "Agent emitted applicant-support flags when gold expects none. train-009: 1 flag (numeric-gap-not-quantified), gold=0. train-012: 3 flags, gold=0. train-013: 2 flags, gold=0. M10=0 in all 3.",
+      "recommended_owner_action": "Add few-shot examples of cases without applicant-support indicators (specialist cases with complete docs, simple energy-step cases with no first-time markers) that correctly produce empty flag lists."
+    },
+    {
+      "agent_id": "completeness-applicant-support-auditor",
+      "metric": "M10",
+      "error_class": "wrong_flag_type",
+      "frequency": 4,
+      "case_ids": [
+        "van-ssmuh-train-005", "van-ssmuh-train-015",
+        "van-ssmuh-train-017", "van-ssmuh-train-018"
+      ],
+      "severity": "medium",
+      "evidence": "Partial or zero intersection with gold flags. train-017: predicted 2 flags, gold 1, intersection=0 (completely wrong taxonomy). train-005 and train-015: 1 of 2 gold flags matched. train-018: 1 of 2 gold flags matched with over-prediction.",
+      "recommended_owner_action": "Review flag taxonomy in the few-shots. Ensure flag selection is grounded in case-specific evidence rather than generic gap patterns. Align labels to the pinned taxonomy in the judge-prompts-manifest."
+    },
+    {
+      "agent_id": "completeness-applicant-support-auditor",
+      "metric": "M10",
+      "error_class": "missed_applicant_flag",
+      "frequency": 1,
+      "case_ids": ["van-ssmuh-train-007"],
+      "severity": "low",
+      "evidence": "Agent emitted 0 flags when gold expects 1 flag. M10=0 via zero_gold_nonempty_predicted_empty branch.",
+      "recommended_owner_action": "Add a few-shot example where a case with a small numeric gap and complete docs still requires one applicant-support flag."
+    },
+    {
+      "agent_id": "completeness-applicant-support-auditor",
+      "metric": "M11",
+      "error_class": "false_positive_applicant_flags",
+      "frequency": 3,
+      "case_ids": ["van-ssmuh-train-009", "van-ssmuh-train-012", "van-ssmuh-train-013"],
+      "severity": "high",
+      "evidence": "Same three cases as M10 false positives. Emitting flags when gold=0 scores M11=0 via zero_predicted_nonempty_gold_empty branch in all 3 cases.",
+      "recommended_owner_action": "Same fix as M10 false_positive_applicant_flags: add few-shots with empty flag lists for clean specialist and simple energy-step cases."
+    },
+    {
+      "agent_id": "completeness-applicant-support-auditor",
+      "metric": "M11",
+      "error_class": "wrong_flag_type",
+      "frequency": 4,
+      "case_ids": [
+        "van-ssmuh-train-005", "van-ssmuh-train-015",
+        "van-ssmuh-train-017", "van-ssmuh-train-018"
+      ],
+      "severity": "medium",
+      "evidence": "Recall is partial or zero due to wrong flag taxonomy. train-017: intersection=0 (M11=0). train-005, 015, 018: intersection=1 with gold=2 (M11=0.5 each).",
+      "recommended_owner_action": "Same taxonomy fix as M10 wrong_flag_type. Align few-shot flag labels to the pinned taxonomy in the judge-prompts-manifest."
+    },
+    {
+      "agent_id": "completeness-applicant-support-auditor",
+      "metric": "M11",
+      "error_class": "missed_applicant_flag",
+      "frequency": 1,
+      "case_ids": ["van-ssmuh-train-007"],
+      "severity": "low",
+      "evidence": "Agent emitted 0 flags when gold expects 1. M11=0 via standard branch (predicted=0, gold=1, intersection=0).",
+      "recommended_owner_action": "Same fix as M10 missed_applicant_flag."
+    }
+  ]
+}

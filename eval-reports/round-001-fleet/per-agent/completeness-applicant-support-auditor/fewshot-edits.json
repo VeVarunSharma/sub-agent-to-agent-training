@@ -1,0 +1,88 @@
+[
+  {
+    "few_shot_id": "fs-completeness-add-001",
+    "targeted_failure": "M10",
+    "rationale": "Teach agent to not flag complete packages. Reviewer affirms completeness; applicant_support_flags must be empty.",
+    "inspired_by_train_case_ids": ["van-ssmuh-train-001"],
+    "draft": {
+      "input": {
+        "case": {
+          "case_id": "fs-add-001",
+          "reviewer_notes": "All Stage 1 items present and consistent. Drawings, survey, energy report, tree note, and neighbour notice align. Ready for staff pre-review.",
+          "submitted_documents": ["architectural-set","site-survey","energy-report","tree-assessment","neighbour-notification"]
+        }
+      },
+      "output": {
+        "stage1_complete": true,
+        "stage1_missing": [],
+        "applicant_support_flags": [],
+        "equity_notes": []
+      }
+    }
+  },
+  {
+    "few_shot_id": "fs-completeness-add-002",
+    "targeted_failure": "M11",
+    "rationale": "Map reviewer language about applicant experience to a single allowed flag 'first-time-applicant-tone-mismatch'.",
+    "inspired_by_train_case_ids": ["van-ssmuh-train-002"],
+    "draft": {
+      "input": {
+        "case": {
+          "case_id": "fs-add-002",
+          "reviewer_notes": "Applicant appears to be an owner-builder with no prior permits. Use plain next steps and supportive wording. Two documents missing: neighbour notification and tree assessment.",
+          "submitted_documents": ["architectural-set","site-survey","energy-report"],
+          "missing_documents": ["neighbour-notification","tree-assessment"]
+        }
+      },
+      "output": {
+        "stage1_complete": false,
+        "stage1_missing": ["neighbour-notification","tree-assessment"],
+        "applicant_support_flags": ["first-time-applicant-tone-mismatch"],
+        "equity_notes": ["Use concrete document names and a supportive tone for an owner-builder with no prior permits."]
+      }
+    }
+  },
+  {
+    "few_shot_id": "fs-completeness-add-003",
+    "targeted_failure": "M11",
+    "rationale": "Map reviewer wording about vague missing items to 'missing-document-specificity-low'.",
+    "inspired_by_train_case_ids": ["van-ssmuh-train-003"],
+    "draft": {
+      "input": {
+        "case": {
+          "case_id": "fs-add-003",
+          "reviewer_notes": "Reviewer asks for additional evidence but does not name the specific report required. Stage 1 otherwise complete.",
+          "submitted_documents": ["architectural-set","site-survey","neighbour-notification","energy-report"]
+        }
+      },
+      "output": {
+        "stage1_complete": true,
+        "stage1_missing": [],
+        "applicant_support_flags": ["missing-document-specificity-low"],
+        "equity_notes": ["Specify the exact document name and where to find the required information in applicant wording."]
+      }
+    }
+  },
+  {
+    "few_shot_id": "fs-completeness-add-004",
+    "targeted_failure": "M11",
+    "rationale": "Map numeric discrepancy language to 'numeric-gap-not-quantified' so agent requests clear numbers.",
+    "inspired_by_train_case_ids": ["van-ssmuh-train-014"],
+    "draft": {
+      "input": {
+        "case": {
+          "case_id": "fs-add-004",
+          "reviewer_notes": "FSR and height exceed by amounts not quantified in the reviewer note; missing neighbour notification and tree assessment.",
+          "submitted_documents": ["architectural-set","site-survey","heritage-statement"],
+          "missing_documents": ["neighbour-notification","tree-assessment"]
+        }
+      },
+      "output": {
+        "stage1_complete": false,
+        "stage1_missing": ["neighbour-notification","tree-assessment"],
+        "applicant_support_flags": ["numeric-gap-not-quantified"],
+        "equity_notes": ["Ask the applicant to quantify the floor area and height deviations in plain language."]
+      }
+    }
+  }
+]
