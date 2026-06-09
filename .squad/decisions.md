@@ -151,3 +151,24 @@ Carry-forwards for chunk 6:
 - `RuntimePathwayClass` / `RuntimeOutcomeClass` enum dedupe.
 - `extractJsonPayload` heuristic is best-effort. Document and revisit if prose-with-braces output bites.
 - Reference-output fidelity regen still pending under `p1-reference-outputs`.
+
+---
+
+## 2026-06-07 chunk 6 close-out: round-001 fleet iteration shipped (Firefly cast)
+
+Squad assignment id: `chunk-6-fleet-iteration-2026-06-07`. Firefly cast (Mal, Wash, Kaylee, Inara). Dispatched 14 sub-agents across 3 waves (1 triager, 12 v1 iterators, 6 v2 fewshot retries) plus a hardening pass on 4 role files.
+
+**Merged PR**: https://github.com/VeVarunSharma/sub-agent-to-agent-training/pull/9 (squash `19aa399`).
+
+**Result**: deterministic PRQS lifted from 80.96 -> 86.49 (+5.53) on the train split (17/18 ok). Big wins: M1 +0.209 (scope-pathway-classifier), M7 +0.163 (compliance-evidence-compiler). Regressions to address in round 002: M10 -0.044, M11 -0.080 (applicant-support flags).
+
+**Decisions made during this chunk**:
+- Few-shot edits deferred for round 001. Hand-written rows by sub-agents (gpt-5-mini v1 and claude-sonnet-4.6 v2) populated only 3-4 of the 10 required `FewShotSchema` keys. Apply-edits guard catches this now and skips the write. Chunk 7 routes few-shots through `pnpm gen:few-shot` (the only sanctioned path).
+- Sub-agent role hardening: `forbidden_tools: [git, gh, ...]`, explicit `scratch_path` under `.srs-iterate-tmp/<role>/`, `agents/<any-other>/**` out-of-scope, and explicit no-git prose. Cause: a v2 fewshot-completeness-auditor sub-agent created branch `vesharma/fs-completeness-add`, committed `debe106` as `ve@noreply.local`, and pushed to origin. Rogue commit/branch deleted from origin.
+- `SRS_GHMODELS_TIMEOUT_MS` default raised from 60s to 120s. 60s timed out memo-writer step on long packets and produced false errors on the baseline run. 180s recommended for round runs.
+- gh-models ignores SIGTERM. Sub-agent processes kept running 7+ minutes after the orchestrator declared timeout. Future hardening: escalate to SIGKILL after grace period.
+
+**Operator pitfalls section** added to `docs/fleet-mode-playbook.md` covering scope escape, schema gap, scratch leakage, network flakiness, and iterator output split.
+
+SQL todos: 82 done / 15 pending. All `chunk6-*`, `p3-subagents`, `p3-iterate-script`, `p3-rounds`, `p3-playbook` closed.
+

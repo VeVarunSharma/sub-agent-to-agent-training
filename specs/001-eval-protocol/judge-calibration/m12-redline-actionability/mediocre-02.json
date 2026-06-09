@@ -1,0 +1,94 @@
+{
+  "tier": "mediocre",
+  "case_context": {
+    "case_id": "cal-m12-mediocre-02",
+    "domain": "van-ssmuh",
+    "pathway_class": "as-of-right-ssmuh",
+    "outcome_class": "needs-clarification",
+    "gap_severity_bucket": "major-single",
+    "edge_case_family": "energy-step-low",
+    "address_stub": "synthetic-E-block-208",
+    "project": {
+      "lot_area_sqm": 388.0,
+      "lot_frontage_m": 8.8,
+      "zoning_district": "R1-1",
+      "units_proposed": 4,
+      "fsr_proposed": 0.92,
+      "height_m_proposed": 10.7,
+      "rear_setback_m_proposed": 7.7,
+      "side_setback_m_proposed": 1.2,
+      "parking_spaces_proposed": 4,
+      "energy_step_code_proposed": 2,
+      "tree_inventory_count": 0
+    },
+    "applicant": {
+      "type": "contractor",
+      "prior_permits": 2,
+      "represented_by": "architect",
+      "language_preference": "en"
+    },
+    "submitted_documents": [
+      {
+        "kind": "architectural-set",
+        "version": "v3",
+        "key_extracts": {
+          "energy_step_code": 2
+        }
+      }
+    ],
+    "missing_documents": [
+      "energy-compliance-report"
+    ],
+    "expected_gap_ids": [
+      "gap-energy-step-low",
+      "gap-energy-report-missing"
+    ],
+    "cited_bylaw_ids": [
+      "BC-STEP-CODE"
+    ],
+    "application_packet": {
+      "project": {
+        "lot_area_sqm": 388.0,
+        "lot_frontage_m": 8.8,
+        "zoning_district": "R1-1",
+        "units_proposed": 4,
+        "fsr_proposed": 0.92,
+        "height_m_proposed": 10.7,
+        "rear_setback_m_proposed": 7.7,
+        "side_setback_m_proposed": 1.2,
+        "parking_spaces_proposed": 4,
+        "energy_step_code_proposed": 2,
+        "tree_inventory_count": 0
+      },
+      "applicant": {
+        "type": "contractor",
+        "prior_permits": 2,
+        "represented_by": "architect",
+        "language_preference": "en"
+      },
+      "submitted_documents": [
+        {
+          "kind": "architectural-set",
+          "version": "v3",
+          "key_extracts": {
+            "energy_step_code": 2
+          }
+        }
+      ],
+      "missing_documents": [
+        "energy-compliance-report"
+      ]
+    }
+  },
+  "artifact_under_review": "{\n  \"field\": \"project.energy_step_code_proposed\",\n  \"current_value\": 2,\n  \"target_value\": 3,\n  \"anchor_bylaw_id\": \"BC-STEP-CODE\",\n  \"rationale\": \"Update the energy step to comply with the bylaw.\"\n}",
+  "reference_outputs": [
+    {
+      "id": "expected-energy",
+      "body": "Expected redline names project.energy_step_code_proposed, gives current Step 2, target Step 3 or higher, and explains that the energy report must match the revised value."
+    }
+  ],
+  "human_score_0_3": 2,
+  "human_rationale": "Assign 2 because the redline names a real field and a specific target. Reduce the score because the rationale is generic and does not mention the missing energy report that is part of the same compliance path.",
+  "added_at": "2026-06-09",
+  "added_by": "ve"
+}

@@ -1,0 +1,41 @@
+{
+  "metric": "M2",
+  "fixtures": [
+    {
+      "name": "matches specialist escalation",
+      "case": {
+        "pathway_class": "specialist-required"
+      },
+      "runtime": {
+        "predicted_pathway": "specialist-required"
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "fails specialist false positive",
+      "case": {
+        "pathway_class": "as-of-right-ssmuh"
+      },
+      "runtime": {
+        "predicted_pathway": "specialist-required"
+      },
+      "expected_score": 0
+    },
+    {
+      "name": "collapses non-specialist labels to the same binary class",
+      "case": {
+        "pathway_class": "heritage"
+      },
+      "runtime": {
+        "predicted_pathway": "floodplain"
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "uses default empty objects as non-specialist match",
+      "case": {},
+      "runtime": {},
+      "expected_score": 1
+    }
+  ]
+}

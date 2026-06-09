@@ -1,0 +1,83 @@
+{
+  "metric": "M4",
+  "fixtures": [
+    {
+      "name": "accepts valid citations from every source",
+      "case": {},
+      "runtime": {
+        "cited_bylaw_ids": [
+          "AB-1"
+        ],
+        "evidence_fields_by_bylaw": {
+          "CD-2": [
+            "site_plan"
+          ]
+        },
+        "redlines": [
+          {
+            "field": "fsr_proposed",
+            "current_value": 0.92,
+            "proposed_value": 0.7,
+            "addresses_gap": "gap-fsr-max",
+            "cited_bylaw_id": "EF-3",
+            "rationale": "Adjust the application field."
+          }
+        ],
+        "memo_markdown": "Review AB-1 and EF-3 before approval."
+      },
+      "context": {
+        "valid_bylaw_ids": [
+          "AB-1",
+          "CD-2",
+          "EF-3"
+        ]
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "fails when any citation is invalid",
+      "case": {},
+      "runtime": {
+        "cited_bylaw_ids": [
+          "AB-1"
+        ],
+        "evidence_fields_by_bylaw": {
+          "BAD-99": [
+            "site_plan"
+          ]
+        },
+        "redlines": [
+          {
+            "field": "fsr_proposed",
+            "current_value": 0.92,
+            "proposed_value": 0.7,
+            "addresses_gap": "gap-fsr-max",
+            "cited_bylaw_id": "EF-3",
+            "rationale": "Adjust the application field."
+          }
+        ],
+        "memo_markdown": "The memo also cites NOPE-404."
+      },
+      "context": {
+        "valid_bylaw_ids": [
+          "AB-1",
+          "EF-3"
+        ]
+      },
+      "expected_score": 0
+    },
+    {
+      "name": "scores citation-empty runtime as vacuous one",
+      "case": {},
+      "runtime": {
+        "memo_markdown": "No bylaw IDs are present."
+      },
+      "context": {
+        "valid_bylaw_ids": [
+          "AB-1"
+        ]
+      },
+      "expected_score": 1
+    }
+  ]
+}

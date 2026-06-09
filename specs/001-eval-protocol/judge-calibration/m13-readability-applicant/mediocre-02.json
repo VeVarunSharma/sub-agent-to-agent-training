@@ -1,0 +1,93 @@
+{
+  "tier": "mediocre",
+  "case_context": {
+    "case_id": "cal-m13-applicant-mediocre-02",
+    "domain": "van-ssmuh",
+    "pathway_class": "as-of-right-ssmuh",
+    "outcome_class": "needs-clarification",
+    "gap_severity_bucket": "minor-multi",
+    "edge_case_family": "rear-and-side-setbacks",
+    "address_stub": "synthetic-SE-block-223",
+    "project": {
+      "lot_area_sqm": 470.0,
+      "lot_frontage_m": 9.8,
+      "zoning_district": "R1-1",
+      "units_proposed": 4,
+      "fsr_proposed": 0.96,
+      "height_m_proposed": 10.5,
+      "rear_setback_m_proposed": 6.9,
+      "side_setback_m_proposed": 1.0,
+      "parking_spaces_proposed": 4,
+      "energy_step_code_proposed": 3,
+      "tree_inventory_count": 0
+    },
+    "applicant": {
+      "type": "owner-builder",
+      "prior_permits": 0,
+      "represented_by": null,
+      "language_preference": "en-simple"
+    },
+    "submitted_documents": [
+      {
+        "kind": "site-survey-bcls",
+        "version": "v2",
+        "key_extracts": {
+          "rear_setback_m": 6.9,
+          "west_side_setback_m": 1.0
+        }
+      }
+    ],
+    "missing_documents": [],
+    "expected_gap_ids": [
+      "gap-rear-setback-short",
+      "gap-side-setback-short"
+    ],
+    "cited_bylaw_ids": [
+      "ZDB-R1-1-REAR-SETBACK",
+      "ZDB-R1-1-SIDE-SETBACK"
+    ],
+    "application_packet": {
+      "project": {
+        "lot_area_sqm": 470.0,
+        "lot_frontage_m": 9.8,
+        "zoning_district": "R1-1",
+        "units_proposed": 4,
+        "fsr_proposed": 0.96,
+        "height_m_proposed": 10.5,
+        "rear_setback_m_proposed": 6.9,
+        "side_setback_m_proposed": 1.0,
+        "parking_spaces_proposed": 4,
+        "energy_step_code_proposed": 3,
+        "tree_inventory_count": 0
+      },
+      "applicant": {
+        "type": "owner-builder",
+        "prior_permits": 0,
+        "represented_by": null,
+        "language_preference": "en-simple"
+      },
+      "submitted_documents": [
+        {
+          "kind": "site-survey-bcls",
+          "version": "v2",
+          "key_extracts": {
+            "rear_setback_m": 6.9,
+            "west_side_setback_m": 1.0
+          }
+        }
+      ],
+      "missing_documents": []
+    }
+  },
+  "artifact_under_review": "Thank you for your submission. We found two items to fix before staff can start detailed review.\n\n## Required fixes\n- Increase the rear setback from 6.9 m to 7.6 m.\n- Increase the west side setback from 1.0 m to the required side yard.\n\n## Optional improvements\n- Cloud the updated setback dimensions on the site plan.\n\n## Next step\nUpload the revised drawings in the permit portal.",
+  "reference_outputs": [
+    {
+      "id": "ref-van-ssmuh-008-applicant-a",
+      "body": "Letter should ask for rear yard 6.9 m to 7.6 m and west side yard 1.0 m to 1.2 m, with optional clouding of revised dimensions."
+    }
+  ],
+  "human_score_0_3": 2,
+  "human_rationale": "Assign 2 because the letter is plain and mostly actionable. Reduce the score because the second required fix says required side yard instead of the specific 1.2 m target.",
+  "added_at": "2026-06-09",
+  "added_by": "ve"
+}

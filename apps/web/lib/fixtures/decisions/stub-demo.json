@@ -1,0 +1,56 @@
+{
+  "runId": "stub-demo",
+  "caseId": "van-ssmuh-train-001",
+  "submittedAt": "2026-06-07T19:24:00.000Z",
+  "notes": "Demo packet for the read-only web shell.",
+  "agents": [
+    {
+      "id": "bylaw-retriever",
+      "label": "Bylaw retriever",
+      "status": "done",
+      "elapsedSeconds": 11,
+      "artifactHref": "/api/eval-reports/round-001-fleet/per-agent/bylaw-retriever/prompt-edits.json",
+      "summary": "Retrieved the SSMUH bylaw set and ranked public corpus snippets."
+    },
+    {
+      "id": "scope-pathway-classifier",
+      "label": "Scope pathway classifier",
+      "status": "done",
+      "elapsedSeconds": 8,
+      "artifactHref": "/api/eval-reports/round-001-fleet/per-agent/scope-pathway-classifier/prompt-edits.json",
+      "summary": "Classified the packet as staff pre-review ready."
+    },
+    {
+      "id": "compliance-evidence-compiler",
+      "label": "Compliance evidence compiler",
+      "status": "done",
+      "elapsedSeconds": 15,
+      "artifactHref": "/api/eval-reports/round-001-fleet/per-agent/compliance-evidence-compiler/prompt-edits.json",
+      "summary": "Mapped numeric gaps and required evidence fields."
+    },
+    {
+      "id": "completeness-applicant-support-auditor",
+      "label": "Completeness and applicant support auditor",
+      "status": "running",
+      "elapsedSeconds": 19,
+      "artifactHref": "/api/eval-reports/round-001-fleet/per-agent/completeness-applicant-support-auditor/prompt-edits.json",
+      "summary": "Auditing Stage 1 gaps and applicant support flags."
+    },
+    {
+      "id": "pre-review-memo-writer",
+      "label": "Pre-review memo writer",
+      "status": "queued",
+      "elapsedSeconds": 0,
+      "artifactHref": "/api/eval-reports/round-001-fleet/per-agent/pre-review-memo-writer/prompt-edits.json",
+      "summary": "Waiting for audit output."
+    },
+    {
+      "id": "redline-generator",
+      "label": "Redline generator",
+      "status": "queued",
+      "elapsedSeconds": 0,
+      "artifactHref": "/api/eval-reports/round-001-fleet/per-agent/redline-generator/prompt-edits.json",
+      "summary": "Waiting for memo output."
+    }
+  ]
+}

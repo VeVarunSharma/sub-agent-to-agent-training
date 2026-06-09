@@ -1,0 +1,75 @@
+{
+  "metric": "M7",
+  "fixtures": [
+    {
+      "name": "scores complete empty missing set as one",
+      "case": {
+        "gold_labels": {
+          "stage1_complete": true,
+          "stage1_missing": []
+        }
+      },
+      "runtime": {
+        "stage1_complete": true,
+        "stage1_missing": []
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "scores unordered missing set match as one",
+      "case": {
+        "gold_labels": {
+          "stage1_complete": false,
+          "stage1_missing": [
+            "survey",
+            "energy-report"
+          ]
+        }
+      },
+      "runtime": {
+        "stage1_complete": false,
+        "stage1_missing": [
+          "energy-report",
+          "survey"
+        ]
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "fails boolean mismatch even when missing set matches",
+      "case": {
+        "gold_labels": {
+          "stage1_complete": true,
+          "stage1_missing": [
+            "survey"
+          ]
+        }
+      },
+      "runtime": {
+        "stage1_complete": false,
+        "stage1_missing": [
+          "survey"
+        ]
+      },
+      "expected_score": 0
+    },
+    {
+      "name": "fails missing set mismatch even when boolean matches",
+      "case": {
+        "gold_labels": {
+          "stage1_complete": false,
+          "stage1_missing": [
+            "survey"
+          ]
+        }
+      },
+      "runtime": {
+        "stage1_complete": false,
+        "stage1_missing": [
+          "title-search"
+        ]
+      },
+      "expected_score": 0
+    }
+  ]
+}

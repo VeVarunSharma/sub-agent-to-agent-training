@@ -1,0 +1,131 @@
+{
+  "metric": "M5",
+  "fixtures": [
+    {
+      "name": "scores complete evidence across gold bylaws",
+      "case": {
+        "gold_labels": {
+          "bylaws_to_cite": [
+            "AB-1",
+            "CD-2"
+          ]
+        }
+      },
+      "runtime": {
+        "evidence_fields_by_bylaw": {
+          "AB-1": [
+            "site_plan"
+          ],
+          "CD-2": [
+            "survey"
+          ]
+        }
+      },
+      "context": {
+        "required_evidence_entries": {
+          "AB-1": {
+            "required_evidence_keys": [
+              "site_plan"
+            ],
+            "expected_gap_ids": [],
+            "vintage_date": "2026-01-01",
+            "source_corpus_entry": "ab-1"
+          },
+          "CD-2": {
+            "required_evidence_keys": [
+              "survey"
+            ],
+            "expected_gap_ids": [],
+            "vintage_date": "2026-01-01",
+            "source_corpus_entry": "cd-2"
+          }
+        }
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "fails when required evidence is missing",
+      "case": {
+        "gold_labels": {
+          "bylaws_to_cite": [
+            "AB-1"
+          ]
+        }
+      },
+      "runtime": {
+        "evidence_fields_by_bylaw": {}
+      },
+      "context": {
+        "required_evidence_entries": {
+          "AB-1": {
+            "required_evidence_keys": [
+              "site_plan"
+            ],
+            "expected_gap_ids": [],
+            "vintage_date": "2026-01-01",
+            "source_corpus_entry": "ab-1"
+          }
+        }
+      },
+      "expected_score": 0
+    },
+    {
+      "name": "scores empty gold bylaw set as vacuous one",
+      "case": {
+        "gold_labels": {
+          "bylaws_to_cite": []
+        }
+      },
+      "runtime": {
+        "evidence_fields_by_bylaw": {}
+      },
+      "context": {
+        "required_evidence_entries": {}
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "averages partial evidence by gold bylaw",
+      "case": {
+        "gold_labels": {
+          "bylaws_to_cite": [
+            "AB-1",
+            "CD-2"
+          ]
+        }
+      },
+      "runtime": {
+        "evidence_fields_by_bylaw": {
+          "AB-1": [
+            "site_plan"
+          ],
+          "CD-2": [
+            "survey"
+          ]
+        }
+      },
+      "context": {
+        "required_evidence_entries": {
+          "AB-1": {
+            "required_evidence_keys": [
+              "site_plan",
+              "survey"
+            ],
+            "expected_gap_ids": [],
+            "vintage_date": "2026-01-01",
+            "source_corpus_entry": "ab-1"
+          },
+          "CD-2": {
+            "required_evidence_keys": [
+              "survey"
+            ],
+            "expected_gap_ids": [],
+            "vintage_date": "2026-01-01",
+            "source_corpus_entry": "cd-2"
+          }
+        }
+      },
+      "expected_score": 0.75
+    }
+  ]
+}

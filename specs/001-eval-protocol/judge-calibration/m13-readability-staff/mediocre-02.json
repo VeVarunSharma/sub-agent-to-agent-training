@@ -1,0 +1,110 @@
+{
+  "tier": "mediocre",
+  "case_context": {
+    "case_id": "cal-m13-staff-mediocre-02",
+    "domain": "van-ssmuh",
+    "pathway_class": "discretionary",
+    "outcome_class": "needs-clarification",
+    "gap_severity_bucket": "minor-multi",
+    "edge_case_family": "parking-and-notice",
+    "address_stub": "synthetic-E-block-252",
+    "project": {
+      "lot_area_sqm": 530.0,
+      "lot_frontage_m": 11.0,
+      "zoning_district": "R1-1",
+      "units_proposed": 5,
+      "fsr_proposed": 0.98,
+      "height_m_proposed": 11.0,
+      "rear_setback_m_proposed": 7.7,
+      "side_setback_m_proposed": 1.3,
+      "parking_spaces_proposed": 3,
+      "energy_step_code_proposed": 3,
+      "tree_inventory_count": 0
+    },
+    "applicant": {
+      "type": "contractor",
+      "prior_permits": 2,
+      "represented_by": "architect",
+      "language_preference": "en"
+    },
+    "submitted_documents": [
+      {
+        "kind": "architectural-set",
+        "version": "v4",
+        "key_extracts": {
+          "units": 5,
+          "parking_spaces": 3
+        }
+      },
+      {
+        "kind": "site-survey-bcls",
+        "key_extracts": {
+          "lot_area_sqm": 530.0
+        }
+      }
+    ],
+    "missing_documents": [
+      "neighbour-notification"
+    ],
+    "expected_gap_ids": [
+      "gap-units-over",
+      "gap-parking-short",
+      "gap-neighbour-notification-missing"
+    ],
+    "cited_bylaw_ids": [
+      "ZDB-R1-1-UNITS",
+      "PARKING-SSMUH"
+    ],
+    "application_packet": {
+      "project": {
+        "lot_area_sqm": 530.0,
+        "lot_frontage_m": 11.0,
+        "zoning_district": "R1-1",
+        "units_proposed": 5,
+        "fsr_proposed": 0.98,
+        "height_m_proposed": 11.0,
+        "rear_setback_m_proposed": 7.7,
+        "side_setback_m_proposed": 1.3,
+        "parking_spaces_proposed": 3,
+        "energy_step_code_proposed": 3,
+        "tree_inventory_count": 0
+      },
+      "applicant": {
+        "type": "contractor",
+        "prior_permits": 2,
+        "represented_by": "architect",
+        "language_preference": "en"
+      },
+      "submitted_documents": [
+        {
+          "kind": "architectural-set",
+          "version": "v4",
+          "key_extracts": {
+            "units": 5,
+            "parking_spaces": 3
+          }
+        },
+        {
+          "kind": "site-survey-bcls",
+          "key_extracts": {
+            "lot_area_sqm": 530.0
+          }
+        }
+      ],
+      "missing_documents": [
+        "neighbour-notification"
+      ]
+    }
+  },
+  "artifact_under_review": "# Staff memo\n\nFive-unit R1-1 package needs a unit count correction, parking update, and neighbour notification.\n\n## Triage\nNEEDS-CLARIFICATION with medium confidence. The file has enough drawings for a zoning screen, but the Stage 1 record needs a clearer unit count path before review can move forward.\n\n## Applicable bylaws\n- ZDB-R1-1-UNITS: four units are the usual R1-1 SSMUH cap. The drawings show five units.\n- PARKING-SSMUH: parking supply should match the unit count. The drawings show three spaces for five units.\n\n## Evidence\n- Architectural set v4 lists five units and three parking spaces.\n- The site survey supports the lot area.\n\n## Gaps\n- Unit count: proposed 5 vs expected 4. Guidance: revise to four units or route the file to a discretionary review path.\n- Parking: proposed 3 spaces vs 5 units. Guidance: update the parking plan.\n- Neighbour notification: package is missing. Guidance: submit the notice package before Stage 1 clears.\n\n## Recommendation\nIssue a Stage 1 clarification request. Ask for a unit count decision, parking plan update, and neighbour notification package.",
+  "reference_outputs": [
+    {
+      "id": "ref-parking-units-staff",
+      "body": "Staff memo should cite ZDB-R1-1-UNITS and PARKING-SSMUH, surface five units, three parking spaces, missing neighbour notification, and recommend Stage 1 clarification."
+    }
+  ],
+  "human_score_0_3": 2,
+  "human_rationale": "Assign 2 because the memo is structured and mostly decision-relevant. Reduce the score because one citation is generic and the evidence section does not cite the missing notification source.",
+  "added_at": "2026-06-09",
+  "added_by": "ve"
+}

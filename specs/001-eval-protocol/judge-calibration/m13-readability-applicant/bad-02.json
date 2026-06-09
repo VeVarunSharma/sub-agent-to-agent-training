@@ -1,0 +1,94 @@
+{
+  "tier": "bad",
+  "case_context": {
+    "case_id": "cal-m13-applicant-bad-02",
+    "domain": "van-ssmuh",
+    "pathway_class": "as-of-right-ssmuh",
+    "outcome_class": "needs-clarification",
+    "gap_severity_bucket": "major-multi",
+    "edge_case_family": "energy-and-report",
+    "address_stub": "synthetic-E-block-088",
+    "project": {
+      "lot_area_sqm": 410.0,
+      "lot_frontage_m": 9.0,
+      "zoning_district": "R1-1",
+      "units_proposed": 4,
+      "fsr_proposed": 0.95,
+      "height_m_proposed": 10.9,
+      "rear_setback_m_proposed": 7.9,
+      "side_setback_m_proposed": 1.2,
+      "parking_spaces_proposed": 4,
+      "energy_step_code_proposed": 2,
+      "tree_inventory_count": 0
+    },
+    "applicant": {
+      "type": "owner-builder",
+      "prior_permits": 0,
+      "represented_by": null,
+      "language_preference": "en"
+    },
+    "submitted_documents": [
+      {
+        "kind": "architectural-set",
+        "version": "v1",
+        "key_extracts": {
+          "energy_step_code": 2
+        }
+      }
+    ],
+    "missing_documents": [
+      "energy-compliance-report"
+    ],
+    "expected_gap_ids": [
+      "gap-energy-step-low",
+      "gap-energy-report-missing"
+    ],
+    "cited_bylaw_ids": [
+      "BC-STEP-CODE"
+    ],
+    "application_packet": {
+      "project": {
+        "lot_area_sqm": 410.0,
+        "lot_frontage_m": 9.0,
+        "zoning_district": "R1-1",
+        "units_proposed": 4,
+        "fsr_proposed": 0.95,
+        "height_m_proposed": 10.9,
+        "rear_setback_m_proposed": 7.9,
+        "side_setback_m_proposed": 1.2,
+        "parking_spaces_proposed": 4,
+        "energy_step_code_proposed": 2,
+        "tree_inventory_count": 0
+      },
+      "applicant": {
+        "type": "owner-builder",
+        "prior_permits": 0,
+        "represented_by": null,
+        "language_preference": "en"
+      },
+      "submitted_documents": [
+        {
+          "kind": "architectural-set",
+          "version": "v1",
+          "key_extracts": {
+            "energy_step_code": 2
+          }
+        }
+      ],
+      "missing_documents": [
+        "energy-compliance-report"
+      ]
+    }
+  },
+  "artifact_under_review": "Good news. Your file can proceed. Energy items can be handled later during detailed review if staff need them.",
+  "reference_outputs": [
+    {
+      "id": "ref-energy-applicant",
+      "body": "Letter should ask the applicant to update Step Code 2 to Step Code 3 or higher and upload the energy compliance report before resubmission."
+    }
+  ],
+  "human_score_0_3": 0,
+  "human_rationale": "Assign 0 because the letter tells the applicant the file can proceed even though required energy evidence is missing. It would cause the applicant to resubmit without fixing a Stage 1 blocker.",
+  "added_at": "2026-06-09",
+  "added_by": "ve"
+}

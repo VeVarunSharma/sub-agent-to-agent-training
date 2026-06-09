@@ -1,0 +1,109 @@
+{
+  "tier": "bad",
+  "case_context": {
+    "case_id": "cal-m13-staff-bad-01",
+    "domain": "van-ssmuh",
+    "pathway_class": "as-of-right-ssmuh",
+    "outcome_class": "needs-clarification",
+    "gap_severity_bucket": "major-multi",
+    "edge_case_family": "fsr-rear-tree",
+    "address_stub": "synthetic-NW-block-021",
+    "project": {
+      "lot_area_sqm": 502.5,
+      "lot_frontage_m": 10.1,
+      "zoning_district": "R1-1",
+      "units_proposed": 4,
+      "fsr_proposed": 1.06,
+      "height_m_proposed": 11.0,
+      "rear_setback_m_proposed": 7.1,
+      "side_setback_m_proposed": 1.3,
+      "parking_spaces_proposed": 4,
+      "energy_step_code_proposed": 3,
+      "tree_inventory_count": 1
+    },
+    "applicant": {
+      "type": "owner-builder",
+      "prior_permits": 0,
+      "represented_by": null,
+      "language_preference": "en"
+    },
+    "submitted_documents": [
+      {
+        "kind": "architectural-set",
+        "version": "v2",
+        "key_extracts": {
+          "FSR": 1.06
+        }
+      },
+      {
+        "kind": "site-survey-bcls",
+        "key_extracts": {
+          "rear_setback_m": 7.1
+        }
+      }
+    ],
+    "missing_documents": [
+      "tree-assessment"
+    ],
+    "expected_gap_ids": [
+      "gap-fsr-over",
+      "gap-rear-setback-short",
+      "gap-tree-assessment-missing"
+    ],
+    "cited_bylaw_ids": [
+      "ZDB-R1-1-FSR",
+      "ZDB-R1-1-REAR-SETBACK",
+      "TREE-PROTECTION"
+    ],
+    "application_packet": {
+      "project": {
+        "lot_area_sqm": 502.5,
+        "lot_frontage_m": 10.1,
+        "zoning_district": "R1-1",
+        "units_proposed": 4,
+        "fsr_proposed": 1.06,
+        "height_m_proposed": 11.0,
+        "rear_setback_m_proposed": 7.1,
+        "side_setback_m_proposed": 1.3,
+        "parking_spaces_proposed": 4,
+        "energy_step_code_proposed": 3,
+        "tree_inventory_count": 1
+      },
+      "applicant": {
+        "type": "owner-builder",
+        "prior_permits": 0,
+        "represented_by": null,
+        "language_preference": "en"
+      },
+      "submitted_documents": [
+        {
+          "kind": "architectural-set",
+          "version": "v2",
+          "key_extracts": {
+            "FSR": 1.06
+          }
+        },
+        {
+          "kind": "site-survey-bcls",
+          "key_extracts": {
+            "rear_setback_m": 7.1
+          }
+        }
+      ],
+      "missing_documents": [
+        "tree-assessment"
+      ]
+    }
+  },
+  "artifact_under_review": "# Review note\n\nThis one has issues. Check FSR and trees. Probably ask for more drawings.",
+  "reference_outputs": [
+    {
+      "id": "ref-van-ssmuh-001-staff-a",
+      "body": "Triage, Applicable bylaws, Evidence, Gaps, and Recommendation list FSR 1.06, rear yard 7.1 m, and missing tree assessment with bylaw IDs."
+    }
+  ],
+  "human_score_0_3": 0,
+  "human_rationale": "Assign 0 because the memo lacks the required skim structure and gives no specific bylaw citations. It does not support a ready, clarification, or specialist decision.",
+  "added_at": "2026-06-09",
+  "added_by": "ve"
+}

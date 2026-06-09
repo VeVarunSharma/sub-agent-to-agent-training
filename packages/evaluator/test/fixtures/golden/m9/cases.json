@@ -1,0 +1,108 @@
+{
+  "metric": "M9",
+  "fixtures": [
+    {
+      "name": "scores valid memo and letter structure as one",
+      "case": {},
+      "runtime": {
+        "memo_markdown": "## Triage\nREADY-FOR-DETAILED-REVIEW with high confidence. See Gaps.\n## Applicable bylaws\n- AB-1 applies.\n## Evidence\n- fsr_proposed from architectural-set-v3.\n## Gaps\n- fsr_proposed: proposed 0.92 vs required 0.70.\n## Recommendation\nProceed after FSR correction.",
+        "letter_markdown": "## Summary\nYour submission needs one correction.\n## What to fix before resubmitting\n- Reduce the proposed floor space.\n## Optional improvements\nNone at this stage.\n## Next step\nResubmit the revised package for review."
+      },
+      "context": {
+        "valid_bylaw_ids": [
+          "AB-1"
+        ],
+        "memo_structure_requirements": {
+          "memoSections": [
+            "Triage",
+            "Applicable bylaws",
+            "Evidence",
+            "Gaps",
+            "Recommendation"
+          ],
+          "letterSections": [
+            "Summary",
+            "What to fix before resubmitting",
+            "Optional improvements",
+            "Next step"
+          ]
+        }
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "fails missing section bad order invalid citation and broken cross reference",
+      "case": {},
+      "runtime": {
+        "memo_markdown": "## Triage\nNEEDS-CLARIFICATION. See Evidence.\n## Gaps\n- fsr_proposed is over the limit.\n## Applicable bylaws\n- ZZ-9 is not in the corpus.\n## Recommendation\nAsk for a revision.",
+        "letter_markdown": "## Summary\nUpdate the package before review.\n## What to fix before resubmitting\n- Address AB-1.\n## Next step\nSend the update.\n## Optional improvements\nNone at this stage."
+      },
+      "context": {
+        "valid_bylaw_ids": [
+          "AB-1"
+        ],
+        "memo_structure_requirements": {
+          "memoSections": [
+            "Triage",
+            "Applicable bylaws",
+            "Evidence",
+            "Gaps",
+            "Recommendation"
+          ],
+          "letterSections": [
+            "Summary",
+            "What to fix before resubmitting",
+            "Optional improvements",
+            "Next step"
+          ]
+        }
+      },
+      "expected_score": 0
+    },
+    {
+      "name": "scores empty required sections and empty documents as one",
+      "case": {},
+      "runtime": {
+        "memo_markdown": "",
+        "letter_markdown": ""
+      },
+      "context": {
+        "valid_bylaw_ids": [],
+        "memo_structure_requirements": {
+          "memoSections": [],
+          "letterSections": []
+        }
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "fails when applicant letter contains bylaw ids",
+      "case": {},
+      "runtime": {
+        "memo_markdown": "## Triage\nREADY-FOR-DETAILED-REVIEW with high confidence. See Gaps.\n## Applicable bylaws\n- AB-1 applies.\n## Evidence\n- fsr_proposed from architectural-set-v3.\n## Gaps\n- fsr_proposed: proposed 0.92 vs required 0.70.\n## Recommendation\nProceed after FSR correction.",
+        "letter_markdown": "## Summary\nYour submission needs one correction.\n## What to fix before resubmitting\n- Reduce the proposed floor space.\n## Optional improvements\nNone at this stage.\n## Next step\nResubmit the revised package for review.\nRefer to AB-1."
+      },
+      "context": {
+        "valid_bylaw_ids": [
+          "AB-1"
+        ],
+        "memo_structure_requirements": {
+          "memoSections": [
+            "Triage",
+            "Applicable bylaws",
+            "Evidence",
+            "Gaps",
+            "Recommendation"
+          ],
+          "letterSections": [
+            "Summary",
+            "What to fix before resubmitting",
+            "Optional improvements",
+            "Next step"
+          ]
+        }
+      },
+      "expected_score": 0
+    }
+  ]
+}

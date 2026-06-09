@@ -1,0 +1,89 @@
+{
+  "tier": "mediocre",
+  "case_context": {
+    "case_id": "cal-m13-applicant-mediocre-01",
+    "domain": "van-ssmuh",
+    "pathway_class": "as-of-right-ssmuh",
+    "outcome_class": "needs-clarification",
+    "gap_severity_bucket": "minor-single",
+    "edge_case_family": "fsr-near-cap",
+    "address_stub": "synthetic-W-block-156",
+    "project": {
+      "lot_area_sqm": 512.0,
+      "lot_frontage_m": 10.2,
+      "zoning_district": "R1-1",
+      "units_proposed": 4,
+      "fsr_proposed": 1.05,
+      "height_m_proposed": 10.7,
+      "rear_setback_m_proposed": 7.7,
+      "side_setback_m_proposed": 1.3,
+      "parking_spaces_proposed": 4,
+      "energy_step_code_proposed": 3,
+      "tree_inventory_count": 0
+    },
+    "applicant": {
+      "type": "owner-builder",
+      "prior_permits": 0,
+      "represented_by": null,
+      "language_preference": "en"
+    },
+    "submitted_documents": [
+      {
+        "kind": "architectural-set",
+        "version": "v3",
+        "key_extracts": {
+          "FSR": 1.05
+        }
+      }
+    ],
+    "missing_documents": [],
+    "expected_gap_ids": [
+      "gap-fsr-over"
+    ],
+    "cited_bylaw_ids": [
+      "ZDB-R1-1-FSR"
+    ],
+    "application_packet": {
+      "project": {
+        "lot_area_sqm": 512.0,
+        "lot_frontage_m": 10.2,
+        "zoning_district": "R1-1",
+        "units_proposed": 4,
+        "fsr_proposed": 1.05,
+        "height_m_proposed": 10.7,
+        "rear_setback_m_proposed": 7.7,
+        "side_setback_m_proposed": 1.3,
+        "parking_spaces_proposed": 4,
+        "energy_step_code_proposed": 3,
+        "tree_inventory_count": 0
+      },
+      "applicant": {
+        "type": "owner-builder",
+        "prior_permits": 0,
+        "represented_by": null,
+        "language_preference": "en"
+      },
+      "submitted_documents": [
+        {
+          "kind": "architectural-set",
+          "version": "v3",
+          "key_extracts": {
+            "FSR": 1.05
+          }
+        }
+      ],
+      "missing_documents": []
+    }
+  },
+  "artifact_under_review": "Thank you for your submission.\n\nYour FSR is too high. Please revise the plans so they comply with the R1-1 requirement. This is needed before resubmission. You may also add a cover note.",
+  "reference_outputs": [
+    {
+      "id": "ref-fsr-applicant",
+      "body": "Letter should define FSR, state 1.05 vs 1.00 or lower, and tell the applicant to revise the floor-area table before resubmitting."
+    }
+  ],
+  "human_score_0_3": 1,
+  "human_rationale": "Assign 1 because the letter identifies the right issue and says it is required. It needs rework because FSR is undefined and the target value is missing.",
+  "added_at": "2026-06-09",
+  "added_by": "ve"
+}

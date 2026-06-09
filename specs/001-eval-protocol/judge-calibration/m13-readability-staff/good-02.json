@@ -1,0 +1,113 @@
+{
+  "tier": "good",
+  "case_context": {
+    "case_id": "cal-m13-staff-good-02",
+    "domain": "van-ssmuh",
+    "pathway_class": "specialist-required",
+    "outcome_class": "needs-clarification",
+    "gap_severity_bucket": "major-multi",
+    "edge_case_family": "height-and-part9",
+    "address_stub": "synthetic-SW-block-304",
+    "project": {
+      "lot_area_sqm": 401.0,
+      "lot_frontage_m": 9.2,
+      "zoning_district": "R1-1",
+      "units_proposed": 4,
+      "fsr_proposed": 0.94,
+      "height_m_proposed": 12.0,
+      "rear_setback_m_proposed": 7.8,
+      "side_setback_m_proposed": 1.2,
+      "parking_spaces_proposed": 4,
+      "energy_step_code_proposed": 3,
+      "tree_inventory_count": 0
+    },
+    "applicant": {
+      "type": "designer",
+      "prior_permits": 4,
+      "represented_by": "designer",
+      "language_preference": "en"
+    },
+    "submitted_documents": [
+      {
+        "kind": "architectural-set",
+        "version": "v3",
+        "key_extracts": {
+          "height_m": 12.0,
+          "units": 4
+        }
+      },
+      {
+        "kind": "site-survey-bcls",
+        "key_extracts": {
+          "rear_setback_m": 7.8
+        }
+      }
+    ],
+    "missing_documents": [
+      "part9-code-summary"
+    ],
+    "expected_gap_ids": [
+      "gap-height-over",
+      "gap-architectural-set-missing"
+    ],
+    "cited_bylaw_ids": [
+      "ZDB-R1-1-HEIGHT",
+      "VBBL-PART9"
+    ],
+    "application_packet": {
+      "project": {
+        "lot_area_sqm": 401.0,
+        "lot_frontage_m": 9.2,
+        "zoning_district": "R1-1",
+        "units_proposed": 4,
+        "fsr_proposed": 0.94,
+        "height_m_proposed": 12.0,
+        "rear_setback_m_proposed": 7.8,
+        "side_setback_m_proposed": 1.2,
+        "parking_spaces_proposed": 4,
+        "energy_step_code_proposed": 3,
+        "tree_inventory_count": 0
+      },
+      "applicant": {
+        "type": "designer",
+        "prior_permits": 4,
+        "represented_by": "designer",
+        "language_preference": "en"
+      },
+      "submitted_documents": [
+        {
+          "kind": "architectural-set",
+          "version": "v3",
+          "key_extracts": {
+            "height_m": 12.0,
+            "units": 4
+          }
+        },
+        {
+          "kind": "site-survey-bcls",
+          "key_extracts": {
+            "rear_setback_m": 7.8
+          }
+        }
+      ],
+      "missing_documents": [
+        "part9-code-summary"
+      ]
+    }
+  },
+  "artifact_under_review": "# Staff memo\n\nFour-unit R1-1 package needs height reduction and Part 9 code evidence before detailed review.\n\n## Triage\nNEEDS-CLARIFICATION with medium-high confidence. The package stays in the SSMUH pre-review stream, but the height and code evidence must clear before staff can rely on the file.\n\n## Applicable bylaws\n- ZDB-R1-1-HEIGHT: building height must be 11.5 m or lower. Cited because architectural-set v3 shows 12.0 m.\n- VBBL-PART9: small residential review needs a Part 9 code summary. Cited because the package is missing that document.\n\n## Evidence\n- architectural-set v3 elevation shows building height 12.0 m.\n- site-survey-bcls supports the yard dimensions and does not change the height gap.\n- missing_documents lists part9-code-summary.\n\n## Gaps\n- Building height: proposed 12.0 m vs required 11.5 m. Gap is 0.5 m over. Guidance: lower the roof height or provide a compliant elevation.\n- Part 9 code summary: required summary is missing. Guidance: submit life safety, exiting, and assembly notes for the small residential path.\n\n## Recommendation\nIssue a Stage 1 clarification request. Ask the applicant to lower the height to 11.5 m or less and upload a Part 9 code summary before detailed review.",
+  "reference_outputs": [
+    {
+      "id": "ref-van-ssmuh-005-staff-a",
+      "body": "Formal reference flags building height 12.0 m vs 11.5 m and missing Part 9 code summary before detailed review."
+    },
+    {
+      "id": "ref-van-ssmuh-005-staff-b",
+      "body": "Short reference recommends lowering height and adding the code summary for life safety, exiting, and assemblies."
+    }
+  ],
+  "human_score_0_3": 3,
+  "human_rationale": "Assign 3 because the memo is concise, citation-dense, and directly useful for the reviewer. It ties each gap to evidence and to a Stage 1 decision.",
+  "added_at": "2026-06-09",
+  "added_by": "ve"
+}

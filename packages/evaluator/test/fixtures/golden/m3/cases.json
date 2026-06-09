@@ -1,0 +1,83 @@
+{
+  "metric": "M3",
+  "fixtures": [
+    {
+      "name": "recalls every gold bylaw in the top ten",
+      "case": {
+        "gold_labels": {
+          "bylaws_to_cite": [
+            "AB-1",
+            "CD-2"
+          ]
+        }
+      },
+      "runtime": {
+        "cited_bylaw_ids": [
+          "CD-2",
+          "AB-1",
+          "ZZ-9"
+        ]
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "fails when no gold bylaws are recovered",
+      "case": {
+        "gold_labels": {
+          "bylaws_to_cite": [
+            "AB-1",
+            "CD-2"
+          ]
+        }
+      },
+      "runtime": {
+        "cited_bylaw_ids": [
+          "ZZ-9",
+          "YY-8"
+        ]
+      },
+      "expected_score": 0
+    },
+    {
+      "name": "ignores gold hits after the first ten citations",
+      "case": {
+        "gold_labels": {
+          "bylaws_to_cite": [
+            "AB-1",
+            "CD-2",
+            "EF-3"
+          ]
+        }
+      },
+      "runtime": {
+        "cited_bylaw_ids": [
+          "AB-1",
+          "XX-1",
+          "XX-2",
+          "XX-3",
+          "XX-4",
+          "XX-5",
+          "XX-6",
+          "XX-7",
+          "XX-8",
+          "XX-9",
+          "CD-2",
+          "EF-3"
+        ]
+      },
+      "expected_score": 0.3333333333333333
+    },
+    {
+      "name": "scores empty gold and empty citations as vacuous one",
+      "case": {
+        "gold_labels": {
+          "bylaws_to_cite": []
+        }
+      },
+      "runtime": {
+        "cited_bylaw_ids": []
+      },
+      "expected_score": 1
+    }
+  ]
+}

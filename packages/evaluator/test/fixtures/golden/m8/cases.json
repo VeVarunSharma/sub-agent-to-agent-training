@@ -1,0 +1,132 @@
+{
+  "metric": "M8",
+  "fixtures": [
+    {
+      "name": "scores valid redlines that address every expected gap",
+      "case": {
+        "gold_labels": {
+          "expected_gap_ids": [
+            "gap-fsr-max",
+            "gap-height-over"
+          ]
+        }
+      },
+      "runtime": {
+        "redlines": [
+          {
+            "field": "fsr_proposed",
+            "current_value": 0.92,
+            "proposed_value": 0.7,
+            "addresses_gap": "gap-fsr-max",
+            "cited_bylaw_id": "AB-1",
+            "rationale": "Adjust the application field."
+          },
+          {
+            "field": "height_m",
+            "current_value": 12,
+            "proposed_value": 11,
+            "addresses_gap": "gap-height-over",
+            "cited_bylaw_id": "AB-1",
+            "rationale": "Reduce height."
+          }
+        ]
+      },
+      "context": {
+        "valid_bylaw_ids": [
+          "AB-1"
+        ]
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "fails invalid redline with bad field gap and bylaw",
+      "case": {
+        "gold_labels": {
+          "expected_gap_ids": [
+            "gap-fsr-max"
+          ]
+        }
+      },
+      "runtime": {
+        "redlines": [
+          {
+            "field": "missing_field",
+            "current_value": 0.92,
+            "proposed_value": 0.7,
+            "addresses_gap": "gap-extra",
+            "cited_bylaw_id": "ZZ-9",
+            "rationale": "Adjust the application field."
+          }
+        ]
+      },
+      "context": {
+        "valid_bylaw_ids": [
+          "AB-1"
+        ]
+      },
+      "expected_score": 0
+    },
+    {
+      "name": "scores no gold gaps and no redlines as vacuous one",
+      "case": {
+        "gold_labels": {
+          "expected_gap_ids": []
+        }
+      },
+      "runtime": {
+        "redlines": []
+      },
+      "context": {
+        "valid_bylaw_ids": [
+          "AB-1"
+        ]
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "fails when gold gaps exist and redlines are empty",
+      "case": {
+        "gold_labels": {
+          "expected_gap_ids": [
+            "gap-fsr-max"
+          ]
+        }
+      },
+      "runtime": {
+        "redlines": []
+      },
+      "context": {
+        "valid_bylaw_ids": [
+          "AB-1"
+        ]
+      },
+      "expected_score": 0
+    },
+    {
+      "name": "fails when no gold gaps exist and redline is emitted",
+      "case": {
+        "gold_labels": {
+          "expected_gap_ids": []
+        }
+      },
+      "runtime": {
+        "redlines": [
+          {
+            "field": "fsr_proposed",
+            "current_value": 0.92,
+            "proposed_value": 0.7,
+            "addresses_gap": "gap-fsr-max",
+            "cited_bylaw_id": "AB-1",
+            "rationale": "Adjust the application field."
+          }
+        ]
+      },
+      "context": {
+        "valid_bylaw_ids": [
+          "AB-1"
+        ]
+      },
+      "expected_score": 0
+    }
+  ]
+}
