@@ -1,0 +1,56 @@
+{
+  "domain": "van-ssmuh",
+  "corpus_version": "v2026.06.0",
+  "generated_at": "2026-06-09",
+  "description": "Per-gap numeric truth resolved from the case application_packet. Each entry names the proposed-value field, the required-value field, the tolerance (per spec 001 M6), and the unit. M6 reads provided + required from application_packet[proposed_field] and application_packet[required_field] and validates the runtime numeric gap entry against (provided, required, delta = required - provided) within tolerance. Sign convention: delta > 0 means the case is short of required (under). A non-numeric gap (missing document, missing signature, narrative) does NOT appear here.",
+  "entries": {
+    "gap-fsr-over": {
+      "proposed_field": "fsr_proposed",
+      "required_field": "fsr_allowed",
+      "tolerance": 0.02,
+      "unit": "ratio"
+    },
+    "gap-rear-setback-short": {
+      "proposed_field": "rear_setback_m",
+      "required_field": "rear_setback_required_m",
+      "tolerance": 0.05,
+      "unit": "m"
+    },
+    "gap-side-setback-short": {
+      "proposed_field": "side_setback_m",
+      "required_field": "side_setback_required_m",
+      "tolerance": 0.05,
+      "unit": "m"
+    },
+    "gap-front-setback-short": {
+      "proposed_field": "front_setback_m",
+      "required_field": "front_setback_required_m",
+      "tolerance": 0.05,
+      "unit": "m"
+    },
+    "gap-height-over": {
+      "proposed_field": "height_proposed_m",
+      "required_field": "height_allowed_m",
+      "tolerance": 0.05,
+      "unit": "m"
+    },
+    "gap-units-over": {
+      "proposed_field": "units_proposed",
+      "required_field": "units_allowed",
+      "tolerance": 0,
+      "unit": "count"
+    },
+    "gap-parking-short": {
+      "proposed_field": "parking_spaces_proposed",
+      "required_field": "parking_spaces_required",
+      "tolerance": 1,
+      "unit": "count"
+    },
+    "gap-energy-step-low": {
+      "proposed_field": "energy_step_code_proposed",
+      "required_field": "energy_step_code_required",
+      "tolerance": 0,
+      "unit": "step"
+    }
+  }
+}

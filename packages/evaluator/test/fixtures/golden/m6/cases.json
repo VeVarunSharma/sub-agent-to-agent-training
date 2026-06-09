@@ -104,6 +104,76 @@
         ]
       },
       "expected_score": 0.3333333333333333
+    },
+    {
+      "name": "truth-map path scores 1 when reported values match within tolerance",
+      "case": {
+        "application_packet": {
+          "fsr_proposed": 1.05,
+          "fsr_allowed": 1.0
+        },
+        "gold_labels": {
+          "expected_gap_ids": ["gap-fsr-over"]
+        }
+      },
+      "runtime": {
+        "reported_numeric_gaps": [
+          {
+            "gap_id": "gap-fsr-over",
+            "field": "fsr_proposed",
+            "proposed_value": 1.05,
+            "required_value": 1.0,
+            "delta": -0.05,
+            "unit": "ratio"
+          }
+        ]
+      },
+      "context": {
+        "numeric_gap_truth_map_entries": {
+          "gap-fsr-over": {
+            "proposed_field": "fsr_proposed",
+            "required_field": "fsr_allowed",
+            "tolerance": 0.02,
+            "unit": "ratio"
+          }
+        }
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "truth-map path scores 0 when reported provided value is wrong",
+      "case": {
+        "application_packet": {
+          "fsr_proposed": 1.05,
+          "fsr_allowed": 1.0
+        },
+        "gold_labels": {
+          "expected_gap_ids": ["gap-fsr-over"]
+        }
+      },
+      "runtime": {
+        "reported_numeric_gaps": [
+          {
+            "gap_id": "gap-fsr-over",
+            "field": "fsr_proposed",
+            "proposed_value": 1.20,
+            "required_value": 1.0,
+            "delta": -0.20,
+            "unit": "ratio"
+          }
+        ]
+      },
+      "context": {
+        "numeric_gap_truth_map_entries": {
+          "gap-fsr-over": {
+            "proposed_field": "fsr_proposed",
+            "required_field": "fsr_allowed",
+            "tolerance": 0.02,
+            "unit": "ratio"
+          }
+        }
+      },
+      "expected_score": 0
     }
   ]
 }

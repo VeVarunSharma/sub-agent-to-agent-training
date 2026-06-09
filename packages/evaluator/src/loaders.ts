@@ -4,6 +4,7 @@ import type {
   CorpusManifest,
   CorpusManifestRawFile,
   MemoStructureRequirements,
+  NumericGapTruthMap,
   RequiredEvidenceMap,
 } from "./metrics/types.js";
 
@@ -36,6 +37,19 @@ const RequiredEvidenceMapJsonSchema = z.object({
   domain: z.string(),
   corpus_version: z.string(),
   entries: z.record(z.string(), RequiredEvidenceEntryJsonSchema),
+});
+
+const NumericGapTruthEntryJsonSchema = z.object({
+  proposed_field: z.string(),
+  required_field: z.string(),
+  tolerance: z.number().nonnegative(),
+  unit: z.string(),
+});
+
+const NumericGapTruthMapJsonSchema = z.object({
+  domain: z.string(),
+  corpus_version: z.string(),
+  entries: z.record(z.string(), NumericGapTruthEntryJsonSchema),
 });
 
 function parseJson(text: string, filePath: string): unknown {
@@ -81,6 +95,17 @@ export async function loadCorpusManifest(filePath: string): Promise<CorpusManife
 
 export async function loadRequiredEvidenceMap(filePath: string): Promise<RequiredEvidenceMap> {
   const parsed = RequiredEvidenceMapJsonSchema.parse(
+    parseJson(await readFile(filePath, "utf8"), filePath),
+  );
+  return {
+    domain: parsed.domain,
+    corpusVersion: parsed.corpus_version,
+    entries: parsed.entries,
+  };
+}
+
+export async function loadNumericGapTruthMap(filePath: string): Promise<NumericGapTruthMap> {
+  const parsed = NumericGapTruthMapJsonSchema.parse(
     parseJson(await readFile(filePath, "utf8"), filePath),
   );
   return {

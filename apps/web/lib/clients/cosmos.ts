@@ -8,6 +8,10 @@ type CosmosContainers = {
 
 let containers: CosmosContainers | null | undefined
 
+export function isAzureStrictMode() {
+  return process.env.SRS_REQUIRE_AZURE === "1"
+}
+
 export function getRunsContainer() {
   return getCosmosContainers()?.runs ?? null
 }
@@ -25,6 +29,11 @@ function getCosmosContainers() {
   const reportsContainerName = readEnv("SRS_COSMOS_REPORTS_CONTAINER_NAME") ?? "reports"
 
   if (!endpoint || !databaseName) {
+    if (isAzureStrictMode()) {
+      throw new Error(
+        "SRS_REQUIRE_AZURE=1 but Cosmos is not configured. Set SRS_COSMOS_ENDPOINT and SRS_COSMOS_DATABASE_NAME, or unset SRS_REQUIRE_AZURE.",
+      )
+    }
     containers = null
     return containers
   }

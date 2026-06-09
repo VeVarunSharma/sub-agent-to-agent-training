@@ -14,6 +14,7 @@ import {
   aggregateSplit,
   loadCorpusManifest,
   loadMemoStructureRequirements,
+  loadNumericGapTruthMap,
   loadRequiredEvidenceMap,
   scoreCase,
 } from "../packages/evaluator/dist/index.js";
@@ -205,10 +206,23 @@ async function main() {
   const requiredEvidenceMap = await loadRequiredEvidenceMap(
     join(args.datasetsRoot, "policy-corpus/oracle", args.domain, "required-evidence-map.json"),
   );
+  const numericGapTruthMapPath = join(
+    args.datasetsRoot,
+    "policy-corpus/oracle",
+    args.domain,
+    "numeric-gap-truth-map.json",
+  );
+  let numericGapTruthMap = null;
+  try {
+    numericGapTruthMap = await loadNumericGapTruthMap(numericGapTruthMapPath);
+  } catch (err) {
+    if (err && err.code !== "ENOENT") throw err;
+    console.warn(`eval: numeric-gap-truth-map not found at ${numericGapTruthMapPath}; M6 will use legacy heuristic`);
+  }
   const memoStructureRequirements = await loadMemoStructureRequirements(
     join(REPO_ROOT, "specs/001-eval-protocol/judge-prompts/memo-structure.md"),
   );
-  const ctx = { domain: args.domain, datasetsRoot: args.datasetsRoot, corpusManifest, requiredEvidenceMap, memoStructureRequirements };
+  const ctx = { domain: args.domain, datasetsRoot: args.datasetsRoot, corpusManifest, requiredEvidenceMap, numericGapTruthMap, memoStructureRequirements };
 
   const cases = loadSplitCases(args);
   const runtimes = loadRuntimePayloads(args.runtimePath);

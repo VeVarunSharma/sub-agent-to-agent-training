@@ -2,7 +2,7 @@ import { readdir, readFile, stat } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { cache } from "react"
-import { getReportsContainer } from "./clients/cosmos"
+import { getReportsContainer, isAzureStrictMode } from "./clients/cosmos"
 
 export type EvalRoundSummary = {
   folder: string
@@ -85,6 +85,11 @@ async function readCosmosReportDocuments() {
     const { resources } = await container.items.query<CosmosReportDocument>("SELECT * FROM c").fetchAll()
     return resources
   } catch (error) {
+    if (isAzureStrictMode()) {
+      throw new Error(
+        `Cosmos report query failed under SRS_REQUIRE_AZURE=1: ${error instanceof Error ? error.message : String(error)}`,
+      )
+    }
     console.info(`Cosmos report reads unavailable. ${error instanceof Error ? error.message : "Reading reports from filesystem."}`)
     return null
   }
@@ -120,6 +125,11 @@ async function readCosmosReportAsset(parts: string[]): Promise<EvalReportAsset |
     if (fileName.endsWith(".report.md")) return markdownAsset(textValue(folderDocument.reportMarkdown) ?? textValue(folderDocument.reportBody))
     return null
   } catch (error) {
+    if (isAzureStrictMode()) {
+      throw new Error(
+        `Cosmos report asset read failed under SRS_REQUIRE_AZURE=1: ${error instanceof Error ? error.message : String(error)}`,
+      )
+    }
     console.info(`Cosmos report asset unavailable. ${error instanceof Error ? error.message : "Reading asset from filesystem."}`)
     return undefined
   }
