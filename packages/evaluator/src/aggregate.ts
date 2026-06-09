@@ -54,6 +54,7 @@ const EMPTY_SET_BRANCHES = [
   "zero_gold_nonempty_predicted_empty",
   "zero_predicted_nonempty_gold_empty",
   "zero_gate_fail",
+  "gate_failed",
   "not_applicable",
 ] as const satisfies readonly EmptySetBranch[];
 
@@ -139,6 +140,7 @@ function emptyMissingness(): Record<EmptySetBranch, number> {
     zero_gold_nonempty_predicted_empty: 0,
     zero_predicted_nonempty_gold_empty: 0,
     zero_gate_fail: 0,
+    gate_failed: 0,
     not_applicable: 0,
   };
 }

@@ -1,0 +1,31 @@
+name: M12 redline actionability
+description: Score whether redline guidance gives clear applicant actions.
+model: openai/gpt-4o-mini
+modelParameters:
+  temperature: 0.0
+testData: []
+messages:
+  - role: system
+    content: |
+      You are a Vancouver municipal planning reviewer with five years of staff redline review experience.
+      Score the redline output below for actionability.
+      Respond with a single JSON object: {"score": <float in [0, 1]>, "rationale": "<one sentence>"}.
+      Do not return any text outside the JSON object.
+      Use these anchors:
+      - 1.0 = every redline item has a specific bylaw reference, a clear required change, and an applicant-visible severity.
+      - 0.5 = redlines exist, but some lack specificity or severity.
+      - 0.0 = redlines are vague, missing references, or empty when the case requires them.
+  - role: user
+    content: |
+      Case context:
+      {{case_context}}
+
+      Redline output under review:
+      {{artifact_under_review}}
+
+      Reference outputs:
+      {{reference_outputs}}
+evaluators:
+  - name: judge-output-is-valid-json
+    string:
+      contains: '"score"'

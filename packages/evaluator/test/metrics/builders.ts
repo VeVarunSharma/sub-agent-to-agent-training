@@ -8,6 +8,8 @@ interface BuildCaseOptions {
   pathwayClass?: CaseRecord["pathway_class"]
   bylawsToCite?: string[]
   expectedApplicantSupportFlags?: string[]
+  expectedGapIds?: string[]
+  applicationPacket?: CaseRecord["application_packet"]
 }
 
 export const buildCase = (options: BuildCaseOptions = {}): CaseRecord => ({
@@ -19,7 +21,7 @@ export const buildCase = (options: BuildCaseOptions = {}): CaseRecord => ({
   pathway_class: options.pathwayClass ?? "as-of-right-ssmuh",
   gap_severity_bucket: "none",
   edge_case_family: null,
-  application_packet: {},
+  application_packet: options.applicationPacket ?? {},
   content_fingerprint: "content",
   entity_fingerprint: "entity",
   document_stub_fingerprints: [],
@@ -27,7 +29,7 @@ export const buildCase = (options: BuildCaseOptions = {}): CaseRecord => ({
   gold_labels: {
     bylaws_to_cite: options.bylawsToCite ?? [],
     evidence_to_surface: [],
-    expected_gap_ids: [],
+    expected_gap_ids: options.expectedGapIds ?? [],
     expected_redlines_min: 0,
     expected_redlines_max: 0,
     stage1_complete: true,

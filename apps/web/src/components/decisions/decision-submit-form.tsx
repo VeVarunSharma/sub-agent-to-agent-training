@@ -27,10 +27,10 @@ export function DecisionSubmitForm({ cases }: { cases: DecisionCaseOption[] }) {
         body: JSON.stringify({ caseId, notes }),
       })
       const payload = (await response.json()) as { runId?: string; error?: string }
-      if (!response.ok || !payload.runId) throw new Error(payload.error ?? "Unable to create the stub run.")
+      if (!response.ok || !payload.runId) throw new Error(payload.error ?? "Unable to create the decision run.")
       router.push(`/decisions/${payload.runId}`)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unable to create the stub run.")
+      setError(err instanceof Error ? err.message : "Unable to create the decision run.")
     } finally {
       setIsSubmitting(false)
     }
@@ -49,7 +49,7 @@ export function DecisionSubmitForm({ cases }: { cases: DecisionCaseOption[] }) {
             ))}
           </Select>
         </FormControl>
-        <FormDescription>Load synthetic case IDs from the local stub.</FormDescription>
+        <FormDescription>Load synthetic case IDs from shared fixtures.</FormDescription>
       </FormField>
 
       <FormField>
@@ -60,7 +60,7 @@ export function DecisionSubmitForm({ cases }: { cases: DecisionCaseOption[] }) {
             name="notes"
             value={notes}
             onChange={(event) => setNotes(event.target.value)}
-            placeholder="Add intake context for the stub run."
+            placeholder="Add intake context for this run."
             className="min-h-28"
           />
         </FormControl>

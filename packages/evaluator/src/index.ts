@@ -62,8 +62,9 @@ export const NULL_JUDGE_SCORER: MetricScorer = nullScorer;
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
 const JUDGE_PROMPT_PATHS = [
-  resolve(REPO_ROOT, "agents/judges/m12-readability.prompt.yml"),
-  resolve(REPO_ROOT, "agents/judges/m13-accuracy.prompt.yml"),
+  resolve(REPO_ROOT, "agents/judges/m12-redline-actionability.prompt.yml"),
+  resolve(REPO_ROOT, "agents/judges/m13-readability-staff.prompt.yml"),
+  resolve(REPO_ROOT, "agents/judges/m13-readability-applicant.prompt.yml"),
 ] as const;
 
 export function buildJudgeRunner(): JudgeRunner | null {

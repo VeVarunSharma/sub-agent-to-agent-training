@@ -8,6 +8,7 @@ export const EmptySetBranchSchema = z.enum([
   "zero_gold_nonempty_predicted_empty",
   "zero_predicted_nonempty_gold_empty",
   "zero_gate_fail",
+  "gate_failed",
   "not_applicable",
 ]);
 export type EmptySetBranch = z.infer<typeof EmptySetBranchSchema>;

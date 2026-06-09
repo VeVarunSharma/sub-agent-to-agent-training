@@ -1,6 +1,7 @@
 import { readEvalReportAsset } from "../../../../../lib/eval-reports"
 
 export const dynamic = "force-dynamic"
+export const runtime = "nodejs"
 
 type EvalReportRouteContext = {
   params: Promise<{ path: string[] }>

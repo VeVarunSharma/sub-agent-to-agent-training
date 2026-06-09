@@ -13,9 +13,10 @@
   - `schemas.ts` — per-agent zod input + output schemas
   - Unit tests with mocked `spawnSync`
 
-- [ ] **Inara** — Wire M12 + M13 via `gh models eval`
-  - `agents/judges/m12-readability.prompt.yml`
-  - `agents/judges/m13-accuracy.prompt.yml`
+- [ ] **Inara**: wire M12 + M13 via `gh models eval`
+  - `agents/judges/m12-redline-actionability.prompt.yml`
+  - `agents/judges/m13-readability-staff.prompt.yml`
+  - `agents/judges/m13-readability-applicant.prompt.yml`
   - `packages/evaluator/src/metrics/m12.ts` + `m13.ts`
   - Wire into `DETERMINISTIC_SCORERS` via env-gated swap
 

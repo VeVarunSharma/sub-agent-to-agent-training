@@ -17,7 +17,7 @@ export default async function IterationsPage() {
         <div className="space-y-2">
           <h1 className="text-3xl font-semibold tracking-tight">Review iteration artifacts</h1>
           <p className="text-pretty text-muted-foreground">
-            List local eval rounds, rationale snippets, and read-only JSON artifacts from each sub-agent.
+            List Cosmos round records when configured. Use local eval artifacts when Azure env vars are absent.
           </p>
         </div>
       </header>
