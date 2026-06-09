@@ -17,6 +17,7 @@ import type {
   CaseRecord,
   MetricContext,
   MetricScorer,
+  NumericGapTruthEntry,
   RuntimePayload,
 } from "../src/metrics/types.js"
 
@@ -41,6 +42,7 @@ interface GoldenFixture {
     valid_bylaw_ids?: string[]
     required_evidence_entries?: MetricContext["requiredEvidenceMap"]["entries"]
     memo_structure_requirements?: MetricContext["memoStructureRequirements"]
+    numeric_gap_truth_map_entries?: Record<string, NumericGapTruthEntry>
   }
   expected_score: number | null
 }
@@ -223,6 +225,13 @@ function buildContext(overrides: GoldenFixture["context"] = {}): MetricContext {
       memoSections: [],
       letterSections: [],
     },
+    numericGapTruthMap: overrides.numeric_gap_truth_map_entries
+      ? {
+          domain: "van-ssmuh",
+          corpusVersion: "test",
+          entries: overrides.numeric_gap_truth_map_entries,
+        }
+      : null,
   }
 }
 

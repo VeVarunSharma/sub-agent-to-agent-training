@@ -68,7 +68,7 @@ resource uploadsContainer 'Microsoft.Storage/storageAccounts/blobServices/contai
 }
 
 resource acrPullForApp 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(acr.id, identity.properties.principalId, acrPullRoleId)
+  name: guid(acr.id, identity.id, acrPullRoleId)
   scope: acr
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', acrPullRoleId)
@@ -78,7 +78,7 @@ resource acrPullForApp 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
 }
 
 resource aiServicesUserForApp 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(aiServicesAccount.id, identity.properties.principalId, aiServicesUserRoleId)
+  name: guid(aiServicesAccount.id, identity.id, aiServicesUserRoleId)
   scope: aiServicesAccount
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', aiServicesUserRoleId)
@@ -88,7 +88,7 @@ resource aiServicesUserForApp 'Microsoft.Authorization/roleAssignments@2022-04-0
 }
 
 resource storageBlobContributorForApp 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(uploadsContainer.id, identity.properties.principalId, storageBlobDataContributorRoleId)
+  name: guid(uploadsContainer.id, identity.id, storageBlobDataContributorRoleId)
   scope: uploadsContainer
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', storageBlobDataContributorRoleId)
@@ -99,7 +99,7 @@ resource storageBlobContributorForApp 'Microsoft.Authorization/roleAssignments@2
 
 resource cosmosDataContributorForApp 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2024-05-15' = {
   parent: cosmosAccount
-  name: guid(cosmosAccount.id, identity.properties.principalId, cosmosDataContributorRoleDefinitionId)
+  name: guid(cosmosAccount.id, identity.id, cosmosDataContributorRoleDefinitionId)
   properties: {
     roleDefinitionId: '${cosmosAccount.id}/sqlRoleDefinitions/${cosmosDataContributorRoleDefinitionId}'
     principalId: identity.properties.principalId

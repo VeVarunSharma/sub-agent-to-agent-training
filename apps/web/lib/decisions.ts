@@ -2,7 +2,8 @@ import { readFile } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { listSampleCases } from "@srs/shared"
-import { getRunsContainer } from "./clients/cosmos"
+import { getRunsContainer, isAzureStrictMode } from "./clients/cosmos"
+import { DecisionRunDocumentSchema } from "./clients/cosmos-schemas"
 
 export type DecisionAgentStatus = "queued" | "running" | "done" | "failed"
 export type DecisionRunStatus = "queued" | "running" | "done" | "failed"
@@ -162,9 +163,22 @@ async function persistDecisionRun(run: DecisionRunFixture) {
     id: next.runId,
   }
 
+  const parsed = DecisionRunDocumentSchema.safeParse(document)
+  if (!parsed.success) {
+    const message = `Decision run document failed schema validation: ${parsed.error.issues.map((issue) => `${issue.path.join(".")}: ${issue.message}`).join("; ")}`
+    if (isAzureStrictMode()) throw new Error(message)
+    console.warn(message)
+    return
+  }
+
   try {
-    await container.items.upsert(document)
+    await container.items.upsert(parsed.data)
   } catch (error) {
+    if (isAzureStrictMode()) {
+      throw new Error(
+        `Cosmos upsert failed under SRS_REQUIRE_AZURE=1: ${error instanceof Error ? error.message : String(error)}`,
+      )
+    }
     console.info(`Cosmos run persistence unavailable. ${error instanceof Error ? error.message : "Using in-memory state."}`)
   }
 }
@@ -178,6 +192,11 @@ async function readDecisionRunFromCosmos(runId: string) {
     return resource ? normalizeDecisionRun(resource) : null
   } catch (error) {
     if (isCosmosStatus(error, 404)) return null
+    if (isAzureStrictMode()) {
+      throw new Error(
+        `Cosmos read failed under SRS_REQUIRE_AZURE=1: ${error instanceof Error ? error.message : String(error)}`,
+      )
+    }
     console.info("Cosmos run snapshot unavailable. Reading local decision data.")
     return null
   }

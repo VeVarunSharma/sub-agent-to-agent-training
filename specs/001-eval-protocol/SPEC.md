@@ -148,11 +148,11 @@ Mean across split.
 
 ### M12 Redline actionability (judged)
 
-The judge model scores each emitted redline on a 0-3 scale per `judge-prompts/redline-actionability.md`. Per-redline judge score is normalized: `m12_redline = judge_score / 3 ∈ [0, 1]`.
+The judge model scores each emitted redline on a 0-to-1 continuous scale per `judge-prompts/redline-actionability.md`. The judge returns `{"score": <float in [0, 1]>, "rationale": "<one sentence>"}`. The per-redline value used by the metric is `m12_redline = judge_score`.
 
 Per-case score, gold-driven with empty-set discipline:
 
-- Oracle expects gaps AND system emits any: per-case score is `(sum of m12_redline over valid emitted redlines that address a gold `expected_gap_ids` entry) / max(|expected_gap_ids|, |emitted|)`. This combines quality (judge score per addressed gap) with completeness (over the gold denominator). A single high-quality redline that addresses 1 of 4 gold gaps caps at `1/4`.
+- Oracle expects gaps AND system emits any: per-case score is `(sum of m12_redline over valid emitted redlines that address a gold `expected_gap_ids` entry) / max(|expected_gap_ids|, |emitted|)`. This combines quality (judge score per addressed gap) with completeness (over the gold denominator). A single high-quality redline that addresses 1 of 4 gold gaps caps at `1/4`. **"Valid" in this context means the redline (a) references a field present in the application schema, (b) carries an `addresses_gap` that appears in `gold_labels.expected_gap_ids`, (c) cites a bylaw that exists in the corpus manifest. This is the same per-redline integrity check the evaluator runs before invoking the judge. M8 applies its own stricter validity rule (the proposed change must move the case toward compliance per the oracle decision matrix). M12 and M8 are intentionally scored against different validity bars and they do not gate each other.**
 - Oracle expects gaps AND system emits none: per-case score is `0`
 - Oracle expects no gaps AND system emits none: per-case score is `1`
 - Oracle expects no gaps AND system emits any: per-case score is `0`
@@ -161,9 +161,9 @@ Mean across split. The judge sees only the case context, the cited bylaw, and th
 
 ### M13 Memo and letter readability (judged)
 
-Two judge sub-scores per case, each on a 0-3 scale per `judge-prompts/readability-staff.md` and `judge-prompts/readability-applicant.md` respectively. The judge receives the case context, the system's memo or letter, and the case's stylistically diverse reference outputs (chosen per audience). The judge scores primarily against the rubric in the prompt file. Similarity to the closest matching reference is a secondary rubric item documented in the judge prompt.
+Two judge sub-scores per case, each on a 0-to-1 continuous scale per `judge-prompts/readability-staff.md` and `judge-prompts/readability-applicant.md` respectively. Each judge returns `{"score": <float in [0, 1]>, "rationale": "<one sentence>"}`. The judge receives the case context, the system's memo or letter, and the case's stylistically diverse reference outputs (chosen per audience). The judge scores primarily against the rubric in the prompt file. Similarity to the closest matching reference is a secondary rubric item documented in the judge prompt.
 
-Per audience: `m13_audience = judge_score / 3 ∈ [0, 1]`. Per-case combined score: `m13 = 0.67 * m13_staff + 0.33 * m13_applicant`.
+Per audience: `m13_audience = judge_score`. Per-case combined score: `m13 = 0.67 * m13_staff + 0.33 * m13_applicant`. The staff weight dominates because the staff memo is the primary artifact that drives a planner's pre-review action; the applicant letter is downstream of that decision.
 
 Gating: M13 runs ONLY if M4 and M9 both pass for the case. If either fails, `m13 = 0`. This prevents readability points from compensating for invalid citations or broken structure.
 
@@ -283,7 +283,7 @@ judge-calibration/
 └── m13-readability-applicant/
 ```
 
-Each sub-metric carries ~6 examples (~2 each at bad / mediocre / good), hand-scored by the maintainer. The eval runner runs the frozen judge over the calibration set and checks rank-order: every good example must score above every bad example, and the mean score gap between adjacent tiers must exceed 0.5 on the 0-3 scale.
+Each sub-metric carries ~6 examples (~2 each at bad / mediocre / good), hand-scored by the maintainer on the 0-to-3 human-rationale tier scale. The eval runner runs the frozen judge over the calibration set and checks rank-order: every good example must score above every bad example on the judge's 0-to-1 scale, and the mean score gap between adjacent human tiers must exceed `0.166` on the judge's 0-to-1 scale (this is `0.5 / 3`, the spec's original gap threshold mapped from the human 0-to-3 scale to the judge 0-to-1 scale).
 
 If calibration fails, the judge prompt is revised and the calibration set re-scored. Calibration must pass before the freeze SHA is recorded.
 

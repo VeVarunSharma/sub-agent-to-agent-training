@@ -19,6 +19,7 @@
     "gen:data": "tsx scripts/generate-data.ts",
     "gen:few-shot": "tsx scripts/generate-few-shot.ts",
     "validate:data": "tsx scripts/validate-data.ts",
+    "validate:infra": "node scripts/validate-infra.mjs",
     "seal:data": "tsx scripts/seal-data.ts",
     "build:splits": "tsx scripts/build-splits.ts",
     "sync:agents": "tsx scripts/sync-agents.ts",

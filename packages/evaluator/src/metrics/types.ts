@@ -45,12 +45,26 @@ export interface MemoStructureRequirements {
   letterSections: string[];
 }
 
+export interface NumericGapTruthEntry {
+  proposed_field: string;
+  required_field: string;
+  tolerance: number;
+  unit: string;
+}
+
+export interface NumericGapTruthMap {
+  domain: string;
+  corpusVersion: string;
+  entries: Record<string, NumericGapTruthEntry>;
+}
+
 export interface MetricContext {
   domain: string;
   datasetsRoot: string;
   corpusManifest: CorpusManifest;
   requiredEvidenceMap: RequiredEvidenceMap;
   memoStructureRequirements: MemoStructureRequirements;
+  numericGapTruthMap?: NumericGapTruthMap | null;
   judge?: JudgeRunner | null;
 }
 

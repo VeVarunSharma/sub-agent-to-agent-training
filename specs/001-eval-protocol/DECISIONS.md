@@ -152,3 +152,17 @@
 **Decision**: replace the drifted M12 applicant-letter readability prompt and M13 memo-accuracy prompt with three spec-matched prompts. M12 now scores redline actionability. M13 now scores staff memo readability and applicant letter readability separately.
 
 **Reason**: SPEC.md defines the metric contract. The evaluator now loads prompts that conform to that contract, and the manifest pins the new prompt SHAs.
+
+## 2026-06-09: Pick [0,1] as the canonical judge score scale and clarify M12 validity vs M8 validity
+
+**Decision**: Update spec text to describe judge scores as continuous floats in `[0, 1]`. Drop the `judge_score / 3` normalization language. Reframe the calibration rank-order gap as `0.5 / 3 = 0.166` on the judge's `[0, 1]` scale. Pin the canonical judge contract as `{"score": <float in [0, 1]>, "rationale": "<one sentence>"}`. Add an explicit clarification that M12's validity check is local (field exists, addresses_gap is in the gold set, bylaw is in the corpus manifest), and that M8's stricter validity rule (proposed change moves the case toward compliance per the oracle decision matrix) is intentionally separate. M12 and M8 do not gate each other.
+
+**Reason**: The chunk-7 judge-prompts-fix landed three judge prompts that return `[0, 1]` directly. The judge runner parser enforces `[0, 1]`. The evaluator code uses `judged.score` without dividing by 3. The spec text was the only artifact still describing a 0-to-3 scale. The rubber-duck pass found this drift. Picking `[0, 1]` matches the prompts, the parser, the implementation, and the calibration files already authored in chunk 7. The 0-to-3 human-rationale tier in calibration files stays as the maintainer-facing label and is mapped through the spec text.
+
+The M12 vs M8 validity clarification closes a real ambiguity surfaced by the rubber-duck pass. Both metrics use the word "valid" and the spec previously left readers to infer the relationship. M12 measures redline actionability conditional on basic structural integrity. M8 measures whether the proposed change actually fixes the case. Gating M12 on M8 would collapse the two into one signal and lose the operator's ability to see "the redline was specific and well-worded, but pointed the applicant at the wrong remedy".
+
+## 2026-06-09: Mark round-000 and round-001 as pre-reconciliation
+
+**Decision**: Add `SUPERSEDED.md` files to `eval-reports/round-000-baseline/` and `eval-reports/round-001-fleet/` explaining that those rounds ran against the pre-reconciliation evaluator (drifted M12/M13 judge prompts, M6 set-overlap scoring). Deterministic PRQS for M1, M2, M3, M4, M5, M7, M8, M9, M10, M11 remains comparable across rounds. M6 numbers in those rounds are upper-bound estimates because the scorer accepted gap-ID matches without checking numeric values. M12/M13 were judge-disabled so they contributed null and did not skew the rolling number. Future rounds re-baseline before any judged-PRQS comparison.
+
+**Reason**: Chunks 7 and 8 changed frozen artifacts (`packages/evaluator/src/metrics/m12.ts`, `m13.ts`, `agents/judges/*.prompt.yml`, `specs/001-eval-protocol/judge-prompts-manifest.json`, M12/M13 spec sections, M6 scoring rule in chunk 9). Even when the impacted sub-metrics were judge-disabled at runtime, the surrounding contract changed. Operators reading historical receipts need an explicit pointer so they do not treat the +5.53 round-001 lift as an apples-to-apples baseline for future judged work.
