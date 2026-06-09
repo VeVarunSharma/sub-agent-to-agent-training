@@ -18,11 +18,11 @@ export default async function DecisionPage({ params }: DecisionPageProps) {
   return (
     <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-6 py-10 sm:px-10">
       <header className="space-y-3">
-        <Badge variant="outline" className="w-fit">Stub run</Badge>
+        <Badge variant="outline" className="w-fit">Decision run</Badge>
         <div className="space-y-2">
           <h1 className="break-all font-mono text-3xl font-semibold tracking-tight">{run.runId}</h1>
           <p className="text-pretty text-muted-foreground">
-            Watch the six-agent decision timeline. This page reads a local fixture when one exists.
+            Watch the six-agent decision timeline. Cosmos snapshots load first when Azure env vars are present.
           </p>
         </div>
       </header>
@@ -34,11 +34,11 @@ export default async function DecisionPage({ params }: DecisionPageProps) {
               <CardTitle>Agent run timeline</CardTitle>
               <CardDescription>
                 {doneCount} of {run.agents.length} agents done
-                {run.caseId ? ` for ${run.caseId}` : " in the placeholder run"}.
+                {run.caseId ? ` for ${run.caseId}` : " in the fallback run"}.
               </CardDescription>
             </div>
             <Badge variant="secondary" className="font-mono">
-              {run.submittedAt ? new Date(run.submittedAt).toLocaleString("en-CA") : "local stub"}
+              {run.submittedAt ? new Date(run.submittedAt).toLocaleString("en-CA") : "local fallback"}
             </Badge>
           </div>
           {run.notes ? (

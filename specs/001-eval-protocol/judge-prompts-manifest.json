@@ -20,20 +20,20 @@
     {
       "prompt_id": "m12-redline-actionability",
       "sub_metric": "M12",
-      "path": "judge-prompts/redline-actionability.md",
-      "sha256": "ad7d068fe57f54d29efed40f49643626e015924e756f9eecc5e66591a0067af0"
+      "path": "../../agents/judges/m12-redline-actionability.prompt.yml",
+      "sha256": "1a67c3d8e1021c86dcad1f5bbff1d38b1202990a9aaba89e701fac249c537e56"
     },
     {
       "prompt_id": "m13-readability-staff",
       "sub_metric": "M13.staff",
-      "path": "judge-prompts/readability-staff.md",
-      "sha256": "6d79a1fc70a7eb53d4b5ba6799abf62af09208c1024d8f3735a2fd3aea3ac35b"
+      "path": "../../agents/judges/m13-readability-staff.prompt.yml",
+      "sha256": "4d63bf5a737a6d65805028ff49ae9a32902c0e5125ff208eda3029314d5d1e6e"
     },
     {
       "prompt_id": "m13-readability-applicant",
       "sub_metric": "M13.applicant",
-      "path": "judge-prompts/readability-applicant.md",
-      "sha256": "f8ee360e5e5ea4deb155fd6bc403ab4ea882016c6ff81d518176762a73dc2241"
+      "path": "../../agents/judges/m13-readability-applicant.prompt.yml",
+      "sha256": "385adfaa18913b5698c18bdbfd8ebe9ef3713e328698ae9c2f2edbe6edc3d9af"
     },
     {
       "prompt_id": "memo-structure",

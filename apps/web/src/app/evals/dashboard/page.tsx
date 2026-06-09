@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { getEvalRoundSummaries } from "../../../../lib/eval-reports"
 
-export const revalidate = 3600
+export const dynamic = "force-dynamic"
 
 export default async function EvalsDashboardPage() {
   const rounds = await getEvalRoundSummaries()
@@ -16,7 +16,7 @@ export default async function EvalsDashboardPage() {
         <div className="space-y-2">
           <h1 className="text-3xl font-semibold tracking-tight">Track PRQS by round</h1>
           <p className="text-pretty text-muted-foreground">
-            Read local round summaries and baseline reports. Use the chart to spot lift and CI range movement.
+            Read Cosmos report records when configured. Use local round summaries when Azure env vars are absent.
           </p>
         </div>
       </header>

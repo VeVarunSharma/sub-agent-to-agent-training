@@ -145,4 +145,10 @@
 
 **Decision**: `docs/eval-methodology.md` (and SPEC.md "Holdout key isolation" subsection) recommends running `pnpm iterate` under a different OS user from `pnpm eval` so that file ACLs on `~/.config/srs/holdout.age.key` enforce isolation in addition to env-scrubbing. CI runs the orchestrator and eval runner in separate containers; only the eval container sees the key.
 
-**Reason**: the rubber-duck second pass caught that env scrubbing alone is the floor defense; a sub-agent that ignored the orchestrator's curated context and walked the filesystem could still read the key if the same user owned the process. The user-account split closes the gap at the OS level. Documented as a recommendation rather than a hard requirement because not all maintainer machines can easily set up the split, but the documented threat model makes the tradeoff explicit.
+**Reason**: the rubber-duck second pass caught that env scrubbing alone is the floor defense. A sub-agent that ignored the orchestrator's curated context and walked the filesystem could still read the key if the same user owned the process. The user-account split closes the gap at the OS level. Documented as a recommendation rather than a hard requirement because not all maintainer machines can easily set up the split, but the documented threat model makes the tradeoff explicit.
+
+## 2026-06-09: Align M12 and M13 judge prompts with the spec
+
+**Decision**: replace the drifted M12 applicant-letter readability prompt and M13 memo-accuracy prompt with three spec-matched prompts. M12 now scores redline actionability. M13 now scores staff memo readability and applicant letter readability separately.
+
+**Reason**: SPEC.md defines the metric contract. The evaluator now loads prompts that conform to that contract, and the manifest pins the new prompt SHAs.

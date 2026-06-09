@@ -1,13 +1,13 @@
 ## @srs/web
 
-Staff-facing planner copilot for the Vancouver SSMUH permit pre-review workflow. Built on Next.js 16 (App Router) with Tailwind v4 and shadcn (`base-nova` style, neutral palette). Currently runs against a deterministic mock pipeline so the app is usable without an Azure subscription. Swaps to Azure AI Foundry once `pnpm sync:agents` lands.
+Staff-facing planner copilot for the Vancouver SSMUH permit pre-review workflow. Built on Next.js 16 (App Router) with Tailwind v4 and shadcn (`base-nova` style, neutral palette). Runs without Azure env vars by reading local fixtures. Uses Cosmos, Blob Storage, and Foundry clients when ACA provides the Bicep outputs.
 
 ### What you see when you run it
 
 - **App shell**. Sticky header with brand mark, breadcrumb, and a light / dark / system theme toggle. Footer carries the demo disclaimer once. Cmd+K opens a command palette to jump to a case, run a pipeline, or change theme.
 - **Queue page (`/`)**. Three hero stat cards count cases by outcome class. A Cards / Table toggle switches between the case grid and a compact table view. Cards surface address, zoning, units, FSR, parking, and energy step with lucide icons.
 - **Review detail (`/review/[caseId]`)**. Left column holds the application packet. The `NumericEnvelope` renders each numeric requirement as a proposed-vs-allowed bar with a delta badge that turns destructive when the application exceeds or falls short of the SSMUH envelope. The `DocumentList` splits Submitted and Missing documents into separate groups. The `ApplicantCard` shows applicant type, prior permits, and language preference with an avatar.
-- **Pipeline runner**. Right column on the review page. Click "Run pre-review" to POST to `/api/review`. While the request is in flight, a six-stage vertical timeline animates through each agent so the user has visible feedback even though the mock returns single-shot. A skeleton block holds the result space. On success, a sonner toast surfaces a "View memo" jump action.
+- **Pipeline runner**. Right column on the review page. Click "Run pre-review" to POST to `/api/review`. While the request is in flight, a six-stage vertical timeline animates through each agent so the user has visible feedback. A skeleton block holds the result space. On success, a sonner toast surfaces a "View memo" jump action.
 - **Result tabs**. Memo and applicant letter render as real Markdown with prose styles and a Copy button. The ledger tab renders numeric gaps in a shadcn Table with destructive row tinting and a separate document-evidence table. Redlines render as side-by-side strike / insert columns. The audit tab shows Stage 1 completeness, applicant-support flags, and equity notes.
 
 ### Run it locally
@@ -17,7 +17,11 @@ pnpm install
 pnpm dev
 ```
 
-Open http://localhost:3000.
+Open http://localhost:3000. Leave `.env` unset for local dev. The decision, eval, and iteration pages use fixtures when Azure env vars are absent.
+
+### Azure env vars
+
+Copy `.env.example` only when you want to point the app at Azure. ACA receives the same values from the Bicep `aca.bicep` env section. The clients read `AZURE_CLIENT_ID`, Cosmos endpoint and container names, storage account and uploads container names, Foundry endpoint and project name, judge deployment settings, and the App Insights connection string.
 
 ### Scripts
 
@@ -35,7 +39,9 @@ Open http://localhost:3000.
 src/app/layout.tsx              Root shell. Mounts ThemeProvider, TooltipProvider, SiteHeader, SiteFooter, Toaster, CommandPalette.
 src/app/page.tsx                Queue page.
 src/app/review/[caseId]/page.tsx  Review detail page.
-src/app/api/review/route.ts     POST handler. Runs the mock pipeline and returns ReviewResult JSON.
+src/app/api/review/route.ts     POST handler. Runs the mock review pipeline and returns ReviewResult JSON.
+src/app/api/decisions/route.ts  POST handler. Creates a decision run and starts the orchestrator.
+src/app/api/decisions/[id]/stream/route.ts  Server-sent events for decision runs.
 src/components/site-header.tsx     Sticky top bar plus breadcrumb.
 src/components/site-footer.tsx     Footer with the demo disclaimer.
 src/components/theme-toggle.tsx    Light / dark / system menu.
@@ -62,5 +68,5 @@ src/lib/utils.ts                     `cn` helper.
 
 ### Out of scope right now
 
-Streaming the pipeline output. Authentication. Real planner sign-off persistence. Mobile-specific layouts beyond Tailwind's responsive defaults. Anything Azure or Foundry. All future iterations.
+Authentication. Real planner sign-off persistence. Mobile-specific layouts beyond Tailwind's responsive defaults. Push notifications after ACA SSE ingress tuning lands.
 

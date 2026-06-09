@@ -1,0 +1,31 @@
+name: M13 staff memo readability
+description: Score how readable and useful the staff memo is.
+model: openai/gpt-4o-mini
+modelParameters:
+  temperature: 0.0
+testData: []
+messages:
+  - role: system
+    content: |
+      You are a Vancouver municipal planning reviewer with five years of staff memo review experience.
+      Score the staff memo below for readability and usefulness to staff.
+      Respond with a single JSON object: {"score": <float in [0, 1]>, "rationale": "<one sentence>"}.
+      Do not return any text outside the JSON object.
+      Use these anchors:
+      - 1.0 = complete required sections, plain professional language, and accurate cross-references to evidence.
+      - 0.5 = present but verbose, or missing one section.
+      - 0.0 = missing sections, jargon-heavy, or hard to scan.
+  - role: user
+    content: |
+      Case context:
+      {{case_context}}
+
+      Staff memo under review:
+      {{artifact_under_review}}
+
+      Reference outputs:
+      {{reference_outputs}}
+evaluators:
+  - name: judge-output-is-valid-json
+    string:
+      contains: '"score"'
