@@ -1,0 +1,101 @@
+{
+  "tier": "good",
+  "case_context": {
+    "case_id": "cal-m13-applicant-good-02",
+    "domain": "van-ssmuh",
+    "pathway_class": "specialist-required",
+    "outcome_class": "needs-clarification",
+    "gap_severity_bucket": "major-multi",
+    "edge_case_family": "height-and-code",
+    "address_stub": "synthetic-S-block-312",
+    "project": {
+      "lot_area_sqm": 401.0,
+      "lot_frontage_m": 9.2,
+      "zoning_district": "R1-1",
+      "units_proposed": 4,
+      "fsr_proposed": 0.94,
+      "height_m_proposed": 12.0,
+      "rear_setback_m_proposed": 7.8,
+      "side_setback_m_proposed": 1.2,
+      "parking_spaces_proposed": 4,
+      "energy_step_code_proposed": 3,
+      "tree_inventory_count": 0
+    },
+    "applicant": {
+      "type": "owner-builder",
+      "prior_permits": 0,
+      "represented_by": null,
+      "language_preference": "en"
+    },
+    "submitted_documents": [
+      {
+        "kind": "architectural-set",
+        "version": "v3",
+        "key_extracts": {
+          "height_m": 12.0,
+          "units": 4
+        }
+      }
+    ],
+    "missing_documents": [
+      "part9-code-summary"
+    ],
+    "expected_gap_ids": [
+      "gap-height-over",
+      "gap-architectural-set-missing"
+    ],
+    "cited_bylaw_ids": [
+      "ZDB-R1-1-HEIGHT",
+      "VBBL-PART9"
+    ],
+    "application_packet": {
+      "project": {
+        "lot_area_sqm": 401.0,
+        "lot_frontage_m": 9.2,
+        "zoning_district": "R1-1",
+        "units_proposed": 4,
+        "fsr_proposed": 0.94,
+        "height_m_proposed": 12.0,
+        "rear_setback_m_proposed": 7.8,
+        "side_setback_m_proposed": 1.2,
+        "parking_spaces_proposed": 4,
+        "energy_step_code_proposed": 3,
+        "tree_inventory_count": 0
+      },
+      "applicant": {
+        "type": "owner-builder",
+        "prior_permits": 0,
+        "represented_by": null,
+        "language_preference": "en"
+      },
+      "submitted_documents": [
+        {
+          "kind": "architectural-set",
+          "version": "v3",
+          "key_extracts": {
+            "height_m": 12.0,
+            "units": 4
+          }
+        }
+      ],
+      "missing_documents": [
+        "part9-code-summary"
+      ]
+    }
+  },
+  "artifact_under_review": "Thank you for your submission. We found two required fixes before staff can start detailed review.\n\n## Summary\nYour proposal can stay in the small-home pre-review path, but staff need clearer height and code evidence before the Stage 1 gate can clear.\n\n## What to fix before resubmitting\n- Lower the building height from 12.0 m to 11.5 m or less on the elevation drawings.\n- Add a Part 9 code summary. Part 9 is the building-code path for small residential buildings. Include life safety, exiting, and assembly notes.\n\n## Optional improvements\n- Add the height datum on the elevations so staff can verify the revised value quickly.\n\n## Next step\nUpload a revised Stage 1 resubmission package in the permit portal with the updated elevations and Part 9 code summary included.",
+  "reference_outputs": [
+    {
+      "id": "ref-van-ssmuh-005-applicant-a",
+      "body": "Plain reference asks to lower building height from 12.0 m to 11.5 m or less and add a building-code summary."
+    },
+    {
+      "id": "ref-van-ssmuh-005-applicant-b",
+      "body": "Reference explains the code summary in simple terms and asks for updated elevations before resubmission."
+    }
+  ],
+  "human_score_0_3": 3,
+  "human_rationale": "Assign 3 because the letter uses short sentences and gives exact required actions. It defines Part 9 and preserves a warm, direct tone for an owner-builder.",
+  "added_at": "2026-06-09",
+  "added_by": "ve"
+}

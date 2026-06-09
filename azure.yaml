@@ -1,0 +1,14 @@
+name: sub-agent-to-agent-training
+metadata:
+  template: sub-agent-to-agent-training@0.0.0
+
+infra:
+  provider: bicep
+  path: infra
+
+services:
+  web:
+    project: ./apps/web
+    language: js
+    host: containerapp
+    resourceName: ${AZURE_CONTAINER_APP_NAME}

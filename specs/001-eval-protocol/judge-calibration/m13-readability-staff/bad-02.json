@@ -1,0 +1,95 @@
+{
+  "tier": "bad",
+  "case_context": {
+    "case_id": "cal-m13-staff-bad-02",
+    "domain": "van-ssmuh",
+    "pathway_class": "specialist-required",
+    "outcome_class": "complex-requires-specialist",
+    "gap_severity_bucket": "blocking",
+    "edge_case_family": "height-and-code",
+    "address_stub": "synthetic-C-block-190",
+    "project": {
+      "lot_area_sqm": 390.0,
+      "lot_frontage_m": 8.9,
+      "zoning_district": "R1-1",
+      "units_proposed": 4,
+      "fsr_proposed": 0.97,
+      "height_m_proposed": 12.0,
+      "rear_setback_m_proposed": 7.8,
+      "side_setback_m_proposed": 1.2,
+      "parking_spaces_proposed": 4,
+      "energy_step_code_proposed": 3,
+      "tree_inventory_count": 0
+    },
+    "applicant": {
+      "type": "contractor",
+      "prior_permits": 2,
+      "represented_by": "architect",
+      "language_preference": "en"
+    },
+    "submitted_documents": [
+      {
+        "kind": "architectural-set",
+        "version": "v2",
+        "key_extracts": {
+          "height_m": 12.0
+        }
+      }
+    ],
+    "missing_documents": [
+      "part9-code-summary"
+    ],
+    "expected_gap_ids": [
+      "gap-height-over",
+      "gap-architectural-set-missing"
+    ],
+    "cited_bylaw_ids": [
+      "ZDB-R1-1-HEIGHT",
+      "VBBL-PART9"
+    ],
+    "application_packet": {
+      "project": {
+        "lot_area_sqm": 390.0,
+        "lot_frontage_m": 8.9,
+        "zoning_district": "R1-1",
+        "units_proposed": 4,
+        "fsr_proposed": 0.97,
+        "height_m_proposed": 12.0,
+        "rear_setback_m_proposed": 7.8,
+        "side_setback_m_proposed": 1.2,
+        "parking_spaces_proposed": 4,
+        "energy_step_code_proposed": 3,
+        "tree_inventory_count": 0
+      },
+      "applicant": {
+        "type": "contractor",
+        "prior_permits": 2,
+        "represented_by": "architect",
+        "language_preference": "en"
+      },
+      "submitted_documents": [
+        {
+          "kind": "architectural-set",
+          "version": "v2",
+          "key_extracts": {
+            "height_m": 12.0
+          }
+        }
+      ],
+      "missing_documents": [
+        "part9-code-summary"
+      ]
+    }
+  },
+  "artifact_under_review": "The project can move ahead. Height appears acceptable. No specialist review is needed. The applicant can provide code details later if staff ask.",
+  "reference_outputs": [
+    {
+      "id": "ref-van-ssmuh-005-staff-a",
+      "body": "A staff memo should flag height 12.0 m vs 11.5 m and the missing Part 9 code summary, then recommend a Stage 1 clarification request."
+    }
+  ],
+  "human_score_0_3": 0,
+  "human_rationale": "Assign 0 because the memo recommends advancement while the case has a height gap and missing code evidence. It lacks headings, citations, and decision-relevant evidence.",
+  "added_at": "2026-06-09",
+  "added_by": "ve"
+}

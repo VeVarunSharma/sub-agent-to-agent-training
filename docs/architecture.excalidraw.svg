@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1760" height="900" viewBox="0 0 1760 900">
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#1e1e1e"/></marker></defs>
+<rect width="1760" height="900" fill="#ffffff"/>
+<text x="40" y="55" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#000000" text-anchor="start">
+<tspan x="40" dy="0">Vancouver SSMUH pre-review architecture</tspan>
+</text>
+<text x="40" y="88" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#000000" text-anchor="start">
+<tspan x="40" dy="0">Fleet-mode GHCP CLI sub-agents improve a six-agent Foundry fleet with PRQS evals.</tspan>
+</text>
+<rect x="40" y="230" width="150" height="90" rx="12" fill="#a5d8ff" stroke="#1864ab" stroke-width="2"/>
+<text x="115" y="263" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#000000" text-anchor="middle">
+<tspan x="115" dy="0">Applicant</tspan>
+<tspan x="115" dy="25">packet</tspan>
+</text>
+<rect x="240" y="205" width="220" height="140" rx="12" fill="#CFE4FA" stroke="#0078D4" stroke-width="2"/>
+<text x="350" y="235" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#000000" text-anchor="middle">
+<tspan x="350" dy="0">Next.js app</tspan>
+<tspan x="350" dy="20">apps/web</tspan>
+<tspan x="350" dy="20">submit, decision,</tspan>
+<tspan x="350" dy="20">evals, iterations</tspan>
+</text>
+<rect x="510" y="125" width="960" height="390" rx="12" fill="none" stroke="#107C10" stroke-width="2"/>
+<text x="530" y="165" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#000000" text-anchor="start">
+<tspan x="530" dy="0">Runtime agent chain</tspan>
+</text>
+<rect x="540" y="205" width="155" height="90" rx="12" fill="#DFF6DD" stroke="#107C10" stroke-width="2"/>
+<text x="617.5" y="235" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#000000" text-anchor="middle">
+<tspan x="617.5" dy="0">Scope pathway</tspan>
+<tspan x="617.5" dy="18">classifier</tspan>
+</text>
+<rect x="745" y="205" width="155" height="90" rx="12" fill="#DFF6DD" stroke="#107C10" stroke-width="2"/>
+<text x="822.5" y="235" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#000000" text-anchor="middle">
+<tspan x="822.5" dy="0">Bylaw</tspan>
+<tspan x="822.5" dy="18">retriever</tspan>
+</text>
+<rect x="950" y="180" width="165" height="95" rx="12" fill="#DFF6DD" stroke="#107C10" stroke-width="2"/>
+<text x="1032.5" y="210" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#000000" text-anchor="middle">
+<tspan x="1032.5" dy="0">Compliance</tspan>
+<tspan x="1032.5" dy="18">evidence</tspan>
+<tspan x="1032.5" dy="18">compiler</tspan>
+</text>
+<rect x="950" y="335" width="165" height="100" rx="12" fill="#DFF6DD" stroke="#107C10" stroke-width="2"/>
+<text x="1032.5" y="365" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#000000" text-anchor="middle">
+<tspan x="1032.5" dy="0">Completeness +</tspan>
+<tspan x="1032.5" dy="18">applicant support</tspan>
+<tspan x="1032.5" dy="18">auditor</tspan>
+</text>
+<rect x="1160" y="205" width="155" height="90" rx="12" fill="#DFF6DD" stroke="#107C10" stroke-width="2"/>
+<text x="1237.5" y="235" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#000000" text-anchor="middle">
+<tspan x="1237.5" dy="0">Redline</tspan>
+<tspan x="1237.5" dy="18">generator</tspan>
+</text>
+<rect x="1335" y="260" width="120" height="105" rx="12" fill="#DFF6DD" stroke="#107C10" stroke-width="2"/>
+<text x="1395.0" y="290" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#000000" text-anchor="middle">
+<tspan x="1395.0" dy="0">Pre-review</tspan>
+<tspan x="1395.0" dy="18">memo writer</tspan>
+</text>
+<rect x="1530" y="250" width="185" height="120" rx="12" fill="#99e9f2" stroke="#0c8599" stroke-width="2"/>
+<text x="1622" y="285" font-family="Arial, sans-serif" font-size="17" font-weight="700" fill="#000000" text-anchor="middle">
+<tspan x="1622" dy="0">Staff memo</tspan>
+<tspan x="1622" dy="21">Applicant letter</tspan>
+<tspan x="1622" dy="21">Redlines</tspan>
+</text>
+<rect x="40" y="575" width="430" height="270" rx="12" fill="none" stroke="#1864ab" stroke-width="2"/>
+<text x="60" y="617" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#000000" text-anchor="start">
+<tspan x="60" dy="0">Data boundaries</tspan>
+</text>
+<rect x="65" y="635" width="365" height="55" rx="12" fill="#a5d8ff" stroke="#1864ab" stroke-width="2"/>
+<text x="82" y="657" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#000000" text-anchor="start">
+<tspan x="82" dy="0">Public corpus</tspan>
+<tspan x="82" dy="18">shareable bylaw text</tspan>
+</text>
+<rect x="65" y="710" width="365" height="55" rx="12" fill="#a5d8ff" stroke="#1864ab" stroke-width="2"/>
+<text x="82" y="732" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#000000" text-anchor="start">
+<tspan x="82" dy="0">Oracle corpus</tspan>
+<tspan x="82" dy="18">staff-only eval refs</tspan>
+</text>
+<rect x="65" y="785" width="365" height="55" rx="12" fill="#a5d8ff" stroke="#1864ab" stroke-width="2"/>
+<text x="82" y="807" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#000000" text-anchor="start">
+<tspan x="82" dy="0">Cases</tspan>
+<tspan x="82" dy="18">train, dev, sealed holdouts</tspan>
+</text>
+<rect x="540" y="585" width="320" height="235" rx="12" fill="#E8DAEF" stroke="#5C2D91" stroke-width="2"/>
+<text x="560" y="630" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#000000" text-anchor="start">
+<tspan x="560" dy="0">Eval protocol</tspan>
+<tspan x="560" dy="22">packages/evaluator</tspan>
+<tspan x="560" dy="22">M1-M13</tspan>
+<tspan x="560" dy="22">deterministic + judged</tspan>
+<tspan x="560" dy="22">bootstrap CI</tspan>
+<tspan x="560" dy="22">PRQS aggregation</tspan>
+</text>
+<rect x="920" y="585" width="380" height="255" rx="12" fill="#FFF4CE" stroke="#F7630C" stroke-width="2"/>
+<text x="940" y="630" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#000000" text-anchor="start">
+<tspan x="940" dy="0">Fleet iteration loop</tspan>
+<tspan x="940" dy="22">scripts/iterate.ts</tspan>
+<tspan x="940" dy="22">triage</tspan>
+<tspan x="940" dy="22">sub-agent dispatch</tspan>
+<tspan x="940" dy="22">proposed edits</tspan>
+<tspan x="940" dy="22">schema guard</tspan>
+<tspan x="940" dy="22">round summary</tspan>
+</text>
+<rect x="1360" y="575" width="360" height="270" rx="12" fill="none" stroke="#0078D4" stroke-width="2"/>
+<text x="1380" y="617" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#000000" text-anchor="start">
+<tspan x="1380" dy="0">Azure runtime</tspan>
+</text>
+<rect x="1385" y="640" width="140" height="45" rx="12" fill="#CFE4FA" stroke="#0078D4" stroke-width="2"/>
+<text x="1455" y="668" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#000000" text-anchor="middle">
+<tspan x="1455" dy="0">Container Apps</tspan>
+</text>
+<rect x="1545" y="640" width="140" height="45" rx="12" fill="#CFE4FA" stroke="#0078D4" stroke-width="2"/>
+<text x="1615" y="668" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#000000" text-anchor="middle">
+<tspan x="1615" dy="0">Cosmos DB</tspan>
+</text>
+<rect x="1385" y="702" width="140" height="45" rx="12" fill="#CFE4FA" stroke="#0078D4" stroke-width="2"/>
+<text x="1455" y="730" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#000000" text-anchor="middle">
+<tspan x="1455" dy="0">Blob Storage</tspan>
+</text>
+<rect x="1545" y="702" width="140" height="45" rx="12" fill="#CFE4FA" stroke="#0078D4" stroke-width="2"/>
+<text x="1615" y="730" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#000000" text-anchor="middle">
+<tspan x="1615" dy="0">Foundry agents</tspan>
+</text>
+<rect x="1385" y="764" width="140" height="45" rx="12" fill="#CFE4FA" stroke="#0078D4" stroke-width="2"/>
+<text x="1455" y="792" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#000000" text-anchor="middle">
+<tspan x="1455" dy="0">AI Services</tspan>
+</text>
+<rect x="1545" y="764" width="140" height="45" rx="12" fill="#CFE4FA" stroke="#0078D4" stroke-width="2"/>
+<text x="1615" y="792" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#000000" text-anchor="middle">
+<tspan x="1615" dy="0">App Insights + UAMI</tspan>
+</text>
+<line x1="190" y1="275" x2="240" y2="275" stroke="#1864ab" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="460" y1="275" x2="540" y2="250" stroke="#107C10" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="695" y1="250" x2="745" y2="250" stroke="#107C10" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="900" y1="250" x2="950" y2="228" stroke="#107C10" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="900" y1="270" x2="950" y2="385" stroke="#107C10" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="1115" y1="228" x2="1160" y2="250" stroke="#107C10" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="1315" y1="250" x2="1335" y2="300" stroke="#107C10" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="1115" y1="385" x2="1335" y2="330" stroke="#107C10" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="1455" y1="315" x2="1530" y2="310" stroke="#0c8599" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="470" y1="690" x2="745" y2="295" stroke="#1864ab" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="1530" y1="350" x2="860" y2="650" stroke="#5C2D91" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="860" y1="700" x2="920" y2="700" stroke="#F7630C" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="1110" y1="585" x2="1160" y2="295" stroke="#F7630C" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="460" y1="345" x2="1360" y2="640" stroke="#0078D4" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="1470" y1="440" x2="1510" y2="575" stroke="#0078D4" stroke-width="3" marker-end="url(#arrow)"/>
+</svg>

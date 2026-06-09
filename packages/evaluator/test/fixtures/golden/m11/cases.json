@@ -1,0 +1,81 @@
+{
+  "metric": "M11",
+  "fixtures": [
+    {
+      "name": "scores exact applicant-support recall as one",
+      "case": {
+        "gold_labels": {
+          "expected_applicant_support_flags": [
+            "jargon-density-high",
+            "next-step-ambiguous"
+          ]
+        }
+      },
+      "runtime": {
+        "applicant_support_flags": [
+          "jargon-density-high",
+          "next-step-ambiguous"
+        ]
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "fails gold flags when prediction is empty",
+      "case": {
+        "gold_labels": {
+          "expected_applicant_support_flags": [
+            "jargon-density-high"
+          ]
+        }
+      },
+      "runtime": {
+        "applicant_support_flags": []
+      },
+      "expected_score": 0
+    },
+    {
+      "name": "scores gold empty and predicted empty as vacuous one",
+      "case": {
+        "gold_labels": {
+          "expected_applicant_support_flags": []
+        }
+      },
+      "runtime": {
+        "applicant_support_flags": []
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "fails gold empty and predicted nonempty",
+      "case": {
+        "gold_labels": {
+          "expected_applicant_support_flags": []
+        }
+      },
+      "runtime": {
+        "applicant_support_flags": [
+          "next-step-ambiguous"
+        ]
+      },
+      "expected_score": 0
+    },
+    {
+      "name": "drops flags outside taxonomy before recall",
+      "case": {
+        "gold_labels": {
+          "expected_applicant_support_flags": [
+            "jargon-density-high",
+            "next-step-ambiguous"
+          ]
+        }
+      },
+      "runtime": {
+        "applicant_support_flags": [
+          "jargon-density-high",
+          "language-not-english"
+        ]
+      },
+      "expected_score": 0.5
+    }
+  ]
+}

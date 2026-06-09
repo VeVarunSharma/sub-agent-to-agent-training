@@ -1,0 +1,129 @@
+{
+  "tier": "good",
+  "case_context": {
+    "case_id": "cal-m13-staff-good-01",
+    "domain": "van-ssmuh",
+    "pathway_class": "as-of-right-ssmuh",
+    "outcome_class": "needs-clarification",
+    "gap_severity_bucket": "major-multi",
+    "edge_case_family": "fsr-rear-tree",
+    "address_stub": "synthetic-NE-block-144",
+    "project": {
+      "lot_area_sqm": 502.5,
+      "lot_frontage_m": 10.1,
+      "zoning_district": "R1-1",
+      "units_proposed": 4,
+      "fsr_proposed": 1.06,
+      "height_m_proposed": 11.0,
+      "rear_setback_m_proposed": 7.1,
+      "side_setback_m_proposed": 1.3,
+      "parking_spaces_proposed": 4,
+      "energy_step_code_proposed": 3,
+      "tree_inventory_count": 1
+    },
+    "applicant": {
+      "type": "owner-builder",
+      "prior_permits": 0,
+      "represented_by": null,
+      "language_preference": "en"
+    },
+    "submitted_documents": [
+      {
+        "kind": "architectural-set",
+        "version": "v2",
+        "key_extracts": {
+          "FSR": 1.06,
+          "units": 4
+        }
+      },
+      {
+        "kind": "site-survey-bcls",
+        "version": "v1",
+        "key_extracts": {
+          "rear_setback_m": 7.1
+        }
+      },
+      {
+        "kind": "tree-inventory-note",
+        "key_extracts": {
+          "tree_inventory_count": 1
+        }
+      }
+    ],
+    "missing_documents": [
+      "tree-assessment"
+    ],
+    "expected_gap_ids": [
+      "gap-fsr-over",
+      "gap-rear-setback-short",
+      "gap-tree-assessment-missing"
+    ],
+    "cited_bylaw_ids": [
+      "ZDB-R1-1-FSR",
+      "ZDB-R1-1-REAR-SETBACK",
+      "TREE-PROTECTION"
+    ],
+    "application_packet": {
+      "project": {
+        "lot_area_sqm": 502.5,
+        "lot_frontage_m": 10.1,
+        "zoning_district": "R1-1",
+        "units_proposed": 4,
+        "fsr_proposed": 1.06,
+        "height_m_proposed": 11.0,
+        "rear_setback_m_proposed": 7.1,
+        "side_setback_m_proposed": 1.3,
+        "parking_spaces_proposed": 4,
+        "energy_step_code_proposed": 3,
+        "tree_inventory_count": 1
+      },
+      "applicant": {
+        "type": "owner-builder",
+        "prior_permits": 0,
+        "represented_by": null,
+        "language_preference": "en"
+      },
+      "submitted_documents": [
+        {
+          "kind": "architectural-set",
+          "version": "v2",
+          "key_extracts": {
+            "FSR": 1.06,
+            "units": 4
+          }
+        },
+        {
+          "kind": "site-survey-bcls",
+          "version": "v1",
+          "key_extracts": {
+            "rear_setback_m": 7.1
+          }
+        },
+        {
+          "kind": "tree-inventory-note",
+          "key_extracts": {
+            "tree_inventory_count": 1
+          }
+        }
+      ],
+      "missing_documents": [
+        "tree-assessment"
+      ]
+    }
+  },
+  "artifact_under_review": "# Staff memo\n\nFour-unit R1-1 SSMUH proposal needs clarification for FSR, rear yard, and tree evidence.\n\n## Triage\nNEEDS-CLARIFICATION with high confidence. Use this memo as a Stage 1 pre-review screen before detailed zoning, building, and site review. Keep review limited to the listed bylaws and gaps.\n\n## Applicable bylaws\n- ZDB-R1-1-FSR: R1-1 SSMUH floor space ratio cap is 1.00. Cited because architectural-set v2 shows FSR 1.06.\n- ZDB-R1-1-REAR-SETBACK: rear yard must be at least 7.6 m. Cited because site-survey-bcls v1 shows 7.1 m.\n- TREE-PROTECTION: tree evidence is needed when a qualifying tree may be affected. Cited because the tree inventory note shows 1 tree near the footprint.\n\n## Evidence\n- architectural-set v2 shows FSR 1.06 and four units.\n- site-survey-bcls v1 shows rear yard 7.1 m.\n- tree-inventory-note shows 1 tree near the proposed work area.\n\n## Gaps\n- FSR: proposed 1.06 vs required 1.00. Gap is 0.06 over. Guidance: revise the floor-area table to 1.00 or lower.\n- Rear setback: proposed 7.1 m vs required 7.6 m. Gap is 0.5 m short. Guidance: move the rear wall line or revise the site plan.\n- Tree assessment: 1 tree is flagged and the arborist assessment is missing. Guidance: submit the tree assessment before detailed review.\n\n## Recommendation\nIssue a Stage 1 clarification request. Ask the applicant to revise FSR, revise rear setback, and upload a tree assessment before detailed review.",
+  "reference_outputs": [
+    {
+      "id": "ref-van-ssmuh-001-staff-a",
+      "body": "Formal reference uses Triage, Applicable bylaws, Evidence, Gaps, Recommendation and lists FSR 1.06, rear yard 7.1 m, and missing tree assessment."
+    },
+    {
+      "id": "ref-van-ssmuh-001-staff-b",
+      "body": "Concise reference asks for FSR, rear setback, and tree assessment fixes before detailed review."
+    }
+  ],
+  "human_score_0_3": 3,
+  "human_rationale": "Assign 3 because the memo uses the required headings in order and cites bylaw IDs with specific numeric evidence. It gives a clear Stage 1 recommendation with no filler.",
+  "added_at": "2026-06-09",
+  "added_by": "ve"
+}

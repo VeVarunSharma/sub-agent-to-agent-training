@@ -1,0 +1,101 @@
+{
+  "tier": "bad",
+  "case_context": {
+    "case_id": "cal-m12-bad-02",
+    "domain": "van-ssmuh",
+    "pathway_class": "as-of-right-ssmuh",
+    "outcome_class": "needs-clarification",
+    "gap_severity_bucket": "minor-single",
+    "edge_case_family": "rear-setback-below",
+    "address_stub": "synthetic-W-block-044",
+    "project": {
+      "lot_area_sqm": 420.0,
+      "lot_frontage_m": 9.4,
+      "zoning_district": "R1-1",
+      "units_proposed": 3,
+      "fsr_proposed": 0.94,
+      "height_m_proposed": 10.8,
+      "rear_setback_m_proposed": 6.9,
+      "side_setback_m_proposed": 1.4,
+      "parking_spaces_proposed": 3,
+      "energy_step_code_proposed": 3,
+      "tree_inventory_count": 0
+    },
+    "applicant": {
+      "type": "designer",
+      "prior_permits": 4,
+      "represented_by": "designer",
+      "language_preference": "en"
+    },
+    "submitted_documents": [
+      {
+        "kind": "site-survey-bcls",
+        "version": "v1",
+        "key_extracts": {
+          "rear_setback_m": 6.9
+        }
+      },
+      {
+        "kind": "architectural-set",
+        "key_extracts": {
+          "height_m": 10.8
+        }
+      }
+    ],
+    "missing_documents": [],
+    "expected_gap_ids": [
+      "gap-rear-setback-short"
+    ],
+    "cited_bylaw_ids": [
+      "ZDB-R1-1-REAR-SETBACK"
+    ],
+    "application_packet": {
+      "project": {
+        "lot_area_sqm": 420.0,
+        "lot_frontage_m": 9.4,
+        "zoning_district": "R1-1",
+        "units_proposed": 3,
+        "fsr_proposed": 0.94,
+        "height_m_proposed": 10.8,
+        "rear_setback_m_proposed": 6.9,
+        "side_setback_m_proposed": 1.4,
+        "parking_spaces_proposed": 3,
+        "energy_step_code_proposed": 3,
+        "tree_inventory_count": 0
+      },
+      "applicant": {
+        "type": "designer",
+        "prior_permits": 4,
+        "represented_by": "designer",
+        "language_preference": "en"
+      },
+      "submitted_documents": [
+        {
+          "kind": "site-survey-bcls",
+          "version": "v1",
+          "key_extracts": {
+            "rear_setback_m": 6.9
+          }
+        },
+        {
+          "kind": "architectural-set",
+          "key_extracts": {
+            "height_m": 10.8
+          }
+        }
+      ],
+      "missing_documents": []
+    }
+  },
+  "artifact_under_review": "{\n  \"field\": \"project.height_m_proposed\",\n  \"current_value\": 10.8,\n  \"target_value\": 12.0,\n  \"anchor_bylaw_id\": \"ZDB-R1-1-REAR-SETBACK\",\n  \"rationale\": \"Raise the building height to improve the rear yard issue.\"\n}",
+  "reference_outputs": [
+    {
+      "id": "expected-rear",
+      "body": "Expected redline names project.rear_setback_m_proposed, gives current 6.9 m, target 7.6 m or more, and explains the rear yard minimum."
+    }
+  ],
+  "human_score_0_3": 0,
+  "human_rationale": "Assign 0 because the redline changes height while the cited bylaw concerns rear setback. It also moves the project away from the compliance issue, which contradicts the actionability rubric.",
+  "added_at": "2026-06-09",
+  "added_by": "ve"
+}

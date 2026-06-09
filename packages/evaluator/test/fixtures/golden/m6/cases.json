@@ -1,0 +1,109 @@
+{
+  "metric": "M6",
+  "fixtures": [
+    {
+      "name": "scores matching numeric gap ids as one",
+      "case": {
+        "gold_labels": {
+          "expected_gap_ids": [
+            "gap-fsr-max"
+          ]
+        }
+      },
+      "runtime": {
+        "reported_numeric_gaps": [
+          {
+            "gap_id": "gap-fsr-max",
+            "field": "fsr_proposed",
+            "proposed_value": 0.92,
+            "required_value": 0.7,
+            "delta": -0.22,
+            "unit": "ratio"
+          }
+        ]
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "fails when expected numeric gaps are not reported",
+      "case": {
+        "gold_labels": {
+          "expected_gap_ids": [
+            "gap-parking-short"
+          ]
+        }
+      },
+      "runtime": {
+        "reported_numeric_gaps": []
+      },
+      "expected_score": 0
+    },
+    {
+      "name": "scores nonnumeric gold gaps and no predictions as vacuous one",
+      "case": {
+        "gold_labels": {
+          "expected_gap_ids": [
+            "gap-tree-assessment-missing"
+          ]
+        }
+      },
+      "runtime": {
+        "reported_numeric_gaps": []
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "fails when numeric predictions exist but gold numeric set is empty",
+      "case": {
+        "gold_labels": {
+          "expected_gap_ids": []
+        }
+      },
+      "runtime": {
+        "reported_numeric_gaps": [
+          {
+            "gap_id": "gap-height-over",
+            "field": "height_m",
+            "proposed_value": 12,
+            "required_value": 11,
+            "delta": -1,
+            "unit": "m"
+          }
+        ]
+      },
+      "expected_score": 0
+    },
+    {
+      "name": "uses intersection over union for partial numeric gaps",
+      "case": {
+        "gold_labels": {
+          "expected_gap_ids": [
+            "gap-fsr-max",
+            "gap-height-over"
+          ]
+        }
+      },
+      "runtime": {
+        "reported_numeric_gaps": [
+          {
+            "gap_id": "gap-fsr-max",
+            "field": "fsr_proposed",
+            "proposed_value": 0.92,
+            "required_value": 0.7,
+            "delta": -0.22,
+            "unit": "ratio"
+          },
+          {
+            "gap_id": "gap-parking-short",
+            "field": "parking_spaces",
+            "proposed_value": 0,
+            "required_value": 1,
+            "delta": 1,
+            "unit": "count"
+          }
+        ]
+      },
+      "expected_score": 0.3333333333333333
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "tier": "mediocre",
+  "case_context": {
+    "case_id": "cal-m12-mediocre-01",
+    "domain": "van-ssmuh",
+    "pathway_class": "as-of-right-ssmuh",
+    "outcome_class": "needs-clarification",
+    "gap_severity_bucket": "minor-single",
+    "edge_case_family": "side-setback-below",
+    "address_stub": "synthetic-S-block-083",
+    "project": {
+      "lot_area_sqm": 465.0,
+      "lot_frontage_m": 10.0,
+      "zoning_district": "R1-1",
+      "units_proposed": 4,
+      "fsr_proposed": 0.98,
+      "height_m_proposed": 10.6,
+      "rear_setback_m_proposed": 7.8,
+      "side_setback_m_proposed": 1.0,
+      "parking_spaces_proposed": 4,
+      "energy_step_code_proposed": 3,
+      "tree_inventory_count": 0
+    },
+    "applicant": {
+      "type": "owner-builder",
+      "prior_permits": 0,
+      "represented_by": null,
+      "language_preference": "en"
+    },
+    "submitted_documents": [
+      {
+        "kind": "site-survey-bcls",
+        "version": "v2",
+        "key_extracts": {
+          "west_side_setback_m": 1.0
+        }
+      },
+      {
+        "kind": "architectural-set",
+        "key_extracts": {
+          "units": 4
+        }
+      }
+    ],
+    "missing_documents": [],
+    "expected_gap_ids": [
+      "gap-side-setback-short"
+    ],
+    "cited_bylaw_ids": [
+      "ZDB-R1-1-SIDE-SETBACK"
+    ],
+    "application_packet": {
+      "project": {
+        "lot_area_sqm": 465.0,
+        "lot_frontage_m": 10.0,
+        "zoning_district": "R1-1",
+        "units_proposed": 4,
+        "fsr_proposed": 0.98,
+        "height_m_proposed": 10.6,
+        "rear_setback_m_proposed": 7.8,
+        "side_setback_m_proposed": 1.0,
+        "parking_spaces_proposed": 4,
+        "energy_step_code_proposed": 3,
+        "tree_inventory_count": 0
+      },
+      "applicant": {
+        "type": "owner-builder",
+        "prior_permits": 0,
+        "represented_by": null,
+        "language_preference": "en"
+      },
+      "submitted_documents": [
+        {
+          "kind": "site-survey-bcls",
+          "version": "v2",
+          "key_extracts": {
+            "west_side_setback_m": 1.0
+          }
+        },
+        {
+          "kind": "architectural-set",
+          "key_extracts": {
+            "units": 4
+          }
+        }
+      ],
+      "missing_documents": []
+    }
+  },
+  "artifact_under_review": "{\n  \"field\": \"project.side_setback_m_proposed\",\n  \"current_value\": 1.0,\n  \"target_value\": \"increase side yard\",\n  \"anchor_bylaw_id\": \"ZDB-R1-1-SIDE-SETBACK\",\n  \"rationale\": \"The side yard needs to comply with the side setback rule.\"\n}",
+  "reference_outputs": [
+    {
+      "id": "expected-side",
+      "body": "Expected redline names project.side_setback_m_proposed, gives current 1.0 m, target 1.2 m or more, and points to the side yard minimum."
+    }
+  ],
+  "human_score_0_3": 1,
+  "human_rationale": "Assign 1 because the field is correct but the target is vague. The applicant cannot tell the exact side yard dimension needed without contacting staff.",
+  "added_at": "2026-06-09",
+  "added_by": "ve"
+}

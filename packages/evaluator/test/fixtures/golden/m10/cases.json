@@ -1,0 +1,81 @@
+{
+  "metric": "M10",
+  "fixtures": [
+    {
+      "name": "scores exact applicant-support precision as one",
+      "case": {
+        "gold_labels": {
+          "expected_applicant_support_flags": [
+            "jargon-density-high",
+            "next-step-ambiguous"
+          ]
+        }
+      },
+      "runtime": {
+        "applicant_support_flags": [
+          "jargon-density-high",
+          "next-step-ambiguous"
+        ]
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "fails predicted flags when gold set is empty",
+      "case": {
+        "gold_labels": {
+          "expected_applicant_support_flags": []
+        }
+      },
+      "runtime": {
+        "applicant_support_flags": [
+          "next-step-ambiguous"
+        ]
+      },
+      "expected_score": 0
+    },
+    {
+      "name": "scores predicted empty and gold empty as vacuous one",
+      "case": {
+        "gold_labels": {
+          "expected_applicant_support_flags": []
+        }
+      },
+      "runtime": {
+        "applicant_support_flags": []
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "fails predicted empty and gold nonempty",
+      "case": {
+        "gold_labels": {
+          "expected_applicant_support_flags": [
+            "jargon-density-high"
+          ]
+        }
+      },
+      "runtime": {
+        "applicant_support_flags": []
+      },
+      "expected_score": 0
+    },
+    {
+      "name": "drops flags outside taxonomy before precision",
+      "case": {
+        "gold_labels": {
+          "expected_applicant_support_flags": [
+            "jargon-density-high"
+          ]
+        }
+      },
+      "runtime": {
+        "applicant_support_flags": [
+          "jargon-density-high",
+          "next-step-ambiguous",
+          "language-not-english"
+        ]
+      },
+      "expected_score": 0.5
+    }
+  ]
+}

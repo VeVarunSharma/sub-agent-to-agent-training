@@ -1,0 +1,41 @@
+{
+  "metric": "M1",
+  "fixtures": [
+    {
+      "name": "matches discretionary pathway",
+      "case": {
+        "pathway_class": "discretionary"
+      },
+      "runtime": {
+        "predicted_pathway": "discretionary"
+      },
+      "expected_score": 1
+    },
+    {
+      "name": "mismatches heritage and floodplain pathways",
+      "case": {
+        "pathway_class": "heritage"
+      },
+      "runtime": {
+        "predicted_pathway": "floodplain"
+      },
+      "expected_score": 0
+    },
+    {
+      "name": "uses default empty objects as matching as-of-right",
+      "case": {},
+      "runtime": {},
+      "expected_score": 1
+    },
+    {
+      "name": "matches out-of-scope pathway",
+      "case": {
+        "pathway_class": "out-of-scope"
+      },
+      "runtime": {
+        "predicted_pathway": "out-of-scope"
+      },
+      "expected_score": 1
+    }
+  ]
+}
