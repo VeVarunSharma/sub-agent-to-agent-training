@@ -2,13 +2,14 @@
   "name": "@srs/web",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "echo \"(web) no tests yet\" && exit 0"
+    "test": "node --import tsx --test test/*.test.ts"
   },
   "dependencies": {
     "@azure/cosmos": "^4.9.3",

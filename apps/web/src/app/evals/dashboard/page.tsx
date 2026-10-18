@@ -24,7 +24,11 @@ export default async function EvalsDashboardPage() {
       <Card>
         <CardHeader>
           <CardTitle>PRQS trend</CardTitle>
-          <CardDescription>Show deterministic PRQS with CI95 bands.</CardDescription>
+          <CardDescription>
+            Historical train-split deterministic PRQS with CI95 bands. These results are separate from browser mock runs.
+            M10 and M11 regressed in round 001. Judged M12 and M13 are unavailable.
+            Historical receipts are superseded for changed metric semantics. Generalization and time savings are unproven.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <PrqsChart rounds={rounds} />

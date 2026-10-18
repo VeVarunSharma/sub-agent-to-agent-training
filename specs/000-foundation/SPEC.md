@@ -20,9 +20,9 @@ The repo doubles as source material for a public blog post. Every artifact in it
 ## Stack
 
 - Node 22 LTS
-- pnpm 9 workspaces
+- pnpm 10 workspaces
 - TypeScript 5.x (strict)
-- Next.js 15 (App Router)
+- Next.js 16 (App Router)
 - shadcn/ui (Radix + Tailwind)
 - Azure AI Foundry Agent Service (managed agents, vector stores, threads)
 - Azure Cosmos DB for NoSQL (cases, runs, eval reports)
@@ -33,6 +33,8 @@ The repo doubles as source material for a public blog post. Every artifact in it
 - GitHub Copilot CLI (fleet-mode iteration)
 
 No auth in the demo. The web app is a public read of published eval reports plus a stateless submit flow.
+
+Label local review execution as deterministic mock stages. Keep historical model-backed reports separate from browser runs. Package the web app as a non-root standalone container with repository-root build context. Run workspace checks in pull-request CI without model credentials or holdout keys. Web tests cover the review HTTP handler with Node's test runner and the existing tsx loader.
 
 ## Repo layout
 

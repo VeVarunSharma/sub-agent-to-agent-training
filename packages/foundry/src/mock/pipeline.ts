@@ -281,7 +281,7 @@ ${stageBlock}
 
 ${greeting}
 
-This is a pre-review note from City staff. It is not a final decision and it is not legal advice. The goal here is to surface the few items that, if addressed, will let your application move forward without another full review cycle.
+Demonstration draft for staff review. This synthetic example is not issued by the City of Vancouver. It is not a final decision or legal advice. A staff reviewer must verify every finding and choose the next action.
 
 ## What we found
 
@@ -289,7 +289,7 @@ ${applicantFixes}
 
 ## What happens next
 
-A planner will review this pre-review note and confirm whether the items above are blocking or can be resolved at the next stage. You will hear from us within the published intake timelines.
+A staff reviewer would confirm whether the items above need clarification, specialist input, or detailed review. This demonstration sends no communication and promises no response timeline.
 
 If anything above is unclear, please reply and we will translate the request into plain language for you.`;
 

@@ -1,128 +1,128 @@
 # Architecture
 
-Build a Vancouver SSMUH permit pre-review copilot for staff planners and the developers reading the blog. The headline pattern is fleet-mode GitHub Copilot CLI sub-agents iterating on a six-agent Azure AI Foundry fleet, with PRQS evals deciding whether each round moves forward.
+Trace a synthetic permit packet into evidence and staff-reviewed drafts. Separate the runnable mock experience from optional clients and the target Azure deployment.
 
-## System diagram
-
-![](./architecture.excalidraw.svg)
-
-Open the editable source at [architecture.excalidraw](./architecture.excalidraw).
+## Distinguish the execution paths
 
 ```mermaid
-flowchart LR
-  applicant[Applicant packet] --> web[Next.js app]
-  web --> scope[scope-pathway-classifier]
-  scope --> retriever[bylaw-retriever]
-  retriever --> evidence[compliance-evidence-compiler]
-  retriever --> auditor[completeness-applicant-support-auditor]
-  evidence --> redline[redline-generator]
-  redline --> memo[pre-review-memo-writer]
-  auditor --> memo
-  memo --> outputs[Staff memo and applicant letter]
-  public[Public corpus] --> retriever
-  oracle[Oracle corpus for eval only] --> eval[packages/evaluator]
-  cases[Train, dev, holdout cases] --> eval
-  outputs --> eval
-  eval --> fleet[scripts/iterate.ts fleet loop]
-  fleet --> agents[.github/agents role files]
-  agents --> guard[proposed edits plus schema guard]
-  guard --> scope
-  web --> azure[Azure Container Apps runtime]
-  azure --> cosmos[Cosmos DB]
-  azure --> blob[Blob Storage]
-  azure --> foundry[Foundry agents]
-  azure --> insights[Application Insights]
+flowchart TB
+  subgraph local["Local demo: no credentials"]
+    queue["Queue and synthetic samples"] --> review["/review/[caseId]"]
+    review --> api["POST /api/review"]
+    api --> mock["Deterministic six-stage mock pipeline"]
+    mock --> drafts["Ledger, redlines, audit, memo, letter"]
+    submit["/decisions/submit"] --> decisions["POST /api/decisions"]
+    decisions --> fixtures["Fixture orchestrator events"]
+    fixtures --> memory["Process-memory run state"]
+    receipts["Local eval-reports"] --> dashboard["/evals/dashboard and /iterations"]
+  end
+  subgraph optional["Optional integrations: require configuration"]
+    models["GitHub Models baseline and fleet loop"] --> reports["New runtime and evaluation receipts"]
+    reports --> receipts
+    hosted["Hosted Foundry invocation"]
+    cosmos["Cosmos run and report clients"]
+    blob["Blob packet client"]
+  end
+  decisions -. "Configured endpoint and project" .-> hosted
+  decisions -. "Configured persistence" .-> cosmos
+  decisions -. "Configured uploads" .-> blob
+  cosmos -. "Configured report reads" .-> dashboard
+  subgraph target["Target Azure deployment: unverified"]
+    aca["Container Apps web host"]
+    identity["Managed identity"]
+    project["Real Foundry project and six-agent orchestration"]
+    stores["Cosmos DB and Blob Storage"]
+    telemetry["Application Insights"]
+    aca --> identity
+    identity --> project
+    identity --> stores
+    aca --> telemetry
+    standin["Current Bicep: AI Services Foundry stand-in"]
+    standin -. "Requires replacement and validation" .-> project
+  end
 ```
 
-## Components
+Inspect the original [diagram export](architecture.excalidraw.svg) and [editable source](architecture.excalidraw) as a conceptual system sketch. They remain unchanged. Use the diagram above to distinguish current execution from optional and target components.
 
-### Runtime agents
+## Follow the web paths
 
-Run six repo-authored agents from `agents/<agent-id>/`. The runtime chain starts with `agents/scope-pathway-classifier`, then `agents/bylaw-retriever`, then `agents/compliance-evidence-compiler` and `agents/completeness-applicant-support-auditor`, then `agents/redline-generator`, and ends with `agents/pre-review-memo-writer`. Inputs are a synthetic permit packet plus upstream JSON outputs, and outputs are pathway labels, bylaw citations, evidence maps, completeness flags, redlines, staff memos, and applicant letters.
+Serve the UI from `apps/web` with Next.js 16. Read three hand-authored synthetic cases from `packages/shared/src/samples/index.ts`.
 
-### Data corpus
+| Surface | Current behavior |
+| --- | --- |
+| `/` | Lists the sample packets |
+| `/review/[caseId]` | Shows packet fields and calls `/api/review` for result tabs |
+| `/api/review` | Always calls `runReviewPipeline` from the mock package export |
+| `/decisions/submit` | Selects a known synthetic case and creates a run |
+| `/decisions/[id]` | Shows run events and agent status through the decision stream |
+| `/api/decisions` | Uses fixture orchestration without Foundry configuration. Can persist runs and upload packet JSON when clients are configured. |
+| `/evals/dashboard` and `/iterations` | Read local round receipts or configured Cosmos reports |
 
-Store shareable bylaw excerpts under `datasets/policy-corpus/public/`, and index only that pool into the retriever vector store. Keep staff-only references under `datasets/policy-corpus/oracle/`, where the eval runner can read decision matrices, required evidence maps, simplification notes, and reference outputs. Store cases under `datasets/cases/*.{train,dev,holdout,gold-holdout}.jsonl[.age]`, with train visible to allowed few-shot work, dev reserved for aggregate scoring, and holdout plus gold holdout sealed with age.
+Keep review results separate from decision event streams. The mock review route does not become model-backed when Azure environment variables are set. Fixture events include illustrative elapsed values and links to existing iteration artifacts. They do not prove six hosted agents executed for the selected case.
 
-### Eval protocol
+Use process-memory state for local decision runs. It is not durable across process restarts or replicas. Unknown run IDs can resolve to fixture or generated views. A rendered run page alone does not establish successful persistence.
 
-Score outputs in `packages/evaluator` with the PRQS protocol from spec 001. Combine M1 through M13 across deterministic checks, taxonomy matches, and judged metrics, then publish mean PRQS with bootstrap confidence intervals. Feed outputs from the runtime JSONL into `train.eval.jsonl`, `train.report.md`, and round summaries.
+## Trace the review stages
 
-### Fleet-mode iteration loop
+Run `packages/foundry/src/mock/pipeline.ts` for the credential-free review path:
 
-Drive each round with `scripts/iterate.ts` and the GHCP CLI role files in `.github/agents/*.md`. Run triage, dispatch one prompt iterator and one few-shot iterator per runtime agent, collect `prompt-edits.json` and `fewshot-edits.json`, and apply edits only through the schema guard. Emit receipts under `eval-reports/round-NNN-fleet/` so the operator can review diffs, the baseline rerun, and the round recommendation.
+1. Classify the pathway and specialist routing.
+2. Return tutorial bylaw snippets relevant to the packet.
+3. Compile numeric gaps and document evidence.
+4. Audit completeness and applicant-support flags.
+5. Generate proposed redlines.
+6. Draft a staff memo and applicant letter.
 
-### Next.js app
+Treat these as deterministic teaching rules with simplified policy content. The mock retriever does not query a Foundry vector store. Require a staff reviewer to verify every draft and citation before any use outside the tutorial.
 
-Serve the developer-facing and planner-facing UI from `apps/web/` with Next.js, shadcn UI, Tailwind, and shared SSMUH types. Expose four durable user surfaces: `/decisions/submit` for packet intake, `/decisions/[id]` for staff memo plus applicant letter review, `/evals/dashboard` for PRQS and M1-M13 movement, and `/iterations` for fleet round status. Inputs are packets, case IDs, reports, and round artifacts, and outputs are review screens, copied memos, applicant letters, and operator dashboards.
+Keep agent source under `agents/<agent-id>/` for the separate model-backed runtime. Follow the [fleet playbook](fleet-mode-playbook.md) for model access, scoped proposals, schema guards, reruns, and operator decisions. Do not confuse a UI mock run with a scored fleet iteration.
 
-### Azure runtime
+## Preserve data boundaries
 
-Author Azure resources from `infra/`, with the target shape recorded in `infra/README.md` and the foundation spec. Run the web app on Azure Container Apps, store cases and run metadata in Cosmos DB, store corpus, uploads, and artifacts in Blob Storage, run agents in Azure AI Foundry, use Azure AI Services for model deployments, send telemetry to Application Insights, and grant access through a user-assigned managed identity. The web app consumes Bicep outputs as environment variables and secrets.
+Index only approved public corpus content for retrieval. Track source URLs, versions, rights statements, and hashes in [`datasets/policy-corpus/corpus-manifest.van-ssmuh.json`](../datasets/policy-corpus/corpus-manifest.van-ssmuh.json).
 
-### gh-models judge runtime
+Keep oracle material evaluation-only. Keep dev case content, every sealed `.age` file, and oracle paths outside sub-agent context. Keep train, dev, and sealed holdout roles separate. Follow specs 001 and 002 for evaluation and provenance rules.
 
-Use the gh-models runtime from spec 004 for laptop-reproducible baselines. The deterministic path runs without judge calls, and the judged path adds M12 and M13 through `gh models eval` with frozen prompts and JSON parsing. This path lets the tutorial show the same pipeline before the Azure Foundry promotion is ready.
+Restrict fleet sub-agents to their explicit context allow-lists and declared outputs. Scrub their environment to approved variables. Keep holdout keys and Azure secrets outside that context. Treat the CLI orchestration and artifact guard as a separate trust boundary from the unauthenticated web UI.
 
-## Data flow: applicant submits a packet
+## Interpret evaluation receipts
 
-1. Submit a synthetic SSMUH packet through the Next.js app. The packet carries zoning, proposed units, numeric envelope fields, documents, and applicant context.
-2. Call `agents/scope-pathway-classifier` to choose the review pathway and escalation state.
-3. Call `agents/bylaw-retriever` to rank public bylaw section IDs from `datasets/policy-corpus/public/`.
-4. Call `agents/compliance-evidence-compiler` to map required evidence against provided evidence and compute numeric gaps.
-5. Call `agents/completeness-applicant-support-auditor` to decide Stage 1 completeness, missing items, applicant-support flags, and equity notes.
-6. Call `agents/redline-generator` to propose compliant field changes for expected gaps.
-7. Call `agents/pre-review-memo-writer` to combine upstream outputs into a staff memo and an applicant letter.
-8. Persist or display the package in the app, then feed the runtime payload to PRQS evals when the case belongs to a scored split.
+Compute PRQS with `packages/evaluator`. Read existing reports under `eval-reports/`, rather than treating dashboard display as a fresh evaluation.
 
-## Data flow: operator iterates a round
+Report the existing train-only deterministic PRQS change as 80.96 to 86.49. Keep overlapping bootstrap intervals, M10/M11 regressions, null M12/M13, and one runtime failure visible. Both hard-freeze specs still contain null freeze dates and commits. Do not claim full judged quality, holdout generalization, or a frozen benchmark.
 
-1. Run the baseline or prior round eval through `pnpm baseline` or `pnpm iterate` so runtime and eval JSONL files land in `eval-reports/round-NNN-fleet/`.
-2. Triage misses with `error-triager`, grouped by agent and PRQS category.
-3. Dispatch scoped GHCP CLI sub-agents from `.github/agents/*.md` with the exact context bundle from `scripts/iterate.ts`.
-4. Collect per-agent proposed edits under `eval-reports/round-NNN-fleet/per-agent/<agent-id>/`.
-5. Apply edits with the orchestrator guard, which validates prompt and few-shot schemas before touching `agents/<agent-id>/`.
-6. Run the baseline again on the train split through the gh-models runtime.
-7. Review `round-summary.md`, including PRQS delta, CI95 range, M1-M13 movement, per-agent rationale, and regression risk.
-8. Decide to accept, revert, or escalate. Accept only when the round moves PRQS without a blocked artifact audit.
+## Configure optional Azure clients
 
-## Trust + privacy boundaries
+Use the server-side environment names from the source and Bicep. Leave them unset for the local fixture path. Consult [`infra/README.md`](../infra/README.md) for the emitted environment contract.
 
-Keep sub-agents away from sealed cases, `datasets/cases/*.dev.jsonl`, every `*.age` file, and `datasets/policy-corpus/oracle/**`. Follow the env-scrub baseline from [spec 000](../specs/000-foundation/SPEC.md) and [spec 005](../specs/005-fleet-iteration/SPEC.md): `PATH`, `HOME`, `LANG`, `LC_*`, and `SRS_*`. Spec 005 also notes `GH_TOKEN` and `GITHUB_TOKEN` for model access, while holdout keys and Azure secrets stay out of sub-agent env.
+| Integration | Settings |
+| --- | --- |
+| Identity | `AZURE_CLIENT_ID` for `DefaultAzureCredential` |
+| Cosmos | `SRS_COSMOS_ENDPOINT`, `SRS_COSMOS_DATABASE_NAME`, `SRS_COSMOS_RUNS_CONTAINER_NAME`, `SRS_COSMOS_REPORTS_CONTAINER_NAME` |
+| Blob | `SRS_STORAGE_ACCOUNT_NAME`, `SRS_STORAGE_UPLOADS_CONTAINER_NAME`. The web client also accepts `SRS_STORAGE_ACCOUNT`. |
+| Hosted orchestration | `SRS_FOUNDRY_ENDPOINT`, `SRS_FOUNDRY_PROJECT_NAME`. The web client also accepts `SRS_FOUNDRY_PROJECT`. |
+| Hosted agent routing | Optional `SRS_FOUNDRY_ORCHESTRATOR_AGENT_NAME` and `SRS_FOUNDRY_ORCHESTRATOR_URL` |
+| Foundry package tooling | `SRS_FOUNDRY_RESOURCE_GROUP` together with endpoint and project name |
+| Judge tooling | `SRS_JUDGE_DEPLOYMENT_NAME` and optional `SRS_JUDGE_ENDPOINT` |
+| Telemetry wiring | `APPLICATIONINSIGHTS_CONNECTION_STRING` |
+| Cosmos strict mode | `SRS_REQUIRE_AZURE=1` prevents Cosmos fallback on configuration or persistence failures. It does not certify every cloud integration. |
 
-Use the role-file convention `forbidden_tools: [git, gh]` to block branch, commit, push, and PR operations inside sub-agents. The round-001 playbook records why this matters. Sub-agents write only their declared output contract, and scratch files stay under `.srs-iterate-tmp/`.
+Do not send these settings or secrets to browser code. Configuring a Foundry endpoint and project attempts a hosted invocation. Its failure can produce failed events. It does not silently revert to fixture orchestration. Cosmos and Blob have their own error handling and fallback boundaries.
 
-## Azure runtime
+## Review the target deployment
 
-Deploy the production shape through `infra/`. Use Azure Container Apps for the Next.js host, Cosmos DB for cases, runs, and eval reports, Blob Storage for corpus files, uploads, and sub-agent artifacts, Azure AI Foundry for the managed agent fleet, Azure AI Services for model deployments, Application Insights for traces and metrics, and a user-assigned managed identity for secretless access.
+Inspect the root `azure.yaml` and `infra/` Bicep. The target host uses Container Apps, Container Registry, Cosmos DB, Blob Storage, a user-assigned identity, and Application Insights. Current infrastructure provisions an AI Services account as a Foundry stand-in and a judge deployment. It does not establish a real Foundry project or a working hosted six-agent orchestrator.
 
-Bridge Bicep outputs into the web app through the Container Apps environment. Use this env-var contract: `AZURE_CLIENT_ID`, `AZURE_COSMOS_ENDPOINT`, `AZURE_COSMOS_DATABASE`, `AZURE_STORAGE_ACCOUNT`, `AZURE_STORAGE_CONTAINER`, `AZURE_FOUNDRY_ENDPOINT`, `AZURE_FOUNDRY_PROJECT`, `AZURE_AI_SERVICES_ENDPOINT`, `APPLICATIONINSIGHTS_CONNECTION_STRING`, and `NEXT_PUBLIC_SRS_ENVIRONMENT`. Keep sensitive values in Container Apps secrets, and expose only non-secret names to the browser.
+Build the web container from the repository root with `docker build -f apps/web/Dockerfile -t srs-demo .`. Bind local demonstrations to `127.0.0.1`. Treat Docker checks, `azd` packaging, cloud provisioning, and end-to-end hosted execution as separate validations. No verified cloud deployment is claimed.
 
-## Repository layout
+Keep real data out until user authentication, authorization, isolation, retention, audit, and security review exist. Managed identity authorizes service access. It does not authenticate planners. Current Bicep includes external ingress, so do not expose the unauthenticated demo as a customer service.
 
-```text
-.
-├── apps/                 Next.js planner and operator UI.
-├── packages/             Workspace packages for Foundry runtime, evaluator, and shared schemas.
-├── agents/               Source of truth for the six SSMUH runtime agents.
-├── datasets/             Public corpus, oracle corpus, synthetic cases, splits, and few-shots.
-├── scripts/              Data generation, seeding, eval, baseline, sync, ablation, and iteration CLIs.
-├── infra/                Bicep and azd deployment surface for Azure runtime resources.
-├── specs/                Versioned contracts for layout, evals, data, Foundry sync, runtime, and fleet iteration.
-├── eval-reports/         Round outputs, PRQS reports, triage, proposed edits, diffs, and summaries.
-├── .github/agents/       GHCP CLI sub-agent role files and output contracts.
-└── docs/                 Operator guides, methodology, architecture, and blog support docs.
-```
+## Continue reading
 
-## References
-
-- [Spec 000: Foundation](../specs/000-foundation/SPEC.md)
-- [Spec 001: Eval protocol](../specs/001-eval-protocol/SPEC.md)
-- [Spec 002: Synthetic data](../specs/002-synthetic-data/SPEC.md)
-- [Spec 003: Foundry agent sync](../specs/003-foundry-agent-sync/SPEC.md)
-- [Spec 004: gh-models runtime](../specs/004-ghmodels-runtime/SPEC.md)
-- [Spec 005: Fleet-mode iteration loop](../specs/005-fleet-iteration/SPEC.md)
-- [Fleet-mode playbook](./fleet-mode-playbook.md)
-- [Round 001 fleet summary](../eval-reports/round-001-fleet/round-summary.md)
-- [Infra README](../infra/README.md)
-- [Web app README](../apps/web/README.md)
+- [Demo scripts, adaptation, and readiness gates](README.md)
+- [Web runtime details](../apps/web/README.md)
+- [Infrastructure guidance](../infra/README.md)
+- [Foundation contract](../specs/000-foundation/SPEC.md)
+- [Evaluation contract](../specs/001-eval-protocol/SPEC.md)
+- [Synthetic data contract](../specs/002-synthetic-data/SPEC.md)
+- [Fleet playbook](fleet-mode-playbook.md)

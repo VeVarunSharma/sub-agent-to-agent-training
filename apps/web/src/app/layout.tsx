@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import { listSampleCases } from "@srs/shared";
 import { CommandPalette } from "@/components/command-palette";
 import { SiteFooter } from "@/components/site-footer";
@@ -9,20 +8,10 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
   title: "SSMUH Pre-Review Copilot",
   description:
-    "A staff-facing copilot for the City of Vancouver SSMUH permit intake. Tutorial repo for GHCP CLI fleet-mode sub-agents iterating on Azure AI Foundry agents.",
+    "Explore synthetic permit pre-review and evaluation-driven agent iteration. Demonstration only. No City of Vancouver affiliation.",
 };
 
 export default function RootLayout({
@@ -38,7 +27,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className="h-full antialiased"
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">

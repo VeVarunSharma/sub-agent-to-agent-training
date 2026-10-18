@@ -1,6 +1,10 @@
 ## @srs/web
 
-Staff-facing planner copilot for the Vancouver SSMUH permit pre-review workflow. Built on Next.js 16 (App Router) with Tailwind v4 and shadcn (`base-nova` style, neutral palette). Runs without Azure env vars by reading local fixtures. Uses Cosmos, Blob Storage, and Foundry clients when ACA provides the Bicep outputs.
+Run a staff-facing planner copilot for the synthetic Vancouver SSMUH permit pre-review workflow. Build with Next.js 16 (App Router), Tailwind v4, and shadcn (`base-nova` style, neutral palette).
+
+Use the deterministic mock review pipeline without credentials. Configure optional Cosmos, Blob Storage, and hosted Foundry clients for the separate decision workflow. Treat end-to-end cloud behavior as unverified. The Bicep Foundry resource remains an AI Services stand-in.
+
+Keep all content synthetic. The app has no authentication or tenant isolation. Require staff review for every draft.
 
 ### What you see when you run it
 
@@ -12,18 +16,39 @@ Staff-facing planner copilot for the Vancouver SSMUH permit pre-review workflow.
 
 ### Run it locally
 
+Use Node 22 or newer and pnpm 10. Next.js 16 requires at least Node 20.9. Run from the repository root:
+
 ```bash
-pnpm install
+corepack enable
+pnpm install --frozen-lockfile
+pnpm --filter @srs/shared --filter @srs/foundry build
 pnpm dev
 ```
 
-Open http://localhost:3000. Leave `.env` unset for local dev. The decision, eval, and iteration pages use fixtures when Azure env vars are absent.
+Open http://localhost:3000. Leave Azure settings unset for local dev. Decision events use fixtures, decision runs use process memory, and eval and iteration pages read local reports.
+
+Open `/review/van-ssmuh-sample-002` for numeric and document gaps. Compare sample 001 for a complete packet and sample 003 for heritage specialist routing. Read the shared [demo scripts, reset, and fallback guide](../../docs/README.md#run-the-demo). UI samples live in `packages/shared/src/samples/index.ts`.
+
+Build the container from the repository root:
+
+```bash
+docker build -f apps/web/Dockerfile -t srs-demo .
+docker run --rm --name srs-demo -p 127.0.0.1:3000:3000 srs-demo
+```
+
+Bind only to localhost for demonstrations. Verify container behavior independently of cloud deployment.
 
 ### Azure env vars
 
-Copy `.env.example` only when you want to point the app at Azure. ACA receives the same values from the Bicep `aca.bicep` env section. The clients read `AZURE_CLIENT_ID`, Cosmos endpoint and container names, storage account and uploads container names, Foundry endpoint and project name, judge deployment settings, and the App Insights connection string.
+Copy `apps/web/.env.example` to `apps/web/.env.local` only for optional Azure configuration. Use `SRS_COSMOS_ENDPOINT`, `SRS_COSMOS_DATABASE_NAME`, `SRS_COSMOS_RUNS_CONTAINER_NAME`, and `SRS_COSMOS_REPORTS_CONTAINER_NAME` for Cosmos. Use `SRS_STORAGE_ACCOUNT_NAME` and `SRS_STORAGE_UPLOADS_CONTAINER_NAME` for Blob.
+
+Use `SRS_FOUNDRY_ENDPOINT` and `SRS_FOUNDRY_PROJECT_NAME` for hosted decision orchestration. The client also accepts `SRS_FOUNDRY_PROJECT`, plus optional `SRS_FOUNDRY_ORCHESTRATOR_AGENT_NAME` and `SRS_FOUNDRY_ORCHESTRATOR_URL`. Configure `AZURE_CLIENT_ID` for managed identity selection. Consult [infra](../../infra/README.md) for judge and telemetry settings.
+
+Keep `/api/review` separate. It always uses the mock pipeline. Configured Foundry invocation failures can emit failed events instead of fixtures. Local decision runs are not durable, and generated run views do not prove persistence. Use `SRS_REQUIRE_AZURE=1` for strict Cosmos checks, not as proof that all cloud services work.
 
 ### Scripts
+
+Run these inside `apps/web`, or prefix them with `pnpm --filter @srs/web` from the root. Build shared workspace packages first. Use root `pnpm build` for the full workspace build.
 
 | Script | What it does |
 |--------|--------------|
@@ -68,5 +93,4 @@ src/lib/utils.ts                     `cn` helper.
 
 ### Out of scope right now
 
-Authentication. Real planner sign-off persistence. Mobile-specific layouts beyond Tailwind's responsive defaults. Push notifications after ACA SSE ingress tuning lands.
-
+Keep authentication, real planner sign-off persistence, real applicant uploads, and production operations outside this demo. Do not claim verified Azure deployment, accessibility certification, measured reviewer savings, or a full judged benchmark. Follow the [readiness and security gates](../../docs/README.md#check-readiness) before a pilot.

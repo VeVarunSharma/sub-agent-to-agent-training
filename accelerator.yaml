@@ -1,0 +1,66 @@
+# Draft metadata for human review.
+# The destination catalog schema has not been validated.
+# No catalog acceptance, support commitment, or cloud verification is claimed.
+name: synthetic-ssmuh-pre-review
+title: Synthetic SSMUH permit pre-review copilot
+description: >-
+  Explore a staff-facing permit review workflow with deterministic local mocks,
+  evidence ledgers, draft memos and letters, and train-only agent iteration receipts.
+status: draft
+schema_validation: unvalidated
+owner: null
+owner_status: unknown
+cloud_verification: unverified
+support_sla: none
+data_policy: synthetic-only
+authentication: absent
+license: MIT
+corpus_rights: external-review-required
+benchmark:
+  split: train
+  deterministic_prqs:
+    round_000: 80.96
+    round_001: 86.49
+  limitations:
+    - Overlapping confidence intervals
+    - M10 and M11 regressions
+    - M12 and M13 are null
+    - One runtime failure in round 001
+    - Freeze dates and commits remain null
+runtime:
+  default: deterministic-local-mock
+  node: ">=22"
+  pnpm: "10"
+  optional:
+    - GitHub Models baseline and fleet loop
+    - Configured Azure clients
+  cloud_limitations:
+    - azd packaging and deployment are unverified
+    - Foundry infrastructure remains an AI Services stand-in
+documentation:
+  overview: README.md
+  demo_and_engagement: docs/README.md
+  architecture: docs/architecture.md
+  web: apps/web/README.md
+  infrastructure: infra/README.md
+  fleet_playbook: docs/fleet-mode-playbook.md
+  evaluation_receipt: eval-reports/round-001-fleet/round-summary.md
+media:
+  status: pending-verification
+  screenshots:
+    - docs/assets/queue.png
+    - docs/assets/packet.png
+    - docs/assets/ledger.png
+    - docs/assets/memo.png
+    - docs/assets/letter.png
+    - docs/assets/evals.png
+  walkthrough: docs/assets/walkthrough.webm
+  captions: docs/assets/walkthrough.vtt
+release_gates:
+  - Validate destination catalog schema and confirm accountable owner
+  - Verify media and captions
+  - Record clean-checkout and container checks
+  - Verify cloud deployment and replace Foundry stand-in
+  - Establish private security reporting and pilot access controls
+  - Resolve benchmark freeze governance and evaluation limitations
+  - Obtain corpus redistribution approval
