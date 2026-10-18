@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSampleCase } from "@srs/shared";
-import { runReviewPipeline } from "@srs/foundry";
+import { runReviewPipeline } from "@srs/foundry/mock";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   } catch {
     return NextResponse.json({ error: "Request body must be JSON." }, { status: 400 });
   }
-  const caseId = typeof body === "object" && body !== null && "caseId" in body ? String((body as { caseId: unknown }).caseId) : "";
+  const caseId = typeof body === "object" && body !== null && "caseId" in body && typeof body.caseId === "string" ? body.caseId : "";
   if (!caseId) {
     return NextResponse.json({ error: "Missing caseId." }, { status: 400 });
   }

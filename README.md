@@ -1,122 +1,119 @@
-# sub-agent-to-agent-training
+```text
+       /\                 /\                 /\
+      /  \      ____     /  \      ____     /  \
+     /____\    | [] |   /____\    | [] |   /____\
+     | [] |    | [] |   | [] |    | [] |   | [] |
+     |____|____|____|___|____|____|____|___|____|
+          VANCOUVER  /  SYNTHETIC SSMUH PRE-REVIEW
 
-Build and study a tutorial repo for GitHub Copilot CLI fleet-mode sub-agents that iterate on Azure AI Foundry agents. Use the Vancouver SSMUH permit pre-review copilot as the grounded example, then lift the pattern into any regulated, staff-reviewed packet workflow.
+  Packet -> Pathway -> Evidence ledger -> Memo + Letter -> Staff review
+                         |
+                Eval -> Scoped edits -> Rerun -> Operator decision
+```
 
-## What you'll learn
+# Explore Permit Pre-Review Agent Studio
 
-- Scope sub-agents with role files, context allow-lists, and denied paths.
-- Gate prompt changes with PRQS, 13 sub-metrics, and bootstrap confidence intervals.
-- Apply prompt proposals through a schema guard before they touch agent source files.
-- Capture every round as an auditable artifact under `eval-reports/`.
-- Promote a local agent loop toward an Azure shape with Foundry, Container Apps, Cosmos DB, and Blob Storage.
-- Keep synthetic data, sealed splits, and oracle material separated.
+Explore a staff-facing Vancouver Small-Scale Multi-Unit Housing (SSMUH) tutorial. Run a synthetic packet through six review stages. Inspect evidence, proposed redlines, a staff memo, and an applicant letter. Then study how GitHub Copilot CLI fleet-mode sub-agents propose auditable improvements to the agent prompts.
 
-## Headline result
+## Follow the customer story
 
-Round 001 improved the deterministic PRQS score on the train split. The round was accepted, with follow-up work for applicant-support flag precision and recall.
+Imagine a city planner opening a first-time owner-builder's multiplex submission. The packet exceeds several numeric limits and lacks two documents. Open `van-ssmuh-sample-002` to see those gaps together. Trace each finding through the ledger, review the proposed changes, and inspect the draft letter before a staff member decides what to send.
 
-| metric | round 000 mean | round 000 CI95 | round 001 mean | round 001 CI95 | delta |
-| --- | ---: | --- | ---: | --- | ---: |
-| deterministic_prqs | 80.96 | [75.24, 86.14] | 86.49 | [80.41, 91.79] | +5.53 |
-| partial_full_prqs_lower_bound | 67.64 | [63.99, 71.11] | 70.95 | [66.69, 75.19] | +3.31 |
+Treat this as an illustrative workflow. The samples, addresses, policy simplifications, and outputs are tutorial material. No city deployment, permit approval, or measured staff time savings is claimed.
 
-M1 moved from 0.556 to 0.765. M7 moved from 0.778 to 0.941. M10 and M11 regressed, so round 002 should target applicant-support flags.
+## Run the local demo
 
-Dashboard screenshot: TODO: add the `/evals/dashboard` capture after the dashboard route or screenshot lands. Until then, read the round receipt in [`eval-reports/round-001-fleet/round-summary.md`](eval-reports/round-001-fleet/round-summary.md).
+Use Node **22 or newer** and pnpm **10**. Match `.nvmrc` for the recommended local runtime.
 
-## Try it yourself
-
-Prerequisites:
-
-- Use Node 20 or newer.
-- Use pnpm 10 or newer through Corepack.
-- Install GitHub CLI with GitHub Models access if you want to run the local `pnpm baseline` path.
-- Use an Azure subscription with `gpt-4.1` quota in `eastus2` if you want judged metrics.
-
-Run the local path:
+Run from the repository root:
 
 ```bash
 corepack enable
-pnpm install
-pnpm validate:data
-pnpm -r typecheck && pnpm -r lint && pnpm -r test
-pnpm baseline
+pnpm install --frozen-lockfile
+pnpm --filter @srs/shared --filter @srs/foundry build
+pnpm dev
 ```
 
-Set `GH_TOKEN` or `GITHUB_TOKEN` with GitHub Models access before running the baseline. Judged metrics also need the Azure OpenAI judge deployment named in [`specs/001-eval-protocol/SPEC.md`](specs/001-eval-protocol/SPEC.md).
+Open <http://localhost:3000>. Leave Azure settings unset for the fixture path. No Azure subscription, model credentials, or paid model calls are needed for this demo.
 
-## Fleet loop
+Open `/review/van-ssmuh-sample-002` and select **Run pre-review**. Follow the [5-minute or 15-minute walkthrough](docs/README.md#run-the-demo). Use the same guide for scenario reset, fallback, workshops, and pilot planning.
 
-Run a round by letting the triager group failures, then dispatching per-agent iterators that write `prompt-edits.json` and `fewshot-edits.json` files. The orchestrator applies those proposals through a schema guard, reruns the baseline, writes a round summary, and leaves the operator to accept, revert, or escalate. Follow the full operator guide in [`docs/fleet-mode-playbook.md`](docs/fleet-mode-playbook.md).
+### Run the container locally
 
-## Sub-agent role files
+Build with the repository root as the Docker context:
 
-Define GHCP CLI sub-agents under [`.github/agents/`](.github/agents/). Each role file declares its scope, context allow-list, allowed tools, `forbidden_tools`, `scratch_path`, and `out_of_scope`. Start with [`.github/agents/README.md`](.github/agents/README.md), then inspect [`.github/agents/prompt-iterator.md`](.github/agents/prompt-iterator.md) for the current contract.
+```bash
+docker build -f apps/web/Dockerfile -t srs-demo .
+docker run --rm --name srs-demo -p 127.0.0.1:3000:3000 srs-demo
+```
 
-## Privacy
+Keep the port bound to localhost. The demo has **no authentication**. Use synthetic content only. The local image build and runtime checks passed in the working tree. `/` and `/evals/dashboard` returned HTTP 200, and the container ran as UID 1000. Azure deployment remains unverified.
 
-Use synthetic cases only. Keep real applicant data, real addresses, and PII out of this repo. Keep sealed splits encrypted with age, and keep the oracle corpus off-limits to sub-agents. Spec 000 names the repo posture in [`specs/000-foundation/SPEC.md`](specs/000-foundation/SPEC.md), and spec 002 gives the data split rules.
+## Choose a runtime path
 
-## Repo layout
+| Path | What it does | Readiness boundary |
+| --- | --- | --- |
+| Local web demo | Runs `/review/[caseId]` through a deterministic mock pipeline. Uses fixture decision events and local eval receipts without Azure configuration. | Demonstrates the review experience. Does not call six hosted agents. |
+| Optional GitHub Models loop | Runs model-backed baselines and fleet iterations with credentials and model access. | Requires operator setup and may incur cost or rate limits. Separate from `pnpm dev`. |
+| Optional Azure clients | Connects decision runs, reports, uploads, and hosted orchestration when configured. | Cloud deployment and end-to-end behavior are unverified here. Foundry infrastructure remains an AI Services stand-in. |
+| Target deployment | Hosts the app on Container Apps with Cosmos DB, Blob Storage, managed identity, and a real Foundry project. | Requires deployment, security, licensing, and evaluation gates before a pilot. |
+
+Read [architecture](docs/architecture.md), [web setup](apps/web/README.md), and [infra guidance](infra/README.md) before changing runtime settings. Follow the [fleet playbook](docs/fleet-mode-playbook.md) for the model-backed loop.
+
+## Inspect the evidence
+
+Read the [round 001 receipt](eval-reports/round-001-fleet/round-summary.md) with the [round 000 supersession marker](eval-reports/round-000-baseline/SUPERSEDED.md) and [round 001 supersession marker](eval-reports/round-001-fleet/SUPERSEDED.md). The historical **train-only, pre-reconciliation** deterministic PRQS moved from **80.96 to 86.49**, a gain of 5.53 points.
+
+| Measure | Round 000 | Round 001 |
+| --- | ---: | ---: |
+| Deterministic PRQS | 80.96 | 86.49 |
+| Bootstrap CI95 | [75.24, 86.14] | [80.41, 91.79] |
+| M10 applicant-support precision | 0.593 | 0.549 |
+| M11 applicant-support recall | 0.639 | 0.559 |
+
+Keep the caveats visible. The confidence intervals overlap. M10 and M11 regressed. M12 and M13 are null. Round 001 reports 17 of 18 cases completing, with one runtime failure. Specs 001 and 002 still record null freeze dates and commits.
+
+Treat these scores as superseded historical receipts. Later evaluator reconciliation tightened M6 numeric value and tolerance checks and changed the M12/M13 judge contract. M6 and composites that include it are not comparable to new runs. The markers preserve comparability for unchanged M1-M5 and M7-M11 scoring rules. Re-run a baseline with the current evaluator before future round comparisons. These receipts do not establish a current benchmark, holdout generalization, full judged PRQS, or production readiness.
+
+## Preview the walkthrough
+
+Inspect actual Chromium captures of the synthetic local container. The five-minute silent walkthrough includes visible captions and a separate WebVTT transcript. It uses a low frame rate for compact distribution.
+
+- [Queue](docs/assets/queue.png) and [packet](docs/assets/packet.png)
+- [Evidence ledger](docs/assets/ledger.png), [corrections](docs/assets/redlines.png), [staff memo](docs/assets/memo.png), and [applicant letter](docs/assets/letter.png)
+- [Evaluation dashboard](docs/assets/evals.png)
+- [Five-minute walkthrough](docs/assets/walkthrough.webm), [captions](docs/assets/walkthrough.vtt), and [capture provenance](docs/assets/provenance.json)
+
+![Synthetic permit queue showing one ready case, one clarification case, and one specialist case.](docs/assets/queue.png)
+
+Read the [text walkthrough](docs/README.md#run-the-demo) as an accessible fallback. Independent accessibility review and presenter handoff remain release gates.
+
+## Adapt the pattern
+
+Start with the [adaptation templates and engagement guide](docs/README.md#adapt-the-pattern). Reuse the packet-to-evidence-to-draft workflow for another staff-reviewed domain only after domain experts define its evidence and escalation rules.
+
+Browse the workspace:
 
 ```text
-apps/              Next.js app workspace.
-packages/          Shared TypeScript packages for Foundry runtime, evaluator, and schemas.
-agents/            Six SSMUH agent source folders with prompts, few-shots, and YAML config.
-datasets/          Public policy corpus, synthetic cases, few-shots, sealed splits, and manifests.
-scripts/           pnpm entry points for data, eval, baseline, sync, iterate, and ablation.
-infra/             Bicep and azd home. Current file is a stub until deploy work lands.
-specs/             Numbered specs that define the contracts.
-eval-reports/      Round reports, runtime JSONL, eval JSONL, triage, and per-agent edit receipts.
-.github/agents/    GHCP CLI fleet-mode role files.
-docs/              Playbook, docs index, and blog outline.
+apps/web/       Next.js 16 planner and operator UI
+packages/       Shared schemas, mock and model runtimes, evaluator
+agents/         Six runtime agent source folders
+datasets/       Synthetic splits and policy corpus with access boundaries
+scripts/        Data, evaluation, sync, and iteration entry points
+infra/          Bicep resources and Azure deployment guidance
+specs/          Versioned contracts and freeze metadata
+eval-reports/   Existing round receipts and proposed edits
+docs/           Demo guide, architecture, and fleet playbook
 ```
 
-## Deploy to Azure
+Read [foundation](specs/000-foundation/SPEC.md), [evaluation](specs/001-eval-protocol/SPEC.md), and [synthetic data](specs/002-synthetic-data/SPEC.md) before changing contracts. Treat the root [accelerator metadata](accelerator.yaml) as a draft with an unvalidated schema and unresolved ownership.
 
-Use the local loop first. The Azure shape maps the same source-of-truth agent files into Azure AI Foundry, hosts the web app on Azure Container Apps, stores cases and run receipts in Cosmos DB, stores corpus and artifacts in Blob Storage, and uses the `gpt-4.1` judge deployment in `eastus2` for judged metrics.
+## Use and support safely
 
-Run `azd up` once `infra/` lands beyond the current stub. Track that path in [`infra/README.md`](infra/README.md). The full system shape lives in [`docs/architecture.md`](docs/architecture.md) with a diagram source at [`docs/architecture.excalidraw`](docs/architecture.excalidraw).
+Keep real applicant data, real addresses, credentials, and PII out of the demo. Keep dev cases, sealed files, and oracle material outside sub-agent context. Require human review for every draft. Read [support, security, and readiness gates](docs/README.md#support-and-security) before sharing or deploying.
 
-## Docs
-
-- [`docs/README.md`](docs/README.md): docs index and planned docs.
-- [`docs/architecture.md`](docs/architecture.md): system overview, component map, data flow, trust boundaries.
-- [`docs/fleet-mode-playbook.md`](docs/fleet-mode-playbook.md): operator playbook and round pitfalls.
-- [`docs/blog-outline.md`](docs/blog-outline.md): companion blog outline for the tutorial.
-
-## Specs
-
-- [`specs/000-foundation/SPEC.md`](specs/000-foundation/SPEC.md): repo purpose, stack, layout, and scripts.
-- [`specs/001-eval-protocol/SPEC.md`](specs/001-eval-protocol/SPEC.md): PRQS, sub-metrics, judge rules, splits, and gates.
-- [`specs/002-synthetic-data/SPEC.md`](specs/002-synthetic-data/SPEC.md): synthetic data pools, cases, provenance, and validation.
-- [`specs/003-foundry-agent-sync/SPEC.md`](specs/003-foundry-agent-sync/SPEC.md): Foundry source-of-truth and sync contract.
-- [`specs/004-ghmodels-runtime/SPEC.md`](specs/004-ghmodels-runtime/SPEC.md): local GitHub Models runtime and baseline path.
-- [`specs/005-fleet-iteration/SPEC.md`](specs/005-fleet-iteration/SPEC.md): fleet-mode iteration loop and round contract.
-
-## Status
-
-Works today:
-
-- Run the web app with a deterministic mock pipeline from `apps/web/`.
-- Validate data with `pnpm validate:data`.
-- Run workspace checks with `pnpm -r typecheck && pnpm -r lint && pnpm -r test`.
-- Reproduce the deterministic baseline path with `pnpm baseline` when GitHub Models access is configured.
-- Read round 000 and round 001 eval receipts under `eval-reports/`.
-- Inspect fleet role files and the round-001 prompt proposals.
-
-Coming next:
-
-- Land `docs/architecture.md` and `docs/architecture.excalidraw`. *(Done — see Docs above.)*
-- Replace the infra stub with deployable Bicep plus azd wiring.
-- Add the `/evals/dashboard` screenshot or route for the PRQS curve.
-- Route few-shot proposals through `pnpm gen:few-shot` so provenance fields stay valid.
-- Run judged M12 and M13 once Azure judge quota is available.
+Use the repository issue tracker for sanitized documentation or reproducibility problems. No support SLA is promised. Do not report secrets or exploitable details publicly. A private security reporting channel and accountable owner remain release gates.
 
 ## License
 
-License: MIT. See [`LICENSE`](LICENSE).
-
-## Acknowledgements
-
-Inspired by the GHCP CLI fleet-mode pattern and Azure AI Foundry agent workflows.
+Use the repository code under [MIT](LICENSE). Review corpus rights separately. The corpus manifest records educational fair-dealing paraphrase claims. It does not establish redistribution clearance for every accelerator or customer use.

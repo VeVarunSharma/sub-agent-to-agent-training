@@ -1,6 +1,21 @@
 # Infra
 
-Provision the SRS tutorial stack with Bicep and Azure Developer CLI.
+Inspect the SRS tutorial stack authored in Bicep and Azure Developer CLI. Treat cloud provisioning and deployment as unverified. Start with the credential-free [local demo](../README.md#run-the-local-demo).
+
+Keep all content synthetic. The app has no user authentication. Current Bicep enables external ingress, so require access controls and security review before exposing a deployment. Managed identity does not authenticate planner users.
+
+## Build the local container
+
+Run from the repository root. Use the root as the build context so workspace packages and local fixtures are available.
+
+```bash
+docker build -f apps/web/Dockerfile -t srs-demo .
+docker run --rm --name srs-demo -p 127.0.0.1:3000:3000 srs-demo
+```
+
+Open <http://localhost:3000>. Leave Azure settings unset for the fixture path. Stop the foreground container with Ctrl+C.
+
+Record the local result: the Docker image built successfully, `/` and `/evals/dashboard` returned HTTP 200, and the container ran as UID 1000. Treat those working-tree checks as separate from `azd` and cloud verification. Azure provisioning and hosted execution remain unverified.
 
 ## Prerequisites
 
@@ -9,8 +24,8 @@ Install these tools before you run `azd up`.
 - Azure Developer CLI, `azd`
 - Azure CLI, `az`
 - Bicep CLI for local syntax checks
-- Docker, when you add a web Dockerfile
-- Node 20 or newer
+- Docker
+- Node 22 or newer
 - pnpm 10 or newer
 
 Authenticate first.
@@ -47,7 +62,7 @@ Copy that object id into `infra/main.parameters.json` under `principalId`. Leave
 
 ## Provision
 
-Run provision and deploy together after the web container build path exists.
+Use these commands only for an operator-led cloud validation. No successful `azd up` or end-to-end Azure execution is asserted here. Confirm quotas, billing, permissions, and cleanup ownership first.
 
 ```bash
 azd up
@@ -55,7 +70,7 @@ azd up
 
 The first Container Apps revision uses `mcr.microsoft.com/k8se/quickstart:latest`. That lets provision complete before a web image exists in the registry. `azd deploy` replaces it with the built web image.
 
-`apps/web` does not include a Dockerfile yet. Add `apps/web/Dockerfile` before you rely on `azd deploy` for the Next.js host.
+Use `apps/web/Dockerfile` with the repository root as its build context. The root `azure.yaml` declares that context relative to the `apps/web` service project. Validate azd packaging before relying on `azd deploy`. A successful local Docker build does not prove azd packaging works.
 
 ## Expected resources
 
@@ -126,4 +141,34 @@ Bicep wires these variables into the Container App.
 | `SRS_FOUNDRY_PROJECT_NAME` | Foundry stand-in output | Keeps the Foundry package contract stable. |
 | `SRS_JUDGE_DEPLOYMENT_NAME` | AI Services deployment output | Selects the judge model deployment. |
 
-`packages/foundry` currently reads `SRS_FOUNDRY_ENDPOINT`, `SRS_FOUNDRY_RESOURCE_GROUP`, and `SRS_FOUNDRY_PROJECT_NAME`. The web app still uses the mock pipeline until the Foundry runtime work lands.
+`packages/foundry` currently reads `SRS_FOUNDRY_ENDPOINT`, `SRS_FOUNDRY_RESOURCE_GROUP`, and `SRS_FOUNDRY_PROJECT_NAME`. The web `/api/review` route always uses the deterministic mock pipeline. The separate `/api/decisions` path can invoke a hosted orchestrator when its endpoint and project are configured. Otherwise it streams fixture events.
+
+The web Foundry client also accepts `SRS_FOUNDRY_PROJECT`, with optional `SRS_FOUNDRY_ORCHESTRATOR_AGENT_NAME` and `SRS_FOUNDRY_ORCHESTRATOR_URL`. Configured invocation failures can yield failed events. They do not silently switch to fixture orchestration.
+
+Use `SRS_REQUIRE_AZURE=1` for strict Cosmos configuration and persistence checks. Do not interpret that setting as verification of every Azure client. See [architecture](../docs/architecture.md) for fallback boundaries.
+
+## Verify before cloud use
+
+- Validate azd packaging with the root Docker context.
+- Verify provision, image deployment, resource outputs, managed identity, data-plane roles, and teardown.
+- Replace the Foundry stand-in with a real project and deploy the hosted orchestrator.
+- Verify run persistence, packet storage, report reads, streaming, and failure behavior end to end.
+- Review authentication, external ingress, data retention, audit, monitoring, quotas, and costs.
+- Resolve the [freeze, licensing, and ownership gates](../docs/README.md#check-readiness) before a customer pilot.
+
+Do not publish credentials or tenant details in issues. Confirm a private security reporting channel and accountable owner before deployment.
+
+## Control costs and clean up
+
+Budget for Container Apps replicas, Container Registry, Cosmos throughput, storage, Log Analytics ingestion, and model calls. Local mocks make no paid model calls. A provisioned stack can incur charges while idle. Confirm region availability, subscription quota, and model capacity before provisioning. Set an Azure budget and alerts with the subscription owner. No fixed cost estimate is asserted.
+
+List azd environments and confirm the selected disposable environment before deleting anything:
+
+```bash
+azd env list
+azd down
+```
+
+Review the interactive resource deletion prompt. Do not delete a shared environment. Verify the resource group is gone in Azure and check for retained storage, logs, soft-deleted resources, or other billable dependencies. Record cleanup approval and evidence without publishing tenant details.
+
+Stop the local container with Ctrl+C when using the foreground command above. Remove the optional local image with `docker image rm srs-demo`.

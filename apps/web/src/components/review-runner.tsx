@@ -131,7 +131,8 @@ export function ReviewRunner({ caseId }: { caseId: string }) {
       <CardHeader className="flex flex-col gap-4 border-b bg-muted/20 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-1.5">
           <CardTitle>Pre-review pipeline</CardTitle>
-          <CardDescription>Run six agents, surface gaps, and draft planner notes for review.</CardDescription>
+          <Badge variant="outline">Simulated execution · Synthetic data</Badge>
+          <CardDescription>Run six deterministic mock stages. Review gaps and draft notes before choosing a staff action.</CardDescription>
         </div>
         <Button onClick={run} disabled={state.kind === "running"} size="lg" className="sm:ml-auto">
           {state.kind === "running" ? (

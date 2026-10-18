@@ -1,0 +1,109 @@
+# Draft metadata for human review.
+# The destination catalog schema has not been validated.
+# No catalog acceptance, support commitment, or cloud verification is claimed.
+id: permit-pre-review-agent-studio
+name: Permit Pre-Review Agent Studio
+repository: https://github.com/VeVarunSharma/sub-agent-to-agent-training
+customer:
+  account: Reusable municipal-government reference
+  industry: Public Sector
+  business_personas: [Planning operations lead, Permit reviewer]
+  technical_personas: [Solution engineer, Cloud solution architect, AI platform engineer]
+  affiliation: No municipal affiliation or endorsement established
+readiness:
+  current: locally-validated-synthetic-demo
+  target: catalog-ready
+technologies:
+  - TypeScript
+  - Next.js
+  - GitHub Copilot CLI
+  - GitHub Models
+  - Azure AI Foundry
+  - Azure Container Apps
+  - Azure Cosmos DB
+  - Azure Blob Storage
+  - Bicep
+  - Azure Developer CLI
+engagement:
+  entry_point: Workflow discovery workshop
+  next_action: Nominate a workflow owner and three approved synthetic scenarios
+description: >-
+  Explore a staff-facing permit review workflow with deterministic local mocks,
+  evidence ledgers, draft memos and letters, and train-only agent iteration receipts.
+status: draft
+schema_validation: unvalidated
+schema_validation_blocker: Catalog repository lookup returned HTTP 404
+owner: null
+owner_status: unknown
+cloud_verification: unverified
+local_container_verification:
+  build: passed
+  routes:
+    "/": 200
+    "/evals/dashboard": 200
+  runtime_uid: 1000
+  scope: current-working-tree
+support_sla: none
+data_policy: synthetic-only
+authentication: absent
+license: MIT
+corpus_rights: external-review-required
+benchmark:
+  status: superseded-historical-pre-reconciliation
+  split: train
+  deterministic_prqs:
+    round_000: 80.96
+    round_001: 86.49
+  limitations:
+    - Overlapping confidence intervals
+    - M10 and M11 regressions
+    - M12 and M13 are null
+    - One runtime failure in round 001
+    - Freeze dates and commits remain null
+    - M6 numeric checks and M12/M13 judge reconciliation require a new baseline
+    - Historical composites are not comparable to current evaluator runs
+runtime:
+  default: deterministic-local-mock
+  node: ">=22"
+  pnpm: "10"
+  optional:
+    - GitHub Models baseline and fleet loop
+    - Configured Azure clients
+  cloud_limitations:
+    - azd packaging and deployment are unverified
+    - Foundry infrastructure remains an AI Services stand-in
+documentation:
+  overview: README.md
+  demo_and_engagement: docs/README.md
+  architecture: docs/architecture.md
+  web: apps/web/README.md
+  infrastructure: infra/README.md
+  fleet_playbook: docs/fleet-mode-playbook.md
+  evaluation_receipt: eval-reports/round-001-fleet/round-summary.md
+  supersession_markers:
+    - eval-reports/round-000-baseline/SUPERSEDED.md
+    - eval-reports/round-001-fleet/SUPERSEDED.md
+media:
+  status: captured-local-synthetic-demo
+  screenshots:
+    - docs/assets/queue.png
+    - docs/assets/packet.png
+    - docs/assets/ledger.png
+    - docs/assets/redlines.png
+    - docs/assets/memo.png
+    - docs/assets/letter.png
+    - docs/assets/evals.png
+  walkthrough: docs/assets/walkthrough.webm
+  walkthrough_status: captured-silent-with-visible-captions
+  duration_seconds: 300
+  captions: docs/assets/walkthrough.vtt
+  provenance: docs/assets/provenance.json
+  accessibility_review: pending-independent-review
+release_gates:
+  - Validate destination catalog schema and confirm accountable owner
+  - Complete independent presenter rehearsal and accessibility review
+  - Repeat clean-checkout checks for the release commit
+  - Verify cloud deployment and replace Foundry stand-in
+  - Establish private security reporting and pilot access controls
+  - Resolve benchmark freeze governance and evaluation limitations
+  - Obtain corpus redistribution approval

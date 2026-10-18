@@ -12,3 +12,6 @@ services:
     language: js
     host: containerapp
     resourceName: ${AZURE_CONTAINER_APP_NAME}
+    docker:
+      path: ./Dockerfile
+      context: ../../

@@ -1,5 +1,11 @@
 # Decisions: foundation
 
+## 2026-10-18: Package an explicitly simulated accelerator demo
+
+**Decision**: Align the foundation with Node 22, pnpm 10, and Next.js 16. Label browser mock execution and historical evaluations separately. Import the dedicated `@srs/foundry/mock` export in the web review endpoint to avoid tracing unrelated model-runtime filesystem readers. Add HTTP-handler tests using Node and the existing tsx loader. Build a non-root standalone web image from the repository root and run credential-free workspace validation in CI.
+
+**Reason**: Support repeatable synthetic-data demonstrations and independent handoff. Keep deployment, licensing, evaluation freeze provenance, and customer approval as explicit readiness gates. Leave frozen evaluation artifacts unchanged and preserve historical receipts.
+
 ## 2026-06-03: Custom-lite spec framework over a third-party tool
 
 **Decision**: roll a four-file convention (SPEC, TASKS, DECISIONS, optional auxiliary files) instead of importing a third-party spec tool.

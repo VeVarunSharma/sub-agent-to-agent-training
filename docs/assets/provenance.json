@@ -1,0 +1,42 @@
+{
+  "captured_on": "2026-10-18",
+  "execution": "local deterministic mock pipeline",
+  "data": "hand-authored synthetic UI samples",
+  "case_id": "van-ssmuh-sample-002",
+  "runtime_image_id": "sha256:44f85980ed26c308ea818eeacad5d69af9f93c0a0b20587e6c7c716c962fbe87",
+  "method": "Installed headless Chromium through its local DevTools protocol. Actual page navigation, run-button click, and result-tab interaction.",
+  "screenshots": {
+    "width": 1440,
+    "height": 1000,
+    "files": ["queue.png", "packet.png", "ledger.png", "redlines.png", "memo.png", "letter.png", "evals.png"]
+  },
+  "video": {
+    "file": "walkthrough.webm",
+    "codec": "VP9",
+    "duration_seconds": 300,
+    "frames": 150,
+    "frames_per_second": 0.5,
+    "width": 1440,
+    "height": 1000,
+    "audio": false,
+    "visible_captions": true,
+    "caption_transcript": "walkthrough.vtt",
+    "sequence": [
+      {"seconds": 0, "view": "synthetic queue"},
+      {"seconds": 40, "view": "sample 002 packet"},
+      {"seconds": 80, "view": "run deterministic pre-review"},
+      {"seconds": 100, "view": "evidence ledger"},
+      {"seconds": 135, "view": "proposed corrections"},
+      {"seconds": 155, "view": "staff memo"},
+      {"seconds": 180, "view": "applicant letter"},
+      {"seconds": 220, "view": "historical evaluation dashboard"},
+      {"seconds": 270, "view": "queue and discovery CTA"}
+    ]
+  },
+  "limitations": [
+    "Uses a local container with no model calls or Azure configuration.",
+    "Historical dashboard scores are separate superseded train-split receipts.",
+    "Does not establish municipal endorsement, policy accuracy, production safety, or time savings.",
+    "Independent presenter handoff and accessibility review remain open."
+  ]
+}
