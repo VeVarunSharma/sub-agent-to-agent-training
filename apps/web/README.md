@@ -36,7 +36,7 @@ docker build -f apps/web/Dockerfile -t srs-demo .
 docker run --rm --name srs-demo -p 127.0.0.1:3000:3000 srs-demo
 ```
 
-Bind only to localhost for demonstrations. Verify container behavior independently of cloud deployment.
+Bind only to localhost for demonstrations. The local Docker build passed. Runtime checks returned HTTP 200 for `/` and `/evals/dashboard` with container UID 1000. These working-tree checks do not verify cloud deployment.
 
 ### Azure env vars
 
@@ -57,6 +57,7 @@ Run these inside `apps/web`, or prefix them with `pnpm --filter @srs/web` from t
 | `pnpm start` | Serve the production build. |
 | `pnpm typecheck` | `tsc --noEmit`. |
 | `pnpm lint` | ESLint via `eslint-config-next`. |
+| `pnpm test` | Node HTTP-handler checks with the existing tsx loader. Does not automate browser interactions. |
 
 ### Component map
 

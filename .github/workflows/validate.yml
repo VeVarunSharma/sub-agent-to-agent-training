@@ -28,4 +28,28 @@ jobs:
       - run: pnpm test
       - run: pnpm validate:data
       - run: pnpm build
+      - run: az bicep install
       - run: SRS_REQUIRE_BICEP=1 pnpm validate:infra
+      - run: docker build -f apps/web/Dockerfile -t srs-demo .
+      - name: Check standalone demo
+        run: |
+          docker run -d --name srs-demo-check -p 127.0.0.1:3000:3000 srs-demo
+          trap 'docker logs srs-demo-check; docker rm -f srs-demo-check' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:3000/ > /dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:3000/evals/dashboard > /dev/null
+          node --input-type=module <<'NODE'
+          for (const caseId of ["van-ssmuh-sample-001", "van-ssmuh-sample-002", "van-ssmuh-sample-003"]) {
+            const response = await fetch("http://127.0.0.1:3000/api/review", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify({ caseId }),
+            });
+            const result = await response.json();
+            if (!response.ok || result.case_id !== caseId || result.pipeline_source !== "mock" || result.stages.length !== 6) {
+              throw new Error(`Invalid standalone review for ${caseId}`);
+            }
+          }
+          NODE

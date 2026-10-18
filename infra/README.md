@@ -13,7 +13,9 @@ docker build -f apps/web/Dockerfile -t srs-demo .
 docker run --rm --name srs-demo -p 127.0.0.1:3000:3000 srs-demo
 ```
 
-Open <http://localhost:3000>. Leave Azure settings unset for the fixture path. Stop the foreground container with Ctrl+C. Treat local container verification as separate from `azd` and cloud verification.
+Open <http://localhost:3000>. Leave Azure settings unset for the fixture path. Stop the foreground container with Ctrl+C.
+
+Record the local result: the Docker image built successfully, `/` and `/evals/dashboard` returned HTTP 200, and the container ran as UID 1000. Treat those working-tree checks as separate from `azd` and cloud verification. Azure provisioning and hosted execution remain unverified.
 
 ## Prerequisites
 
@@ -68,7 +70,7 @@ azd up
 
 The first Container Apps revision uses `mcr.microsoft.com/k8se/quickstart:latest`. That lets provision complete before a web image exists in the registry. `azd deploy` replaces it with the built web image.
 
-Use `apps/web/Dockerfile` with the repository root as its build context. The root `azure.yaml` declares `apps/web` as the service project. Validate or configure azd's Docker context before relying on `azd deploy`. A successful local Docker build does not prove azd packaging works.
+Use `apps/web/Dockerfile` with the repository root as its build context. The root `azure.yaml` declares that context relative to the `apps/web` service project. Validate azd packaging before relying on `azd deploy`. A successful local Docker build does not prove azd packaging works.
 
 ## Expected resources
 
@@ -155,3 +157,18 @@ Use `SRS_REQUIRE_AZURE=1` for strict Cosmos configuration and persistence checks
 - Resolve the [freeze, licensing, and ownership gates](../docs/README.md#check-readiness) before a customer pilot.
 
 Do not publish credentials or tenant details in issues. Confirm a private security reporting channel and accountable owner before deployment.
+
+## Control costs and clean up
+
+Budget for Container Apps replicas, Container Registry, Cosmos throughput, storage, Log Analytics ingestion, and model calls. Local mocks make no paid model calls. A provisioned stack can incur charges while idle. Confirm region availability, subscription quota, and model capacity before provisioning. Set an Azure budget and alerts with the subscription owner. No fixed cost estimate is asserted.
+
+List azd environments and confirm the selected disposable environment before deleting anything:
+
+```bash
+azd env list
+azd down
+```
+
+Review the interactive resource deletion prompt. Do not delete a shared environment. Verify the resource group is gone in Azure and check for retained storage, logs, soft-deleted resources, or other billable dependencies. Record cleanup approval and evidence without publishing tenant details.
+
+Stop the local container with Ctrl+C when using the foreground command above. Remove the optional local image with `docker image rm srs-demo`.

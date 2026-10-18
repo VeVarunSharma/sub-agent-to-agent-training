@@ -52,7 +52,7 @@ Serve the UI from `apps/web` with Next.js 16. Read three hand-authored synthetic
 | --- | --- |
 | `/` | Lists the sample packets |
 | `/review/[caseId]` | Shows packet fields and calls `/api/review` for result tabs |
-| `/api/review` | Always calls `runReviewPipeline` from the mock package export |
+| `/api/review` | Always calls `runReviewPipeline` from the dedicated `@srs/foundry/mock` export |
 | `/decisions/submit` | Selects a known synthetic case and creates a run |
 | `/decisions/[id]` | Shows run events and agent status through the decision stream |
 | `/api/decisions` | Uses fixture orchestration without Foundry configuration. Can persist runs and upload packet JSON when clients are configured. |
@@ -89,7 +89,9 @@ Restrict fleet sub-agents to their explicit context allow-lists and declared out
 
 Compute PRQS with `packages/evaluator`. Read existing reports under `eval-reports/`, rather than treating dashboard display as a fresh evaluation.
 
-Report the existing train-only deterministic PRQS change as 80.96 to 86.49. Keep overlapping bootstrap intervals, M10/M11 regressions, null M12/M13, and one runtime failure visible. Both hard-freeze specs still contain null freeze dates and commits. Do not claim full judged quality, holdout generalization, or a frozen benchmark.
+Report 80.96 to 86.49 as a historical train-only deterministic PRQS change from the pre-reconciliation evaluator. Read the [round 000 supersession marker](../eval-reports/round-000-baseline/SUPERSEDED.md) and [round 001 supersession marker](../eval-reports/round-001-fleet/SUPERSEDED.md). Later M6 numeric checks and M12/M13 judge reconciliation require a new baseline before comparisons with current scoring. Only unchanged M1-M5 and M7-M11 scoring rules remain comparable.
+
+Keep overlapping bootstrap intervals, M10/M11 regressions, null M12/M13, and one runtime failure visible. Both hard-freeze specs still contain null freeze dates and commits. Do not claim current benchmark performance, full judged quality, holdout generalization, or a frozen benchmark.
 
 ## Configure optional Azure clients
 

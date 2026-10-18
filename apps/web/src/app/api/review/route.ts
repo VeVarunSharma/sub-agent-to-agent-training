@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSampleCase } from "@srs/shared";
-import { runReviewPipeline } from "@srs/foundry";
+import { runReviewPipeline } from "@srs/foundry/mock";
 
 export const dynamic = "force-dynamic";
 

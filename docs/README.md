@@ -4,6 +4,39 @@ Run a synthetic, staff-facing Vancouver SSMUH pre-review story. Keep this page a
 
 Read [local setup](../README.md#run-the-local-demo), [architecture](architecture.md), [web details](../apps/web/README.md), [infra](../infra/README.md), and the [fleet playbook](fleet-mode-playbook.md).
 
+## Assess accelerator readiness
+
+| Field | Current assessment |
+| --- | --- |
+| Build | Permit Pre-Review Agent Studio |
+| Repository | https://github.com/VeVarunSharma/sub-agent-to-agent-training |
+| Account | Reusable municipal-government reference. No customer sponsorship established. |
+| Industry | Public sector, municipal planning and housing |
+| Business persona | Planning operations lead and staff permit reviewer |
+| Technical persona | SE/CSA and AI platform engineer |
+| Desired readiness | Catalog-ready |
+| Current rating | Locally validated synthetic demo. Field and catalog gates remain open. |
+
+Help planning teams prepare housing applications for detailed review. Reviewers connect application details, policy requirements, missing evidence, and specialist-routing decisions across several sources. Clarification cycles consume staff capacity and make next steps harder for applicants to understand. Demonstrate an evidence ledger, suggested corrections, a staff memo, and an applicant letter for human review. Evaluate proposed agent changes before adopting them.
+
+Complete these three fixes before catalog submission:
+
+1. Confirm the catalog schema, accountable owner, support channel, and independent presenter handoff.
+2. Resolve evaluation freeze provenance, rebaseline superseded metrics, and review corpus distribution rights.
+3. Verify Azure deployment and security controls before any customer-data pilot.
+
+### Follow the end-to-end journey
+
+1. Receive a request to pre-review a synthetic multiplex application.
+2. Inspect zoning, unit count, numeric fields, documents, and applicant context.
+3. Classify the pathway and select illustrative policy references.
+4. Compare required and provided evidence. Surface gaps and missing documents.
+5. Draft corrections, a staff memo, and an applicant letter.
+6. Ask a human reviewer to choose clarification, specialist input, or detailed review.
+7. Inspect historical quality receipts separately and review proposed prompt changes.
+
+Keep decision intake and streaming timelines separate from the case-review result tabs. The local UI workflow uses mocks. Historical model-backed receipts describe different runs.
+
 ## Prepare the session
 
 1. Use Node 22 or newer and pnpm 10.
@@ -36,7 +69,7 @@ Use the five-minute path for an introduction. Extend that same story for fifteen
 | 0:45 to 1:30 | Inspect the packet, numeric envelope, and missing documents. | Ask which gaps need evidence before staff can proceed. |
 | 1:30 to 2:30 | Select **Run pre-review** and open the ledger and redlines. | Trace a numeric gap back to its proposed and allowed values. Explain the six displayed stages. |
 | 2:30 to 3:30 | Open memo, applicant letter, and audit tabs. | Show staff review and the need to check applicant-support flags. Do not describe drafts as approved correspondence. |
-| 3:30 to 4:30 | Open `/evals/dashboard` and `/iterations`. | Show the train-only 80.96 to 86.49 receipt. Mention M10/M11 regressions, null M12/M13, and the runtime failure. |
+| 3:30 to 4:30 | Open `/evals/dashboard` and `/iterations`. | Show the superseded, historical train-only 80.96 to 86.49 receipt. Mention evaluator reconciliation, M10/M11 regressions, null M12/M13, and the runtime failure. |
 | 4:30 to 5:00 | Return to the packet. | Ask where this evidence-first workflow could help and who must approve a pilot. |
 
 ### Extend to 15 minutes
@@ -72,10 +105,15 @@ Track these capture targets. Their presence, caption quality, and accessibility 
 | [Memo](assets/memo.png) | Staff memo draft |
 | [Letter](assets/letter.png) | Applicant letter draft |
 | [Evals](assets/evals.png) | Existing evaluation receipts |
-| [Walkthrough](assets/walkthrough.webm) | Recorded local demonstration |
 | [Captions](assets/walkthrough.vtt) | WebVTT captions for the recording |
 
+Add a walkthrough video link only after recording production is confirmed. Do not treat an intended filename as a produced artifact.
+
 ## Engage a customer team
+
+Open the account conversation:
+
+> Explore how your review team could assemble a consistent first-pass evidence package from an application and its policy context. Keep staff responsible for decisions and evaluate agent changes before adopting them. Which review step creates the most clarification work today?
 
 Ask these questions before proposing an integration:
 
@@ -105,6 +143,8 @@ Begin in a synthetic sandbox. Require an accountable sponsor, staff reviewer, en
 Measure agreed outcomes only after establishing a baseline and measurement method. Candidate measures include evidence traceability, missed gaps, incorrect support flags, specialist routing, reviewer corrections, and review time. No measured customer benefit, latency, cost, or accuracy beyond the existing train receipts is supplied here.
 
 Require human sign-off on every output. Stop on data exposure, unsupported policy claims, or unacceptable routing and applicant-support errors. Set a rollback path to the existing staff process. Move beyond synthetic data only after authentication, authorization, retention, audit, and privacy approvals exist.
+
+Close with a concrete next step: nominate one workflow owner and bring three approved synthetic scenarios to a discovery workshop. Agree numeric pilot targets and baseline measurement methods before starting.
 
 ## Adapt the pattern
 
@@ -146,6 +186,36 @@ Runtime failure accounting:
 Review and publication approval:
 ```
 
+### Define an agent contract
+
+```text
+Agent purpose and domain:
+Allowed input fields and upstream outputs:
+Authorized policy context:
+Output schema and evidence references:
+Missing-input behavior:
+Escalation conditions:
+Prohibited actions and data:
+Validation checks and accountable reviewer:
+```
+
+### Author a synthetic scenario
+
+Create fictional applicants and project identifiers. Choose a pathway, numeric envelope, document set, and edge case. Ask a domain reviewer to independently verify expected findings. Record generator provenance and fingerprints through the approved data workflow. Keep train, dev, oracle, and sealed pools separate. Add new dataset versions instead of regenerating committed experimental splits.
+
+### Review an iteration
+
+```text
+Baseline and evaluator version:
+Proposed change and rationale:
+Permitted context and artifact audit:
+Per-metric results and runtime failures:
+Confidence intervals and regression limits:
+Applicant-support error review:
+Accept, revert, or escalate:
+Operator and evidence links:
+```
+
 Start with the six-stage contract: pathway, retrieval, evidence, completeness and support, redlines, and draft memo plus letter. Change the domain schema, corpus, evidence map, taxonomy, prompts, and tests together. Follow the numbered specs and append a dated decision when changing a contract. Update pinned manifests when changing frozen material and invalidate affected rounds. Do not reuse the Vancouver score as evidence for another domain.
 
 ## Support and security
@@ -165,14 +235,39 @@ Separate repository artifacts from external approvals. Check an item only when i
 - [x] Link the existing train-only round receipt with its limitations.
 - [x] Provide workshop, pilot, and adaptation templates.
 - [ ] Verify media files, captions, accessible presentation, and capture provenance.
-- [ ] Record clean-checkout and container verification for the release commit.
+- [x] Build the local Docker image and verify `/` and `/evals/dashboard` return HTTP 200 with container UID 1000.
+- [ ] Repeat clean-checkout verification for the release commit.
 - [ ] Validate `accelerator.yaml` against the destination catalog schema and confirm ownership.
+- [x] Record HTTP handler test results separately from browser journey coverage.
 - [ ] Verify `azd` packaging, provision, deployment, teardown, identity, quotas, cost controls, and end-to-end cloud execution.
 - [ ] Replace the AI Services Foundry stand-in with a verified project and hosted orchestrator.
 - [ ] Resolve M10/M11 regressions, null judged M12/M13, and runtime failure accounting before broader quality claims.
 - [ ] Establish authenticated access, authorization, retention, audit, abuse controls, and private security reporting before a customer-data pilot.
 - [ ] Obtain policy and corpus redistribution approval for the intended distribution and jurisdiction.
 - [ ] Resolve benchmark freeze metadata and governance before describing the benchmark as frozen.
+
+Keep catalog validation external. The catalog repository lookup returned HTTP 404, so its schema could not be verified. The draft metadata has no catalog conformance or acceptance claim.
+
+Record the current working-tree validation results separately from release certification:
+
+| Check | Reported local result |
+| --- | --- |
+| Workspace typecheck and lint | Passed |
+| Tests | 236 passed: 80 shared, 18 Foundry, 135 evaluator, and 3 web |
+| Data validation | 24 assertions passed |
+| Workspace build and Bicep validation | Passed |
+| Docker image build | Passed |
+| Docker runtime | `/` and `/evals/dashboard` returned HTTP 200. Container UID was 1000. |
+| Azure provisioning and hosted execution | Unverified |
+| Catalog schema | Unverified. Repository lookup returned HTTP 404. |
+
+Use the existing Node test runner and `tsx` for the web HTTP handler checks. Those checks do not automate the browser journey, result tabs, screenshot capture, keyboard interaction, or end-to-end streaming UI. Browser capture is separate work and remains unverified until its artifacts are produced and reviewed. The successful local build avoids an external Google Fonts fetch. Do not infer Azure readiness from these local checks.
+
+### Re-baseline superseded receipts
+
+Read the [round 000 marker](../eval-reports/round-000-baseline/SUPERSEDED.md) and [round 001 marker](../eval-reports/round-001-fleet/SUPERSEDED.md) before presenting scores. Treat 80.96 to 86.49 as historical train-only results from the pre-reconciliation evaluator.
+
+Later reconciliation tightened M6 to check numeric values and tolerances and changed the M12/M13 judge contract. M6 and composites that include it cannot anchor comparisons with the current evaluator. The markers preserve scoring-rule comparability for M1-M5 and M7-M11. M12/M13 were null in these runs. Re-run the baseline with the reconciled evaluator before future round comparisons. The suggested post-reconciliation baseline path in the markers is a required future artifact, not evidence that a run exists.
 
 ### Keep freeze and licensing gates external
 

@@ -23,7 +23,7 @@ Treat this as an illustrative workflow. The samples, addresses, policy simplific
 
 ## Run the local demo
 
-Use Node **22 or newer** and pnpm **10**. Next.js 16 requires at least Node 20.9. This guide standardizes on Node 22 even though the root package engine currently permits older versions.
+Use Node **22 or newer** and pnpm **10**. Match `.nvmrc` for the recommended local runtime.
 
 Run from the repository root:
 
@@ -47,7 +47,7 @@ docker build -f apps/web/Dockerfile -t srs-demo .
 docker run --rm --name srs-demo -p 127.0.0.1:3000:3000 srs-demo
 ```
 
-Keep the port bound to localhost. The demo has **no authentication**. Use synthetic content only. Treat container verification and cloud verification as separate checks.
+Keep the port bound to localhost. The demo has **no authentication**. Use synthetic content only. The local image build and runtime checks passed in the working tree. `/` and `/evals/dashboard` returned HTTP 200, and the container ran as UID 1000. Azure deployment remains unverified.
 
 ## Choose a runtime path
 
@@ -62,7 +62,7 @@ Read [architecture](docs/architecture.md), [web setup](apps/web/README.md), and 
 
 ## Inspect the evidence
 
-Read the [round 001 receipt](eval-reports/round-001-fleet/round-summary.md). The existing **train-only** deterministic PRQS moved from **80.96 to 86.49**, a gain of 5.53 points.
+Read the [round 001 receipt](eval-reports/round-001-fleet/round-summary.md) with the [round 000 supersession marker](eval-reports/round-000-baseline/SUPERSEDED.md) and [round 001 supersession marker](eval-reports/round-001-fleet/SUPERSEDED.md). The historical **train-only, pre-reconciliation** deterministic PRQS moved from **80.96 to 86.49**, a gain of 5.53 points.
 
 | Measure | Round 000 | Round 001 |
 | --- | ---: | ---: |
@@ -71,7 +71,9 @@ Read the [round 001 receipt](eval-reports/round-001-fleet/round-summary.md). The
 | M10 applicant-support precision | 0.593 | 0.549 |
 | M11 applicant-support recall | 0.639 | 0.559 |
 
-Keep the caveats visible. The confidence intervals overlap. M10 and M11 regressed. M12 and M13 are null. Round 001 reports 17 of 18 cases completing, with one runtime failure. Specs 001 and 002 still record null freeze dates and commits. These receipts do not establish a fully frozen benchmark, holdout generalization, full judged PRQS, or production readiness.
+Keep the caveats visible. The confidence intervals overlap. M10 and M11 regressed. M12 and M13 are null. Round 001 reports 17 of 18 cases completing, with one runtime failure. Specs 001 and 002 still record null freeze dates and commits.
+
+Treat these scores as superseded historical receipts. Later evaluator reconciliation tightened M6 numeric value and tolerance checks and changed the M12/M13 judge contract. M6 and composites that include it are not comparable to new runs. The markers preserve comparability for unchanged M1-M5 and M7-M11 scoring rules. Re-run a baseline with the current evaluator before future round comparisons. These receipts do not establish a current benchmark, holdout generalization, full judged PRQS, or production readiness.
 
 ## Preview the walkthrough
 
@@ -80,7 +82,7 @@ Use these media links when the capture artifacts land. They are planned assets, 
 - [Queue](docs/assets/queue.png) and [packet](docs/assets/packet.png)
 - [Evidence ledger](docs/assets/ledger.png), [staff memo](docs/assets/memo.png), and [applicant letter](docs/assets/letter.png)
 - [Evaluation dashboard](docs/assets/evals.png)
-- [Walkthrough video](docs/assets/walkthrough.webm) and [captions](docs/assets/walkthrough.vtt)
+- [Captions capture target](docs/assets/walkthrough.vtt). Add the video link only after recording production is confirmed.
 
 ## Adapt the pattern
 

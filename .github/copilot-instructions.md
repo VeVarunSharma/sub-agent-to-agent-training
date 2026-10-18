@@ -38,7 +38,7 @@ This voice applies to every Markdown file in this repo. Code comments stay terse
 
 ## Tooling
 
-- Node 20+. pnpm 10+. `corepack enable` is the recommended path.
+- Node 22+. pnpm 10+. `corepack enable` is the recommended path.
 - Workspace packages are scoped under `@srs/`.
 - Type-check the workspace with `pnpm typecheck`. Lint with `pnpm lint`. Test with `pnpm test`. Build with `pnpm build`.
 
