@@ -91,23 +91,28 @@ Use the five-minute path for an introduction. Extend that same story for fifteen
 - Remove local Azure values and restart before a fixture-only presentation. Check `.env`, `.env.local`, and shell settings. Do not expose their contents during screen sharing.
 - Rebuild `@srs/shared` and `@srs/foundry` if workspace exports are missing. Follow the root setup order.
 - Fall back to the packet and the committed [round summary](../eval-reports/round-001-fleet/round-summary.md) if a live run fails. Do not claim that an optional cloud error silently falls back to fixture orchestration.
-- Use the media below only after confirming the files exist. If capture is pending, use the live local route and say so.
+- Use the screenshots or captioned recording below when the live route is unavailable. Explain that these captures use the local mock pipeline.
 
 ## Find presentation assets
 
-Track these capture targets. Their presence, caption quality, and accessibility review must be verified before distribution.
+Use these actual 1440 by 1000 Chromium captures of the synthetic local container. Describe each image with the text below when presenting without visuals.
 
-| Asset | Intended view |
+| Asset | Description and alternative text |
 | --- | --- |
 | [Queue](assets/queue.png) | Three sample cases on `/` |
 | [Packet](assets/packet.png) | Sample 002 packet and numeric envelope |
 | [Ledger](assets/ledger.png) | Numeric gaps and document evidence |
+| [Corrections](assets/redlines.png) | Proposed field changes for the four numeric gaps |
 | [Memo](assets/memo.png) | Staff memo draft |
 | [Letter](assets/letter.png) | Applicant letter draft |
 | [Evals](assets/evals.png) | Existing evaluation receipts |
 | [Captions](assets/walkthrough.vtt) | WebVTT captions for the recording |
+| [Walkthrough](assets/walkthrough.webm) | Five-minute silent recording with visible captions |
+| [Provenance](assets/provenance.json) | Capture method, runtime image, dimensions, and scenario |
 
-Add a walkthrough video link only after recording production is confirmed. Do not treat an intended filename as a produced artifact.
+Record the capture boundary: automated Chromium interaction at one frame every two seconds, encoded as VP9 WebM. The recording contains no audio. Captions explain the request, context, mock execution, ledger, corrections, drafts, evaluation limitations, and workshop CTA. Pair the WebVTT file with the video in players that support caption tracks. Use this page's text script as the nonvisual fallback.
+
+Keep independent presenter rehearsal and accessibility review open. A recorded mock journey does not verify live hosted agents or Azure deployment.
 
 ## Engage a customer team
 
@@ -234,7 +239,8 @@ Separate repository artifacts from external approvals. Check an item only when i
 - [x] Document mock, optional model, and target cloud boundaries.
 - [x] Link the existing train-only round receipt with its limitations.
 - [x] Provide workshop, pilot, and adaptation templates.
-- [ ] Verify media files, captions, accessible presentation, and capture provenance.
+- [x] Capture seven synthetic screenshots, a five-minute captioned walkthrough, WebVTT text, and provenance.
+- [ ] Complete independent presenter rehearsal and accessibility review.
 - [x] Build the local Docker image and verify `/` and `/evals/dashboard` return HTTP 200 with container UID 1000.
 - [ ] Repeat clean-checkout verification for the release commit.
 - [ ] Validate `accelerator.yaml` against the destination catalog schema and confirm ownership.
@@ -258,10 +264,15 @@ Record the current working-tree validation results separately from release certi
 | Workspace build and Bicep validation | Passed |
 | Docker image build | Passed |
 | Docker runtime | `/` and `/evals/dashboard` returned HTTP 200. Container UID was 1000. |
+| Additional container checks | Three review pages, decision intake, and iterations returned HTTP 200. All three mock review APIs passed. Fixture decision submission and streaming completed. |
+| Media | Seven 1440 by 1000 PNG captures. VP9 walkthrough duration 300 seconds with visible captions and WebVTT text. |
+| Security validation | Secret scans passed. CodeQL found zero JavaScript and Actions alerts. Separate read-only code review found no significant issues. |
 | Azure provisioning and hosted execution | Unverified |
 | Catalog schema | Unverified. Repository lookup returned HTTP 404. |
 
-Use the existing Node test runner and `tsx` for the web HTTP handler checks. Those checks do not automate the browser journey, result tabs, screenshot capture, keyboard interaction, or end-to-end streaming UI. Browser capture is separate work and remains unverified until its artifacts are produced and reviewed. The successful local build avoids an external Google Fonts fetch. Do not infer Azure readiness from these local checks.
+Use the existing Node test runner and `tsx` for the web HTTP handler checks. Those tests do not automate the browser journey, result tabs, keyboard interaction, or end-to-end streaming UI. A separate scripted Chromium capture exercised the sample 002 review and result tabs. Container HTTP checks exercised fixture streaming. Neither establishes full browser regression coverage. The successful local build avoids an external Google Fonts fetch. Do not infer Azure readiness from these local checks.
+
+The automated review wrapper could not locate its code-review binary. A separate read-only reviewer inspected the committed changes. CodeQL completed successfully. These checks do not certify security for production use.
 
 ### Re-baseline superseded receipts
 

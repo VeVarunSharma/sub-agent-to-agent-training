@@ -84,19 +84,24 @@ documentation:
     - eval-reports/round-000-baseline/SUPERSEDED.md
     - eval-reports/round-001-fleet/SUPERSEDED.md
 media:
-  status: pending-verification
+  status: captured-local-synthetic-demo
   screenshots:
     - docs/assets/queue.png
     - docs/assets/packet.png
     - docs/assets/ledger.png
+    - docs/assets/redlines.png
     - docs/assets/memo.png
     - docs/assets/letter.png
     - docs/assets/evals.png
-  walkthrough_status: recording-production-unconfirmed
+  walkthrough: docs/assets/walkthrough.webm
+  walkthrough_status: captured-silent-with-visible-captions
+  duration_seconds: 300
   captions: docs/assets/walkthrough.vtt
+  provenance: docs/assets/provenance.json
+  accessibility_review: pending-independent-review
 release_gates:
   - Validate destination catalog schema and confirm accountable owner
-  - Verify media and captions
+  - Complete independent presenter rehearsal and accessibility review
   - Repeat clean-checkout checks for the release commit
   - Verify cloud deployment and replace Foundry stand-in
   - Establish private security reporting and pilot access controls

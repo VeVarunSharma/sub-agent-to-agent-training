@@ -11,7 +11,7 @@
                 Eval -> Scoped edits -> Rerun -> Operator decision
 ```
 
-# Build a permit pre-review copilot
+# Explore Permit Pre-Review Agent Studio
 
 Explore a staff-facing Vancouver Small-Scale Multi-Unit Housing (SSMUH) tutorial. Run a synthetic packet through six review stages. Inspect evidence, proposed redlines, a staff memo, and an applicant letter. Then study how GitHub Copilot CLI fleet-mode sub-agents propose auditable improvements to the agent prompts.
 
@@ -77,12 +77,16 @@ Treat these scores as superseded historical receipts. Later evaluator reconcilia
 
 ## Preview the walkthrough
 
-Use these media links when the capture artifacts land. They are planned assets, and this documentation does not certify that capture or accessibility review is complete.
+Inspect actual Chromium captures of the synthetic local container. The five-minute silent walkthrough includes visible captions and a separate WebVTT transcript. It uses a low frame rate for compact distribution.
 
 - [Queue](docs/assets/queue.png) and [packet](docs/assets/packet.png)
-- [Evidence ledger](docs/assets/ledger.png), [staff memo](docs/assets/memo.png), and [applicant letter](docs/assets/letter.png)
+- [Evidence ledger](docs/assets/ledger.png), [corrections](docs/assets/redlines.png), [staff memo](docs/assets/memo.png), and [applicant letter](docs/assets/letter.png)
 - [Evaluation dashboard](docs/assets/evals.png)
-- [Captions capture target](docs/assets/walkthrough.vtt). Add the video link only after recording production is confirmed.
+- [Five-minute walkthrough](docs/assets/walkthrough.webm), [captions](docs/assets/walkthrough.vtt), and [capture provenance](docs/assets/provenance.json)
+
+![Synthetic permit queue showing one ready case, one clarification case, and one specialist case.](docs/assets/queue.png)
+
+Read the [text walkthrough](docs/README.md#run-the-demo) as an accessible fallback. Independent accessibility review and presenter handoff remain release gates.
 
 ## Adapt the pattern
 
